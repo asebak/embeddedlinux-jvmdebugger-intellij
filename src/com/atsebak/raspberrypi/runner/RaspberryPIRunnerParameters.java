@@ -6,9 +6,6 @@ import com.intellij.util.xmlb.annotations.Transient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created by asebak on 25/03/15.
- */
 public class RaspberryPIRunnerParameters implements Cloneable {
     private String myUrl = "";
     private WebBrowser myNonDefaultBrowser;

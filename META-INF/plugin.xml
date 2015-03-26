@@ -1,6 +1,6 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
-  <name>Plugin display name here</name>
+    <name>Raspberry Pi</name>
   <version>1.0</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
@@ -25,7 +25,6 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
       <configurationType implementation="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationType"/>
   </extensions>
