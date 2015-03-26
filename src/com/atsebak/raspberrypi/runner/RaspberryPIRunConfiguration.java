@@ -1,11 +1,17 @@
 package com.atsebak.raspberrypi.runner;
 
+import com.intellij.diagnostic.logging.LogConfigurationPanel;
+import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
+import com.intellij.execution.JavaRunConfigurationExtensionManager;
+import com.intellij.execution.application.ApplicationConfigurable;
+import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configuration.EmptyRunProfileState;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
@@ -16,11 +22,14 @@ import org.jetbrains.annotations.NotNull;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+//ApplicationConfiguration RunConfigurationBase
 
-public class RaspberryPIRunConfiguration extends RunConfigurationBase {
+public class RaspberryPIRunConfiguration extends ApplicationConfiguration {
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
+    private Project project;
     protected RaspberryPIRunConfiguration(Project project, ConfigurationFactory factory, String name) {
-        super(project, factory, name);
+        super(name, project, factory);
+        this.project = project;
     }
 
     public static void checkURL(String url) throws RuntimeConfigurationException {
@@ -38,7 +47,11 @@ public class RaspberryPIRunConfiguration extends RunConfigurationBase {
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new RaspberryPIRunConfigurationEditor();
+        SettingsEditorGroup<RaspberryPIRunConfiguration> group = new SettingsEditorGroup<RaspberryPIRunConfiguration>();
+        group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new RaspberryPIRunConfigurationEditor(getProject()));
+        JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
+        group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<RaspberryPIRunConfiguration>());
+        return group;
     }
 
     protected RaspberryPIRunnerParameters createRunnerParametersInstance() {
@@ -68,7 +81,7 @@ public class RaspberryPIRunConfiguration extends RunConfigurationBase {
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         //todo validate configuration here
-        checkURL(raspberryPIRunnerParameters.getHostname());
+//        checkURL(raspberryPIRunnerParameters.getHostname());
     }
     public RaspberryPIRunnerParameters getRunnerParameters() {
         return raspberryPIRunnerParameters;

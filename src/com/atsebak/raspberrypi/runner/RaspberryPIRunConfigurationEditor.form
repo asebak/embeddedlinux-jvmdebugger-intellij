@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.atsebak.raspberrypi.runner.RaspberryPIRunConfigurationEditor">
-  <grid id="27dc6" binding="main" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
@@ -8,66 +8,76 @@
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="71b2c" binding="tabbedPane">
+      <grid id="6bda6" binding="myWholePanel" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
-          </grid>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties>
-          <enabled value="true"/>
-          <name value=""/>
-          <toolTipText value=""/>
-        </properties>
+        <properties/>
         <border type="none"/>
         <children>
-          <grid id="78bba" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <vspacer id="765f0">
             <constraints>
-              <tabbedpane title="Raspberry PI"/>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="8570d" class="com.intellij.execution.ui.CommonJavaParametersPanel" binding="myCommonProgramParameters">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
-          <grid id="6751a" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          </component>
+          <component id="d4bb4" class="com.intellij.openapi.ui.LabeledComponent" binding="myMainClass" custom-create="true">
             <constraints>
-              <tabbedpane title="Main"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="20"/>
+              </grid>
+            </constraints>
+            <properties>
+              <labelLocation value="West"/>
+              <text resource-bundle="messages/ExecutionBundle" key="application.configuration.main.class.label"/>
+            </properties>
+          </component>
+          <component id="ac4fc" class="com.intellij.openapi.ui.LabeledComponent" binding="myModule">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <componentClass value="javax.swing.JComboBox"/>
+              <labelLocation value="West"/>
+              <text resource-bundle="messages/ExecutionBundle" key="application.configuration.use.classpath.and.jdk.of.module.label"/>
+            </properties>
+          </component>
+          <component id="47762" class="com.intellij.execution.ui.AlternativeJREPanel" binding="myAlternativeJREPanel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
-          <grid id="f51bd" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          </component>
+          <component id="a0b6c" class="javax.swing.JCheckBox" binding="myShowSwingInspectorCheckbox">
             <constraints>
-              <tabbedpane title="Arguments"/>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
-          <grid id="a3d6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+            <properties>
+              <text resource-bundle="messages/ExecutionBundle" key="show.swing.inspector"/>
+            </properties>
+          </component>
+          <vspacer id="46a07">
             <constraints>
-              <tabbedpane title="Source"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="10"/>
+              </grid>
             </constraints>
-            <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
-          <grid id="1e96d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          </vspacer>
+          <vspacer id="e41af">
             <constraints>
-              <tabbedpane title="Environment"/>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="10"/>
+              </grid>
             </constraints>
-            <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
+          </vspacer>
         </children>
-      </tabbedpane>
+      </grid>
     </children>
   </grid>
 </form>

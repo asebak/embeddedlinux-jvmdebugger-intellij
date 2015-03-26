@@ -3,8 +3,6 @@ package com.atsebak.raspberrypi.runner;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
 public class RaspberryPIRunnerParameters implements Cloneable {
     private String hostname;
     private boolean runAsRoot;
