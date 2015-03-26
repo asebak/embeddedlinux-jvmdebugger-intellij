@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
+@SuppressWarnings("unused")
 public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryPIRunConfiguration> {
     private JPanel main;
     private JTabbedPane tabbedPane;
@@ -21,7 +22,8 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         //myBrowserSelector.setSelected(params.getNonDefaultBrowser() != null ? params.getNonDefaultBrowser() : null);
     }
     @Override
-    protected void applyEditorTo(RaspberryPIRunConfiguration s) throws ConfigurationException {
+    protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
+        RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
 //        RaspberryPIRunnerParameters params = s.getRunnerParameters();
 //        params.setUrl(myWebPathField.getText());
 //        params.setNonDefaultBrowser(myBrowserSelector.getSelected());

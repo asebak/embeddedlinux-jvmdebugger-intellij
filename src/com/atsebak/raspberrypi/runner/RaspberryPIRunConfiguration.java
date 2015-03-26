@@ -22,31 +22,7 @@ public class RaspberryPIRunConfiguration extends RunConfigurationBase {
     protected RaspberryPIRunConfiguration(Project project, ConfigurationFactory factory, String name) {
         super(project, factory, name);
     }
-    @NotNull
-    @Override
-    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new RaspberryPIRunConfigurationEditor();
-    }
-    protected RaspberryPIRunnerParameters createRunnerParametersInstance() {
-        return new RaspberryPIRunnerParameters();
-    }
-    @Override
-    public void readExternal(Element element) throws InvalidDataException {
-        super.readExternal(element);
-        raspberryPIRunnerParameters = createRunnerParametersInstance();
-        XmlSerializer.deserializeInto(raspberryPIRunnerParameters, element);
-    }
-    @Override
-    public void writeExternal(Element element) throws WriteExternalException {
-        super.writeExternal(element);
-        if (raspberryPIRunnerParameters != null) {
-            XmlSerializer.serializeInto(raspberryPIRunnerParameters, element);
-        }
-    }
-    @Override
-    public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        return EmptyRunProfileState.INSTANCE;
-    }
+
     public static void checkURL(String url) throws RuntimeConfigurationException {
         // check URL for correctness
         try {
@@ -58,10 +34,41 @@ public class RaspberryPIRunConfiguration extends RunConfigurationBase {
             throw new RuntimeConfigurationError("Incorrect URL");
         }
     }
+
+    @NotNull
+    @Override
+    public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
+        return new RaspberryPIRunConfigurationEditor();
+    }
+
+    protected RaspberryPIRunnerParameters createRunnerParametersInstance() {
+        return new RaspberryPIRunnerParameters();
+    }
+
+    @Override
+    public void readExternal(Element element) throws InvalidDataException {
+        super.readExternal(element);
+        raspberryPIRunnerParameters = createRunnerParametersInstance();
+        XmlSerializer.deserializeInto(raspberryPIRunnerParameters, element);
+    }
+
+    @Override
+    public void writeExternal(Element element) throws WriteExternalException {
+        super.writeExternal(element);
+        if (raspberryPIRunnerParameters != null) {
+            XmlSerializer.serializeInto(raspberryPIRunnerParameters, element);
+        }
+    }
+
+    @Override
+    public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
+        return EmptyRunProfileState.INSTANCE;
+    }
+
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        //todo check here
-        checkURL(raspberryPIRunnerParameters.getUrl());
+        //todo validate configuration here
+        checkURL(raspberryPIRunnerParameters.getHostname());
     }
     public RaspberryPIRunnerParameters getRunnerParameters() {
         return raspberryPIRunnerParameters;
