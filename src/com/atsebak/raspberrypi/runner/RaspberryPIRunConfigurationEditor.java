@@ -2,7 +2,6 @@ package com.atsebak.raspberrypi.runner;
 
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
-import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.AlternativeJREPanel;
 import com.intellij.execution.ui.ClassBrowser;
@@ -19,12 +18,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
-import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
