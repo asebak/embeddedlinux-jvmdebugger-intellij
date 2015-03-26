@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.moreunit.plugins.intellij</groupId>
+    <artifactId>org.moreunit.intellij.plugin</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>MoreUnit IntelliJ Plugin</name>
+    <description>
+        <![CDATA[
+    <img alt="MoreUnit Logo" src="http://moreunit.sourceforge.net/img/logo.png" />
+    <p>MoreUnit assists you in writing unit tests!</p>
+
+    <p>Features:</p>
+    <ul>
+    <li>Works for all IntelliJ-based IDEs (AppCode, IDEA, PhpStorm, PyCharm, RubyMine, WebStorm, etc.)</li>
+    <li>Jump form your production code to you test code, and vice-versa. To access the command:<ul>
+        <li>From the main menu: "Navigate" > "Jump to Test" or "Jump to Test Subject".</li>
+        <li>From the contextual menu: "Go To" > "Jump to Test" or "Jump to Test Subject".</li>
+        <li>From the "Find Action..." pop-up window: "Jump to Test / Test Subject".</li>
+    </ul></li>
+    <li>Should several candidates be found, a list is displayed for selection.</li>
+    <li>Supported naming patterns:<ul>
+        <li>lower/upper CamelCase or word separated with hyphens, underscores or even spaces</li>
+        <li>"test", "spec" or "should" suffixes (case insensitive, except for CamelCase style)</li>
+        <li>"test" or "spec" prefixes (case insensitive, except for CamelCase style)</li>
+    </ul></li>
+    <li>Writing tests for your Java code in Scala? Your test code does not have to be written in the same</li>
+    language as you production code!</li>
+    </ul>
+    ]]>
+    </description>
+
+    <properties>
+        <vendor.url>https://github.com/MoreUnit/org.moreunit.intellij.plugin</vendor.url>
+        <vendor.email>moreunit.feedback@gmail.com</vendor.email>
+        <vendor.name>MoreUnit</vendor.name>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+
+        <intellij.version>14.0.3</intellij.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.intellij-ce</groupId>
+            <artifactId>intellij-ce</artifactId>
+            <version>${intellij.version}</version>
+            <type>tar.gz</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.savage7.maven.plugins</groupId>
+                    <artifactId>maven-external-dependency-plugin</artifactId>
+                    <version>0.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.18.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>com.savage7.maven.plugins</groupId>
+                <artifactId>maven-external-dependency-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <stagingDirectory>${project.build.directory}/dependencies/</stagingDirectory>
+                    <createChecksum>true</createChecksum>
+                    <skipChecksumVerification>false</skipChecksumVerification>
+                    <force>false</force>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.jetbrains.intellij-ce</groupId>
+                            <artifactId>intellij-ce</artifactId>
+                            <version>${intellij.version}</version>
+                            <packaging>tar.gz</packaging>
+                            <downloadUrl>http://download.jetbrains.com/idea/ideaIC-14.0.3.tar.gz</downloadUrl>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>clean-external-dependencies</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean-external</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>resolve-install-external-dependencies</id>
+                        <!-- <phase>initialize</phase> // does not help, dependencies are evaluated before anything else -->
+                        <goals>
+                            <goal>resolve-external</goal>
+                            <goal>install-external</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unzip-distribution</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>intellij-ce</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}/dependency/IntelliJ-IDEA-CE</outputDirectory>
+                            <includes>**/*.jar</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-extdirs</arg>
+                        <arg>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-idea-lib-dir-predictable</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <move todir="${project.build.directory}/dependency/IntelliJ-IDEA-CE">
+                                    <fileset dir="${project.build.directory}/dependency/IntelliJ-IDEA-CE">
+                                        <include name="idea-IC*/**/*.jar"/>
+                                    </fileset>
+                                    <cutdirsmapper dirs="1"/>
+                                </move>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile-forms</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <path id="maven.plugin.complete.classpath">
+                                    <path refid="maven.plugin.classpath"/>
+                                    <fileset dir="${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib">
+                                        <include name="**/*.jar"/>
+                                    </fileset>
+                                </path>
+                                <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions"
+                                         classpathref="maven.plugin.complete.classpath"/>
+                                <path id="sourcepath">
+                                    <dirset dir="${project.basedir}">
+                                        <include name="src/main/java"/>
+                                        <include name="src/main/resources"/>
+                                    </dirset>
+                                </path>
+                                <instrumentIdeaExtensions destdir="${project.build.outputDirectory}"
+                                                          extdirs="${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib">
+                                    <classpath refid="maven.compile.classpath"/>
+                                    <src refid="sourcepath"/>
+                                </instrumentIdeaExtensions>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun</groupId>
+                        <artifactId>tools</artifactId>
+                        <version>1.8.0</version>
+                        <scope>system</scope>
+                        <systemPath>${env.JAVA_HOME}/lib/tools.jar</systemPath>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <argLine>
+                        -ea
+                        -Xmx512m
+                        -Xbootclasspath/a:${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/boot.jar
+                        -Didea.system.path=${project.build.directory}/test-system
+                        -Didea.home.path=.
+                        -Didea.config.path=${project.build.directory}/test-config
+                        -Didea.platform.prefix=Idea
+                        -Didea.test.group=ALL_EXCLUDE_DEFINED
+                        -Didea.load.plugins.id=MoreUnit
+                    </argLine>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>${java.home}/../lib/tools.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/annotations.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/asm-all.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/asm-commons.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/asm.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/asm4-all.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/automaton.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/boot.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/bootstrap.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/cglib-2.2.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/cli-parser-1.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/commons-codec-1.8.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/commons-httpclient-3.1-patched.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/commons-logging-1.1.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/commons-net-3.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/ecj-4.4.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/extensions.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/fluent-hc-4.3.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/forms_rt.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/freemarker.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/groovy-all-2.2.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/gson-2.2.4.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/guava-17.0.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/hamcrest-core-1.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/hamcrest-library-1.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/httpclient-4.3.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/httpcore-4.3.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/httpmime-4.3.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/icons.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/idea.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/idea_rt.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/isorelax.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/javac2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jaxen-1.1.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jayatana-1.2.4.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jcip-annotations.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jdkAnnotations.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jdom.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jgoodies-common-1.2.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jgoodies-forms.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jgoodies-looks-2.4.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jh.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jing.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jna-utils.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jna.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jps-launcher.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jps-model.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jps-server.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch-0.1.51.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.connector-factory.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.core.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.pageant.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.sshagent.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.usocket-jna.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsch.agentproxy.usocket-nc.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsr166e.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jsr173_1.0_api.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/junit-4.11.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/junit.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/jzlib-1.1.1.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/log4j.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/markdownj-core-0.4.2-SNAPSHOT.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/microba.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/miglayout-swing.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/nanoxml-2.2.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/nekohtml-1.9.14.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/netty-all-4.1.0.Beta3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/openapi.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/optimizedFileManager.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/oromatcher.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/picocontainer.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/protobuf-2.5.0.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/proxy-vole_20120920.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/pty4j-0.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/purejavacomm.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/resolver.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/resources.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/resources_en.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/rhino-js-1_7R4.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/rngom-20051226-patched.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/rt/jps-plugin-system.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/sanselan-0.98-snapshot.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/serviceMessages.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/snappy-in-java-0.3.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/swingx-core-1.6.2.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/trang-core.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/trove4j.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/trove4j_src.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/util.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/velocity.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/winp-1.21-patched.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/xbean.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/xerces.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/xmlrpc-2.0.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/xpp3-1.1.4-min.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/dependency/IntelliJ-IDEA-CE/lib/xstream-1.4.3.jar</additionalClasspathElement>
+                    </additionalClasspathElements>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- prevent runs of useless time-consuming goals when requesting "process-resources" from intellij run configurations -->
+            <id>intellij</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unzip-distribution</id>
+                                <phase>skip</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>make-idea-lib-dir-predictable</id>
+                                <phase>skip</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

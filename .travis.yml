@@ -1,7 +1,7 @@
 language: java
 jdk: openjdk6
 install: true
-script: "./build-and-deploy-if-version-tag.sh"
+script: "./build.sh"
 deploy:
 provider: releases
 api_key:
