@@ -5,10 +5,9 @@ import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.JavaRunConfigurationExtensionManager;
-import com.intellij.execution.application.ApplicationConfigurable;
 import com.intellij.execution.application.ApplicationConfiguration;
-import com.intellij.execution.configuration.EmptyRunProfileState;
 import com.intellij.execution.configurations.*;
+import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
@@ -25,6 +24,11 @@ import java.net.URL;
 //ApplicationConfiguration RunConfigurationBase
 
 public class RaspberryPIRunConfiguration extends ApplicationConfiguration {
+    public static final String DEFAULT_HOSTNAME = "0.0.0.0";
+    public static final String DEFAULT_DEBUG_POST = "4000";
+    public static final boolean DEFAULT_RUN_AS_ROOT = true;
+    public static final String DEFAULT_DISPLAY = ":0";
+
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
     private Project project;
     protected RaspberryPIRunConfiguration(Project project, ConfigurationFactory factory, String name) {
@@ -75,7 +79,10 @@ public class RaspberryPIRunConfiguration extends ApplicationConfiguration {
 
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        return EmptyRunProfileState.INSTANCE;
+        final JavaCommandLineState state = new JavaApplicationCommandLineState<ApplicationConfiguration>(this, env);
+        JavaRunConfigurationModule module = getConfigurationModule();
+        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
+        return state;
     }
 
     @Override

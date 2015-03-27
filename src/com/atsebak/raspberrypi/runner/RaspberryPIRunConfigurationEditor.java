@@ -22,24 +22,26 @@ import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("unused")
 public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryPIRunConfiguration> implements PanelWithAnchor {
+    private final ConfigurationModuleSelector myModuleSelector;
+    private final JreVersionDetector myVersionDetector;
+    private final Project myProject;
     private CommonJavaParametersPanel myCommonProgramParameters;
     private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
     private LabeledComponent<JComboBox> myModule;
-    private JPanel myWholePanel;
-    private final ConfigurationModuleSelector myModuleSelector;
+    private JPanel myGenericPanel;
     private AlternativeJREPanel myAlternativeJREPanel;
     private JCheckBox myShowSwingInspectorCheckbox;
-    private final JreVersionDetector myVersionDetector;
-    private final Project myProject;
+    private JCheckBox runAsRootCheckBox;
+    private JTextField xDisplay;
+    private JTextField debugPort;
+    private JTextField hostName;
+    private JPanel mainPanel;
     private JComponent myAnchor;
 
     public RaspberryPIRunConfigurationEditor(final Project project) {
@@ -64,6 +66,12 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         myAlternativeJREPanel.init(configuration.ALTERNATIVE_JRE_PATH, configuration.ALTERNATIVE_JRE_PATH_ENABLED);
 
         updateShowSwingInspector(configuration);
+
+        RaspberryPIRunnerParameters parameters = configuration.getRunnerParameters();
+        hostName.setText(parameters.getHostname());
+        runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
+        xDisplay.setText(parameters.getDisplay());
+        debugPort.setText(parameters.getPort());
     }
     @Override
     protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
@@ -74,9 +82,20 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         configuration.MAIN_CLASS_NAME = aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className;
         configuration.ALTERNATIVE_JRE_PATH = myAlternativeJREPanel.getPath();
         configuration.ALTERNATIVE_JRE_PATH_ENABLED = myAlternativeJREPanel.isPathEnabled();
-        configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox.isSelected();
-
+        configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration)
+                || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox.isSelected();
         updateShowSwingInspector(configuration);
+
+        setPiSettings(configuration.getRunnerParameters());
+
+
+    }
+
+    private void setPiSettings(RaspberryPIRunnerParameters parameters) {
+        parameters.setHostname(hostName.getText());
+        parameters.setDisplay(xDisplay.getText());
+        parameters.setPort(debugPort.getText());
+        parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
     }
 
     private void updateShowSwingInspector(final RaspberryPIRunConfiguration configuration) {
@@ -95,7 +114,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     @NotNull
     @Override
     protected JComponent createEditor() {
-        return myWholePanel;
+        return mainPanel;
     }
 
     private void createUIComponents() {
