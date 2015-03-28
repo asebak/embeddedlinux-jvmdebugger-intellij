@@ -16,6 +16,7 @@
 package com.atsebak.raspberrypi.protocol;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.util.ArrayUtilRt;
 import com.trilead.ssh2.*;
@@ -93,6 +94,10 @@ public class SSHMain implements GitExternalApp {
      */
     private final int myHandlerNo;
     /**
+     * Comand line
+     */
+    private final GeneralCommandLine commandLine;
+    /**
      * the xml RPC port
      */
     private final GitSSHXmlRpcClient myXmlRpcClient;
@@ -124,31 +129,15 @@ public class SSHMain implements GitExternalApp {
      * @param command  a command
      * @throws java.io.IOException if config file could not be loaded
      */
-    private SSHMain(String host, String username, Integer port, String command) throws IOException {
+    public SSHMain(final GeneralCommandLine commandLine, String host, String username, Integer port, String command) throws IOException {
+        this.commandLine = commandLine;
         SSHConfig config = SSHConfig.load();
         myHost = config.lookup(username, host, port);
-        myHandlerNo = Integer.parseInt(System.getenv(GitSSHHandler.SSH_HANDLER_ENV));
-        int xmlRpcPort = Integer.parseInt(System.getenv(GitSSHHandler.SSH_PORT_ENV));
+        myHandlerNo = Integer.parseInt(commandLine.getEnvironment().get(GitSSHHandler.SSH_HANDLER_ENV));
+        int xmlRpcPort = Integer.parseInt(commandLine.getEnvironment().get(GitSSHHandler.SSH_PORT_ENV));
         myXmlRpcClient = new GitSSHXmlRpcClient(xmlRpcPort, myHost.isBatchMode());
         myCommand = command;
     }
-
-    /**
-     * The application entry point
-     *
-     * @param args program arguments
-     */
-//  public static void main(String[] args) {
-//    try {
-//      SSHMain app = parseArguments(args);
-//      app.start();
-//      System.exit(app.myExitCode);
-//    }
-//    catch (Throwable t) {
-//      t.printStackTrace();
-//      System.exit(1);
-//    }
-//  }
 
     /**
      * Check if the key is encrypted. The key is considered encrypted
@@ -178,62 +167,26 @@ public class SSHMain implements GitExternalApp {
     }
 
     /**
-     * Parse command line arguments and create application instance.
-     *
-     * @param args command line arguments
-     * @return application instance
-     * @throws java.io.IOException if loading configuration file failed
-     */
-    private static SSHMain parseArguments(String[] args) throws IOException {
-        if (args.length != 2 && args.length != 4) {
-            System.err.println(PIBundle.message("sshmain.invalid.amount.of.arguments", Arrays.asList(args)));
-            System.exit(1);
-        }
-        int i = 0;
-        Integer port = null;
-        //noinspection HardCodedStringLiteral
-        if ("-p".equals(args[i])) {
-            i++;
-            port = Integer.parseInt(args[i++]);
-        }
-        String host = args[i++];
-        String user;
-        int atIndex = host.lastIndexOf('@');
-        if (atIndex == -1) {
-            user = null;
-        } else {
-            user = host.substring(0, atIndex);
-            host = host.substring(atIndex + 1);
-        }
-        String command = args[i];
-        return new SSHMain(host, user, port, command);
-    }
-
-    private static void log(String s) {
-        System.err.println(s);
-    }
-
-    /**
      * Start the application
      *
      * @throws java.io.IOException  if there is a problem with connection
      * @throws InterruptedException if thread was interrupted
      */
-    private void start() throws IOException, InterruptedException {
+    public void start() throws IOException, InterruptedException {
         Connection c = new Connection(myHost.getHostName(), myHost.getPort());
         try {
             configureKnownHosts(c);
 
-            boolean useHttpProxy = Boolean.valueOf(System.getenv(GitSSHHandler.SSH_USE_PROXY_ENV));
+            boolean useHttpProxy = Boolean.valueOf(commandLine.getEnvironment().get(GitSSHHandler.SSH_USE_PROXY_ENV));
             if (useHttpProxy) {
-                String proxyHost = System.getenv(GitSSHHandler.SSH_PROXY_HOST_ENV);
-                Integer proxyPort = Integer.valueOf(System.getenv(GitSSHHandler.SSH_PROXY_PORT_ENV));
-                boolean proxyAuthentication = Boolean.valueOf(System.getenv(GitSSHHandler.SSH_PROXY_AUTHENTICATION_ENV));
+                String proxyHost = commandLine.getEnvironment().get(GitSSHHandler.SSH_PROXY_HOST_ENV);
+                Integer proxyPort = Integer.valueOf(commandLine.getEnvironment().get(GitSSHHandler.SSH_PROXY_PORT_ENV));
+                boolean proxyAuthentication = Boolean.valueOf(commandLine.getEnvironment().get(GitSSHHandler.SSH_PROXY_AUTHENTICATION_ENV));
                 String proxyUser = null;
                 String proxyPassword = null;
                 if (proxyAuthentication) {
-                    proxyUser = System.getenv(GitSSHHandler.SSH_PROXY_USER_ENV);
-                    proxyPassword = System.getenv(GitSSHHandler.SSH_PROXY_PASSWORD_ENV);
+                    proxyUser = commandLine.getEnvironment().get(GitSSHHandler.SSH_PROXY_USER_ENV);
+                    proxyPassword = commandLine.getEnvironment().get(GitSSHHandler.SSH_PROXY_PASSWORD_ENV);
                 }
                 c.setProxyData(new HTTPProxyData(proxyHost, proxyPort, proxyUser, proxyPassword));
             }
@@ -550,7 +503,7 @@ public class SSHMain implements GitExternalApp {
          */
         public boolean verifyServerHostKey(String hostname, int port, String serverHostKeyAlgorithm, byte[] serverHostKey) throws Exception {
             try {
-                String s = System.getenv(GitSSHHandler.SSH_IGNORE_KNOWN_HOSTS_ENV);
+                String s = commandLine.getEnvironment().get(GitSSHHandler.SSH_IGNORE_KNOWN_HOSTS_ENV);
                 if (s != null && Boolean.parseBoolean(s)) {
                     return true;
                 }

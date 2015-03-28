@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.runner;
 
+import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
@@ -25,8 +26,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,18 +53,6 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     protected RaspberryPIRunConfiguration(final Project project, final ConfigurationFactory factory) {
         super(new JavaRunConfigurationModule(project, false), factory);
         this.project = project;
-    }
-
-    public static void checkURL(String url) throws RuntimeConfigurationException {
-        // check URL for correctness
-        try {
-            if (url == null) {
-                throw new MalformedURLException("No start file specified or this file is invalid");
-            }
-            new URL(url);
-        } catch (MalformedURLException ignored) {
-            throw new RuntimeConfigurationError("Incorrect URL");
-        }
     }
 
     @NotNull
@@ -112,9 +99,24 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        //todo validate configuration here
-//        checkURL(raspberryPIRunnerParameters.getHostname());
         checkJavaSettings();
+        checkPiSettings();
+    }
+
+    private void checkPiSettings() throws RuntimeConfigurationException {
+        RaspberryPIRunnerParameters rp = this.getRunnerParameters();
+        if (rp.getDisplay() == null || rp.getDisplay().isEmpty()) {
+            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.xdisplay"));
+        }
+        if (rp.getHostname() == null || rp.getHostname().isEmpty()) {
+            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.hostname"));
+        }
+        if (rp.getPort() == null || rp.getPort().isEmpty()) {
+            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.port"));
+        }
+        if (rp.getUsername() == null || rp.getUsername().isEmpty()) {
+            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.username"));
+        }
     }
 
     private void checkJavaSettings() throws RuntimeConfigurationException {
@@ -284,55 +286,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
             final String jreHome = configuration.ALTERNATIVE_JRE_PATH_ENABLED ? configuration.ALTERNATIVE_JRE_PATH : null;
             JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
             params.setMainClass(configuration.MAIN_CLASS_NAME);
-//            setupJavaParameters(params);
-
             return params;
-//            final JavaParameters params = new JavaParameters();
-//            final JavaRunConfigurationModule module = configuration.getConfigurationModule();
-//            params.setMainClass();
-//            return params;
-            //todo create proper parameters
-//            params.setMainClass();
-//            params.setMainClass(AppEngineSdk.DEV_APPSERVER_CLASS);
-//
-//            AppEngineSdk sdk = new AppEngineSdk(configuration.mySdkPath);
-//
-//            ParametersList vmParams = params.getVMParametersList();
-//            if (configuration.myVmArgs != null && !configuration.myVmArgs.trim().isEmpty()) {
-//                vmParams.addParametersString(configuration.myVmArgs);
-//            }
-//            sdk.addServerVmParams(vmParams);
-//
-//            ParametersList programParams = params.getProgramParametersList();
-//            if (configuration.myServerAddress != null && !configuration.myServerAddress.trim().isEmpty()) {
-//                programParams.add("--address=" + configuration.myServerAddress);
-//            }
-//            if (configuration.myServerPort != null && !configuration.myServerPort.trim().isEmpty()) {
-//                programParams.add("--port=" + configuration.myServerPort);
-//            }
-//
-//            String warPath = configuration.myWarPath;
-//            if (warPath == null) {
-//                throw new ExecutionException("War path is invalid");
-//            }
-//            programParams.add(warPath);
-//
-//            params.setWorkingDirectory(warPath);
-//            PathsList classPath = params.getClassPath();
-//
-//            classPath.add(sdk.getToolsApiJarFile().getAbsolutePath());
-//
-//            Module appEngineModule = module.getModule();
-//            if (appEngineModule == null) {
-//                throw new ExecutionException("Module not defined");
-//            }
-//
-//            //TODO : allow selectable alternate jre
-//            params.setJdk(JavaParameters.getModuleJdk(appEngineModule));
-//
-//            UsageTracker.getInstance()
-//                    .trackEvent(GctTracking.CATEGORY, GctTracking.RUN, configuration.getSyncWithGradle() ? "sync" : "custom", null);
-//            return params;
         }
 
         @Override

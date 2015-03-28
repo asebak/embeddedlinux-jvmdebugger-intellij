@@ -1,15 +1,12 @@
 package com.atsebak.raspberrypi.runner;
 
-import org.jetbrains.annotations.NotNull;
 
 public class RaspberryPIRunnerParameters implements Cloneable {
-    @NotNull
     private String hostname;
     private boolean runAsRoot;
-    @NotNull
     private String display;
-    @NotNull
     private String port;
+    private String username;
 
     public String getHostname() {
         return hostname;
@@ -43,8 +40,6 @@ public class RaspberryPIRunnerParameters implements Cloneable {
         this.port = port;
     }
 
-    //    private String piUsername;
-//    private String piPassword;
     @Override
     protected RaspberryPIRunnerParameters clone() {
         try {
@@ -54,6 +49,13 @@ public class RaspberryPIRunnerParameters implements Cloneable {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
 
 

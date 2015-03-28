@@ -44,6 +44,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     private JTextField debugPort;
     private JTextField hostName;
     private JPanel mainPanel;
+    private JTextField username;
     private JComponent myAnchor;
 
     public RaspberryPIRunConfigurationEditor(final Project project) {
@@ -74,6 +75,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
         xDisplay.setText(parameters.getDisplay());
         debugPort.setText(parameters.getPort());
+        username.setText(parameters.getUsername());
     }
     @Override
     protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
@@ -98,6 +100,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         parameters.setDisplay(xDisplay.getText());
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
+        parameters.setUsername(username.getText());
     }
 
     private void updateShowSwingInspector(final RaspberryPIRunConfiguration configuration) {
