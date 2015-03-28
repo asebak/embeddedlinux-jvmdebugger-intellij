@@ -7,6 +7,7 @@ public class RaspberryPIRunnerParameters implements Cloneable {
     private String display;
     private String port;
     private String username;
+    private String password;
 
     public String getHostname() {
         return hostname;
@@ -55,6 +56,14 @@ public class RaspberryPIRunnerParameters implements Cloneable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
 
