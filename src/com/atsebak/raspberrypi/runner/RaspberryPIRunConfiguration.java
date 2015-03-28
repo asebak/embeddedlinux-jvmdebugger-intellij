@@ -1,7 +1,8 @@
 package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
-import com.atsebak.raspberrypi.runner.console.SshUploader;
+import com.atsebak.raspberrypi.protocol.ssh.CommandLineBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SShUploader;
 import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
@@ -30,6 +31,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
+import com.intellij.util.PathsList;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -280,7 +282,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
             super(environment);
             this.configuration = configuration;
             this.environment = environment;
-            createSSH();
+//            createSSH();
         }
 
         @NotNull
@@ -312,30 +314,25 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
             params.setMainClass(configuration.MAIN_CLASS_NAME);
             params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=" +
                     configuration.getRunnerParameters().getPort());
-
+            PathsList classPath = params.getClassPath();
+            //last folder is the output
+            com.atsebak.raspberrypi.protocol.ssh.CommandLineBuilder cmdBuilder = new CommandLineBuilder(configuration, params);
+            createSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
             return params;
         }
 
-        private void createSSH() {
+        private void createSSH(String projectOutput, CommandLineBuilder builder) {
             RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-            Module module = configuration.getConfigurationModule().getModule();
-            File outputDirectory = getOutputDirectory(module.getModuleFile().getParent().getPath());
+//            Module module = configuration.getConfigurationModule().getModule();
             try {
-                SshUploader uploader = new SshUploader();
-                uploader.uploadToTarget(runnerParameters, outputDirectory);
+                SShUploader uploader = new SShUploader();
+                uploader.uploadToTarget(runnerParameters, getOutputDirectory(projectOutput), builder.buildCommandLine());
             } catch (Exception e) {
             }
         }
 
         private File getOutputDirectory(String relPath) {
-            //todo fix to come up with smart way to get output files
-            for (String s : OUTPUT_DIRECTORIES) {
-                File output = new File(relPath + File.separator + s);
-                if (output.exists()) {
-                    return output;
-                }
-            }
-            return null;
+            return new File(relPath);
         }
 
         @Override

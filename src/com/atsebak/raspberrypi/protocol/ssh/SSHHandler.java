@@ -8,7 +8,6 @@ import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
-import net.schmizz.sshj.userauth.UserAuthException;
 import net.schmizz.sshj.xfer.FileSystemFile;
 
 import java.io.File;
@@ -49,27 +48,34 @@ public class SSHHandler {
         }
     }
 
-    public void upload(File outputDirec) throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        SSHClient ssh = new SSHClient();
-        ssh.addHostKeyVerifier(new PromiscuousVerifier());
-        ssh.loadKnownHosts();
-        ssh.connect(hostname);
+    public void upload(File outputDirec, String cmd) throws IOException, ClassNotFoundException, RuntimeConfigurationException {
+        SSHClient ssh = build(new SSHClient());
+        final String remoteDirec = File.separator + "home" + File.separator + username + File.separator + "IdeaProjects";
         try {
-            ssh.authPassword(username, password);
-        } catch (UserAuthException e) {
-            throw new RuntimeConfigurationException("Authentication Failed For Raspberry PI");
-        }
-//        executeCommand()
-        // ssh.authPassword(username, password);
-        try {
-//            ssh.authPublickey(System.getProperty("user.name"));
-            //ssh.useCompression();
-            final String remoteDirec = File.separator + "home" + File.separator + username + File.separator + "IdeaProjects";
+
             final SFTPClient sftp = ssh.newSFTPClient();
             sftp.put(new FileSystemFile(outputDirec), remoteDirec);
         } finally {
             ssh.disconnect();
         }
+        String appPath = remoteDirec + File.separator + outputDirec.getName();
+        runJavaApp(appPath, cmd);
+    }
+
+    private SSHClient build(SSHClient client) throws IOException {
+        client.addHostKeyVerifier(new PromiscuousVerifier());
+        client.loadKnownHosts();
+        client.connect(hostname);
+        client.authPassword(username, password);
+        return client;
+    }
+
+    private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException {
+        final Session session = build(new SSHClient()).startSession();
+        Session.Command exec = session.exec("cd " + targetPathOnRemote + "&&" + cmd);
+        System.out.println(IOUtils.readFully(exec.getInputStream()).toString());
+        exec.join(5, TimeUnit.SECONDS);
+        System.out.println("\n** exit status: " + exec.getExitStatus());
     }
 
 
@@ -82,7 +88,7 @@ public class SSHHandler {
             final Session session = ssh.startSession();
             try {
                 final Session.Command cmd = session.exec(command);
-                System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
+//                System.out.println(IOUtils.readFully(cmd.getInputStream()).toString());
                 cmd.join(5, TimeUnit.SECONDS);
                 System.out.println("\n** exit status: " + cmd.getExitStatus());
             } finally {
