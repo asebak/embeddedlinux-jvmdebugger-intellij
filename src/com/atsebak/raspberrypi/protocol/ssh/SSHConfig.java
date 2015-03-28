@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atsebak.raspberrypi.protocol;
+package com.atsebak.raspberrypi.protocol.ssh;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -38,18 +40,6 @@ public class SSHConfig {
     static {
         String e = System.getenv("HOME");
         USER_HOME = e != null ? e : System.getProperty("user.home");
-    }
-
-    /**
-     * Allowed authentication methods
-     */
-    @NonNls
-    private final static HashSet<String> ALLOWED_METHODS = new HashSet<String>();
-
-    static {
-        ALLOWED_METHODS.add(SSHMain.PUBLIC_KEY_METHOD);
-        ALLOWED_METHODS.add(SSHMain.KEYBOARD_INTERACTIVE_METHOD);
-        ALLOWED_METHODS.add(SSHMain.PASSWORD_METHOD);
     }
 
     /**
@@ -111,7 +101,7 @@ public class SSHConfig {
                     host.myPort = parseInt(argument);
                 } else if ("PreferredAuthentications".equalsIgnoreCase(keyword)) {
                     final List<String> list = parseList(argument);
-                    list.retainAll(ALLOWED_METHODS);
+//                    list.retainAll(ALLOWED_METHODS);
                     if (!list.isEmpty()) {
                         host.myPreferredMethods = Collections.unmodifiableList(list);
                     }
@@ -547,16 +537,16 @@ public class SSHConfig {
             if (myPort == null) {
                 myPort = 22;
             }
-            if (myPreferredMethods == null) {
-                myPreferredMethods = Collections
-                        .unmodifiableList(Arrays.asList(SSHMain.PUBLIC_KEY_METHOD, SSHMain.KEYBOARD_INTERACTIVE_METHOD, SSHMain.PASSWORD_METHOD));
-            }
+//            if (myPreferredMethods == null) {
+//                myPreferredMethods = Collections
+//                        .unmodifiableList(Arrays.asList(SSHMain.PUBLIC_KEY_METHOD, SSHMain.KEYBOARD_INTERACTIVE_METHOD, SSHMain.PASSWORD_METHOD));
+//            }
             if (myBatchMode == null) {
                 myBatchMode = Boolean.FALSE;
             }
-            if (myHostKeyAlgorithms == null) {
-                myHostKeyAlgorithms = Collections.unmodifiableList(Arrays.asList(SSHMain.SSH_RSA_ALGORITHM, SSHMain.SSH_DSS_ALGORITHM));
-            }
+//            if (myHostKeyAlgorithms == null) {
+//                myHostKeyAlgorithms = Collections.unmodifiableList(Arrays.asList(SSHMain.SSH_RSA_ALGORITHM, SSHMain.SSH_DSS_ALGORITHM));
+//            }
             if (myNumberOfPasswordPrompts == null) {
                 myNumberOfPasswordPrompts = 3;
             }

@@ -16,9 +16,6 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by asebak on 28/03/15.
- */
 public class SSHHandler {
     private final String hostname;
     private final String username;
@@ -62,13 +59,14 @@ public class SSHHandler {
         } catch (UserAuthException e) {
             throw new RuntimeConfigurationException("Authentication Failed For Raspberry PI");
         }
+//        executeCommand()
         // ssh.authPassword(username, password);
         try {
 //            ssh.authPublickey(System.getProperty("user.name"));
             //ssh.useCompression();
-            final String src = System.getProperty("user.home") + File.separator + "intellij_plugin_test";
+            final String remoteDirec = File.separator + "home" + File.separator + username + File.separator + "IdeaProjects";
             final SFTPClient sftp = ssh.newSFTPClient();
-            sftp.put(new FileSystemFile(src), "/tmp");
+            sftp.put(new FileSystemFile(outputDirec), remoteDirec);
         } finally {
             ssh.disconnect();
         }

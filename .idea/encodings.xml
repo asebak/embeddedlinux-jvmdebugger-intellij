@@ -8,9 +8,9 @@
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/GitSSHXmlRpcClient.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/GitXmlRpcHandlerService.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/GitXmlRpcSshService.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/SSHConfig.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/SSHMain.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ScriptGenerator.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHConfig.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/GitSSHGUIHandler.java" charset="UTF-8" />
   </component>
 </project>
