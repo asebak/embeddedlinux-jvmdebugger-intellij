@@ -18,7 +18,6 @@ public class CommandLineBuilder {
         this.configuration = configuration;
         this.runnerParameters = configuration.getRunnerParameters();
         this.parameters = parameters;
-        String jarPath = parameters.getJarPath();
     }
 
     public String buildCommandLine() {
@@ -49,11 +48,12 @@ public class CommandLineBuilder {
     }
 
     private void addVMArguments(StringBuilder cmdBuf) {
-        if (!parameters.getVMParametersList().getParameters().isEmpty()) {
-            for (String arg : parameters.getVMParametersList().getParameters()) {
-                cmdBuf.append(' ').append(arg.trim());
-            }
-        }
+        cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=n,suspend=y,address=" + runnerParameters.getPort());
+//        if (!parameters.getVMParametersList().getParameters().isEmpty()) {
+//            for (String arg : parameters.getVMParametersList().getParameters()) {
+//                cmdBuf.append(' ').append(arg.trim());
+//            }
+//        }
     }
 
     private void addDebugOptions(StringBuilder cmdBuf) {

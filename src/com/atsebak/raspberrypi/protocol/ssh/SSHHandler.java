@@ -59,7 +59,7 @@ public class SSHHandler {
             ssh.disconnect();
         }
         String appPath = remoteDirec + File.separator + outputDirec.getName();
-        runJavaApp(appPath, cmd);
+        // runJavaApp(appPath, cmd);
     }
 
     private SSHClient build(SSHClient client) throws IOException {

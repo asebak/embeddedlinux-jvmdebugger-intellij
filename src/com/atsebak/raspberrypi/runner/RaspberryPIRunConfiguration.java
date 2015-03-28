@@ -312,7 +312,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
             final String jreHome = configuration.ALTERNATIVE_JRE_PATH_ENABLED ? configuration.ALTERNATIVE_JRE_PATH : null;
             JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
             params.setMainClass(configuration.MAIN_CLASS_NAME);
-            params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=" +
+            params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
                     configuration.getRunnerParameters().getPort());
             PathsList classPath = params.getClassPath();
             //last folder is the output
