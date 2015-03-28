@@ -53,7 +53,8 @@ public class GitSSHXmlRpcClient implements GitSSHHandler {
      * @return full method name
      */
     private static String methodName(@NonNls final String method) {
-        return GitSSHHandler.HANDLER_NAME + "." + method;
+//        return GitSSHHandler.HANDLER_NAME + "." + method;
+        return method;
     }
 
     /**

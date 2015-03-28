@@ -5,7 +5,6 @@ import com.atsebak.raspberrypi.protocol.GitXmlRpcSshService;
 import com.atsebak.raspberrypi.protocol.SSHMain;
 import com.atsebak.raspberrypi.ui.GitSSHGUIHandler;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -63,8 +62,8 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         try {
 
             GitXmlRpcSshService ssh = ServiceManager.getService(GitXmlRpcSshService.class);
-            final GeneralCommandLine myCommandLine = new GeneralCommandLine();
-            final Map<String, String> myEnv = new HashMap<String, String>(EnvironmentUtil.getEnvironmentMap());
+//            final GeneralCommandLine myCommandLine = new GeneralCommandLine();
+            Map<String, String> myEnv = new HashMap<String, String>(EnvironmentUtil.getEnvironmentMap());
             myEnv.put(GitSSHHandler.GIT_SSH_ENV, ssh.getScriptPath().getPath());
             int myHandlerNo = ssh.registerHandler(new GitSSHGUIHandler(p));
             myEnv.put(GitSSHHandler.SSH_HANDLER_ENV, Integer.toString(myHandlerNo));
@@ -86,9 +85,7 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
                     myEnv.put(GitSSHHandler.SSH_PROXY_PASSWORD_ENV, StringUtil.notNullize(httpConfigurable.getPlainProxyPassword()));
                 }
             }
-            myCommandLine.getEnvironment().clear();
-            myCommandLine.getEnvironment().putAll(myEnv);
-            SSHMain main = new SSHMain(myCommandLine, rp.getHostname(), rp.getUsername(), Integer.parseInt(rp.getPort()), "");
+            SSHMain main = new SSHMain(myEnv, rp.getHostname(), rp.getUsername(), Integer.parseInt(rp.getPort()), "");
             main.start();
         } catch (Exception e) {
 
