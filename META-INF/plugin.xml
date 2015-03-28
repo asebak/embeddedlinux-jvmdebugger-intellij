@@ -27,8 +27,6 @@
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
       <configurationType implementation="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationType"/>
-      <applicationService serviceInterface="com.atsebak.raspberrypi.protocol.GitXmlRpcSshService"
-                          serviceImplementation="com.atsebak.raspberrypi.protocol.GitXmlRpcSshService"/>
   </extensions>
 
   <application-components>

@@ -1,21 +1,30 @@
 package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
+import com.atsebak.raspberrypi.runner.console.SshUploader;
 import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
+import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.junit.RefactoringListeners;
 import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.ui.ConsoleView;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.execution.util.ProgramParametersUtil;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -26,8 +35,10 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 //ApplicationConfiguration RunConfigurationBase
@@ -37,6 +48,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     public static final String DEFAULT_DEBUG_POST = "4000";
     public static final boolean DEFAULT_RUN_AS_ROOT = true;
     public static final String DEFAULT_DISPLAY = ":0";
+    private static final Logger LOG = Logger.getInstance("#com.atsebak.raspberrypi.runner.RaspberryPIRunConfiguration");
     private final Map<String, String> myEnvs = new LinkedHashMap<String, String>();
     public String MAIN_CLASS_NAME;
     public String VM_PARAMETERS;
@@ -47,9 +59,9 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     public boolean ENABLE_SWING_INSPECTOR;
     public String ENV_VARIABLES;
     public boolean PASS_PARENT_ENVS;
-
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
     private Project project;
+
     protected RaspberryPIRunConfiguration(final Project project, final ConfigurationFactory factory) {
         super(new JavaRunConfigurationModule(project, false), factory);
         this.project = project;
@@ -92,8 +104,11 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
         final JavaCommandLineState state = new RemoteJavaApplicationCommandLineState(this, env);
-        JavaRunConfigurationModule module = getConfigurationModule();
-        state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
+//        JavaRunConfigurationModule module = getConfigurationModule();
+
+        final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getProject());
+        textConsoleBuilder.setViewer(true);
+        state.setConsoleBuilder(textConsoleBuilder);
         return state;
     }
 
@@ -256,13 +271,16 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 
     /** Class to configure command line state of the dev app server **/
     public static class RemoteJavaApplicationCommandLineState extends JavaCommandLineState {
-
+        private static final String[] OUTPUT_DIRECTORIES = {"out", "target"};
         private final RaspberryPIRunConfiguration configuration;
+        private ExecutionEnvironment environment;
 
         public RemoteJavaApplicationCommandLineState(@NotNull final RaspberryPIRunConfiguration configuration,
                                                final ExecutionEnvironment environment) {
             super(environment);
             this.configuration = configuration;
+            this.environment = environment;
+            createSSH();
         }
 
         @NotNull
@@ -270,8 +288,15 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         protected OSProcessHandler startProcess() throws ExecutionException {
             OSProcessHandler handler = super.startProcess();
             handler.setShouldDestroyProcessRecursively(true);
+            //todo fix console view
+//            ConsoleViewImpl consoleView = new ConsoleViewImpl(environment.getProject(), false);
+//            consoleView.print("Uploading Via SSH", ConsoleViewContentType.ERROR_OUTPUT);
+//            consoleView.attachToProcess(handler);
+//            handler.addProcessListener(new ConsoleListener(environment.getProject(), environment.getExecutor(), handler, consoleView));
+//            handler.startNotify();
             final RunnerSettings runnerSettings = getRunnerSettings();
             JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(configuration, handler, runnerSettings);
+//            LOG.info("AHMAD SEBAK");
             return handler;
         }
 
@@ -279,19 +304,98 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         protected JavaParameters createJavaParameters() throws ExecutionException {
             final JavaParameters params = new JavaParameters();
             final JavaRunConfigurationModule module = configuration.getConfigurationModule();
-
             final int classPathType = JavaParametersUtil.getClasspathType(module,
                     configuration.MAIN_CLASS_NAME,
                     false);
             final String jreHome = configuration.ALTERNATIVE_JRE_PATH_ENABLED ? configuration.ALTERNATIVE_JRE_PATH : null;
             JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
             params.setMainClass(configuration.MAIN_CLASS_NAME);
+            params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=" +
+                    configuration.getRunnerParameters().getPort());
+
             return params;
+        }
+
+        private void createSSH() {
+            RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
+            Module module = configuration.getConfigurationModule().getModule();
+            File outputDirectory = getOutputDirectory(module.getModuleFile().getParent().getPath());
+            try {
+                SshUploader uploader = new SshUploader();
+                uploader.uploadToTarget(runnerParameters, outputDirectory);
+            } catch (Exception e) {
+            }
+        }
+
+        private File getOutputDirectory(String relPath) {
+            //todo fix to come up with smart way to get output files
+            for (String s : OUTPUT_DIRECTORIES) {
+                File output = new File(relPath + File.separator + s);
+                if (output.exists()) {
+                    return output;
+                }
+            }
+            return null;
         }
 
         @Override
         protected GeneralCommandLine createCommandLine() throws ExecutionException {
             return super.createCommandLine();
         }
+
+        private static class ConsoleListener extends ProcessAdapter {
+            private final Project myProject;
+            private final Executor myExecutor;
+            private final ProcessHandler myProcessHandler;
+            private final StringBuilder myUnprocessedStdErr = new StringBuilder();
+            private ConsoleView console;
+
+            public ConsoleListener(@NotNull Project project,
+                                   @NotNull Executor executor,
+                                   @NotNull ProcessHandler processHandler,
+                                   @NotNull ConsoleView console) {
+                myProject = project;
+                myExecutor = executor;
+                myProcessHandler = processHandler;
+                this.console = console;
+            }
+
+            @Override
+            public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
+                myProcessHandler.removeProcessListener(this);
+            }
+
+            @Override
+            public void onTextAvailable(ProcessEvent event, Key outputType) {
+                final String text = event.getText();
+                final ConsoleViewContentType consoleViewType = ConsoleViewContentType.getConsoleViewType(outputType);
+                console.print(text, consoleViewType);
+//                final Printable printable = new Printable() {
+//                    @Override
+//                    public void printOn(final Printer printer) {
+//                        printer.print(text, consoleViewType);
+//                    }
+//                };
+//                final Extractor extractor;
+
+                boolean hasError = text != null && text.toLowerCase(Locale.US).contains("error");
+//                if (hasError || ProcessOutputTypes.STDERR.equals(outputType)) {
+                ExecutionManager.getInstance(myProject).getContentManager().toFrontRunContent(myExecutor, myProcessHandler);
+            }
+        }
     }
-}
+
+    public static class ProcessOutputCollector extends ProcessAdapter {
+        private final StringBuilder sb = new StringBuilder();
+
+        @Override
+        public void onTextAvailable(ProcessEvent event, Key outputType) {
+            sb.append(event.getText());
+        }
+
+        public String getText() {
+            return sb.toString();
+        }
+    }
+    }
+
