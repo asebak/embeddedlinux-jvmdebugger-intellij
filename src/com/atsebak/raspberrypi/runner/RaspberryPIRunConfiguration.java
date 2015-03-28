@@ -1,16 +1,16 @@
 package com.atsebak.raspberrypi.runner;
 
+import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.diagnostic.logging.LogConfigurationPanel;
 import com.intellij.execution.*;
-import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.junit.RefactoringListeners;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
 import com.intellij.execution.util.ProgramParametersUtil;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.Project;
@@ -20,7 +20,6 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.util.PathsList;
 import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 //ApplicationConfiguration RunConfigurationBase
 
@@ -37,6 +38,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     public static final String DEFAULT_DEBUG_POST = "4000";
     public static final boolean DEFAULT_RUN_AS_ROOT = true;
     public static final String DEFAULT_DISPLAY = ":0";
+    private final Map<String, String> myEnvs = new LinkedHashMap<String, String>();
     public String MAIN_CLASS_NAME;
     public String VM_PARAMETERS;
     public String PROGRAM_PARAMETERS;
@@ -45,7 +47,6 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     public String ALTERNATIVE_JRE_PATH;
     public boolean ENABLE_SWING_INSPECTOR;
     public String ENV_VARIABLES;
-    private final Map<String,String> myEnvs = new LinkedHashMap<String, String>();
     public boolean PASS_PARENT_ENVS;
 
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
@@ -119,9 +120,9 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     private void checkJavaSettings() throws RuntimeConfigurationException {
         JavaParametersUtil.checkAlternativeJRE(this);
         JavaRunConfigurationModule var1 = this.getConfigurationModule();
-        PsiClass var2 = var1.checkModuleAndClassName(this.MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text", new Object[0]));
+        PsiClass var2 = var1.checkModuleAndClassName(this.MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text"));
         if (!PsiMethodUtil.hasMainMethod(var2)) {
-            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", new Object[]{this.MAIN_CLASS_NAME}));
+            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", this.MAIN_CLASS_NAME));
         } else {
             ProgramParametersUtil.checkWorkingDirectoryExist(this, this.getProject(), var1.getModule());
             JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
@@ -132,16 +133,16 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         return raspberryPIRunnerParameters;
     }
 
+    @Nullable
+    public PsiClass getMainClass() {
+        return this.getConfigurationModule().findClass(this.MAIN_CLASS_NAME);
+    }
+
     public void setMainClass(PsiClass var1) {
         Module var2 = this.getConfigurationModule().getModule();
         this.setMainClassName(JavaExecutionUtil.getRuntimeQualifiedName(var1));
         this.setModule(JavaExecutionUtil.findModule(var1));
         this.restoreOriginalModule(var2);
-    }
-
-    @Nullable
-    public PsiClass getMainClass() {
-        return ((JavaRunConfigurationModule)this.getConfigurationModule()).findClass(this.MAIN_CLASS_NAME);
     }
 
     @Nullable
@@ -158,13 +159,13 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     }
 
     @Override
-    public void setVMParameters(String var1) {
-        this.VM_PARAMETERS = var1;
+    public String getVMParameters() {
+        return this.VM_PARAMETERS;
     }
 
     @Override
-    public String getVMParameters() {
-        return this.VM_PARAMETERS;
+    public void setVMParameters(String var1) {
+        this.VM_PARAMETERS = var1;
     }
 
     @Override
@@ -200,11 +201,6 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         return null;
     }
 
-    @Override
-    public void setProgramParameters(@Nullable String var1) {
-        this.PROGRAM_PARAMETERS = var1;
-    }
-
     @Nullable
     @Override
     public String getProgramParameters() {
@@ -212,8 +208,8 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     }
 
     @Override
-    public void setWorkingDirectory(@Nullable String s) {
-        this.WORKING_DIRECTORY = ExternalizablePath.urlValue(s);
+    public void setProgramParameters(@Nullable String var1) {
+        this.PROGRAM_PARAMETERS = var1;
     }
 
     @Nullable
@@ -223,9 +219,8 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     }
 
     @Override
-    public void setEnvs(@NotNull final Map<String, String> envs) {
-        myEnvs.clear();
-        myEnvs.putAll(envs);
+    public void setWorkingDirectory(@Nullable String s) {
+        this.WORKING_DIRECTORY = ExternalizablePath.urlValue(s);
     }
 
     @NotNull
@@ -235,13 +230,19 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     }
 
     @Override
-    public void setPassParentEnvs(boolean b) {
-        this.PASS_PARENT_ENVS = b;
+    public void setEnvs(@NotNull final Map<String, String> envs) {
+        myEnvs.clear();
+        myEnvs.putAll(envs);
     }
 
     @Override
     public boolean isPassParentEnvs() {
         return this.PASS_PARENT_ENVS;
+    }
+
+    @Override
+    public void setPassParentEnvs(boolean b) {
+        this.PASS_PARENT_ENVS = b;
     }
 
     @Nullable
@@ -260,6 +261,16 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
                                                final ExecutionEnvironment environment) {
             super(environment);
             this.configuration = configuration;
+        }
+
+        @NotNull
+        @Override
+        protected OSProcessHandler startProcess() throws ExecutionException {
+            OSProcessHandler handler = super.startProcess();
+            handler.setShouldDestroyProcessRecursively(true);
+            final RunnerSettings runnerSettings = getRunnerSettings();
+            JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(configuration, handler, runnerSettings);
+            return handler;
         }
 
         @Override
@@ -322,6 +333,11 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 //            UsageTracker.getInstance()
 //                    .trackEvent(GctTracking.CATEGORY, GctTracking.RUN, configuration.getSyncWithGradle() ? "sync" : "custom", null);
 //            return params;
+        }
+
+        @Override
+        protected GeneralCommandLine createCommandLine() throws ExecutionException {
+            return super.createCommandLine();
         }
     }
 }

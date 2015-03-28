@@ -1,8 +1,9 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.ui;
 
+import com.atsebak.raspberrypi.runner.RaspberryPIRunConfiguration;
+import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.JavaExecutionUtil;
-import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.AlternativeJREPanel;
 import com.intellij.execution.ui.ClassBrowser;

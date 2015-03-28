@@ -3,11 +3,11 @@ package com.atsebak.raspberrypi.runner;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,9 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-            throw  new NotImplementedException("Not Supported yet");
+            RaspberryPIRunnerParameters runnerParameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
+
+            throw new NotImplementedException("Not Supported yet");
         }
         else {
             return super.doExecute(profileState, environment);
@@ -32,6 +34,7 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
 
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && (profile instanceof RaspberryPIRunConfiguration);
+        return (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) || DefaultRunExecutor.EXECUTOR_ID.equals(executorId)) &&
+                profile instanceof RaspberryPIRunConfiguration;
     }
 }
