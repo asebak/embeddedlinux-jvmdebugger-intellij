@@ -109,6 +109,11 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         textConsoleBuilder.setViewer(true);
         state.setConsoleBuilder(textConsoleBuilder);
         return state;
+//        textConsoleBuilder.getConsole().print("TESTING", ConsoleViewContentType.NORMAL_OUTPUT);
+//        textConsoleBuilder.getConsole().attachToProcess();
+//        textConsoleBuilder.getConsole().attachToProcess();
+//        return state;
+//        return new PIJavaCommandLineState(getProject(), env);
     }
 
 

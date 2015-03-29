@@ -23,7 +23,7 @@ public class RaspberryPiRunnerValidator {
         if (rp.getDisplay() == null || rp.getDisplay().isEmpty()) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.xdisplay"));
         }
-        if (rp.getHostname() == null || rp.getHostname().isEmpty()) {
+        if (!isValidHost(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
         if (rp.getPort() == null || rp.getPort().isEmpty()) {
@@ -50,5 +50,21 @@ public class RaspberryPiRunnerValidator {
             ProgramParametersUtil.checkWorkingDirectoryExist(configuration, configuration.getProject(), javaRunConfigurationModule.getModule());
             JavaRunConfigurationExtensionManager.checkConfigurationIsValid(configuration);
         }
+    }
+
+    /**
+     * Validates host can be contacted
+     *
+     * @param ip
+     * @return
+     * @throws RuntimeConfigurationWarning
+     */
+    private static boolean isValidHost(String ip) throws RuntimeConfigurationWarning {
+        return !(ip == null || ip.isEmpty());
+        //        try {
+//            return InetAddress.getByName(ip).isReachable(200);
+//        } catch (IOException e) {
+//            throw new RuntimeConfigurationWarning("Hostname could not be reached.");
+//        }
     }
 }

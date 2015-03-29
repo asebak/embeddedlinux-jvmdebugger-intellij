@@ -4,9 +4,7 @@ import com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.*;
-import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunProfileState;
+import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.remote.RemoteConfiguration;
@@ -83,6 +81,9 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
     @Override
     protected RunContentDescriptor createContentDescriptor(RunProfileState state, ExecutionEnvironment env)
             throws ExecutionException {
+        JavaCommandLine javaCommandLine = (JavaCommandLine) state;
+        JavaParameters params = javaCommandLine.getJavaParameters();
+
         return super.createContentDescriptor(state, env);
     }
 

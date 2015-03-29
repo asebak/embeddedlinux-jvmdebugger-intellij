@@ -1,14 +1,21 @@
 package com.atsebak.raspberrypi.runner;
 
+import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.protocol.ssh.CommandLineTargetBuilder;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.JavaCommandLineState;
+import com.intellij.execution.configurations.JavaCommandLineStateUtil;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
+import com.intellij.javadoc.JavadocBundle;
+import com.intellij.openapi.util.Key;
 import com.intellij.util.PathsList;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,12 +28,36 @@ public class PIAppCommandLineState extends JavaCommandLineState {
                                  final ExecutionEnvironment environment) {
         super(environment);
         this.configuration = configuration;
+        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
     }
 
     @NotNull
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
-        return super.startProcess();
+        final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
+        ProcessTerminatedListener.attach(handler, configuration.getProject(), JavadocBundle.message("javadoc.generate.exited"));
+        handler.addProcessListener(new ProcessAdapter() {
+            @Override
+            public void startNotified(ProcessEvent event) {
+                super.startNotified(event);
+            }
+
+            @Override
+            public void onTextAvailable(ProcessEvent event, Key outputType) {
+                super.onTextAvailable(event, outputType);
+            }
+
+            @Override
+            public void processTerminated(ProcessEvent event) {
+                super.processTerminated(event);
+            }
+
+            @Override
+            public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
+                super.processWillTerminate(event, willBeDestroyed);
+            }
+        });
+        return handler;
     }
 
     /**
