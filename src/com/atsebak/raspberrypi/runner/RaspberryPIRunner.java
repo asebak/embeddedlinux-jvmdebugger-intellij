@@ -1,5 +1,7 @@
 package com.atsebak.raspberrypi.runner;
 
+import com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory;
+import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunProfile;
@@ -12,6 +14,7 @@ import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -49,15 +52,13 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     @Override
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
+        FileDocumentManager.getInstance().saveAllDocuments();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-//            super.doExecute()
             RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
             closeOldSessionAndRun(environment.getProject(), parameters);
-            return super.doExecute(profileState, environment);
-            //by returning null it won't execute the java application
-        } else {
-            return super.doExecute(profileState, environment);
         }
+        setupConsole(environment.getProject());
+        return null;
     }
 
     /**
@@ -156,6 +157,19 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     private void runSession(final Project project, RaspberryPIRunnerParameters parameters) {
         final RunnerAndConfigurationSettings settings = createRunConfiguration(project, parameters.getPort(), parameters.getHostname());
         ProgramRunnerUtil.executeConfiguration(project, settings, DefaultDebugExecutor.getDebugExecutorInstance());
+    }
+
+    /**
+     * Adds a Console Logger From The Remote App
+     *
+     * @param p
+     */
+    private void setupConsole(Project p) {
+        ToolWindow window = ToolWindowManager.getInstance(p).getToolWindow(PIConsoleToolWindowFactory.ID);
+        if (window != null) {
+            window.activate(null, true);
+            PIConsoleView.getInstance(p).clear();
+        }
     }
 
 }

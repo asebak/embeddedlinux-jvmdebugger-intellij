@@ -27,6 +27,11 @@
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
       <configurationType implementation="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationType"/>
+      <toolWindow id="PI Console"
+                  anchor="bottom"
+                  secondary="true"
+                  factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
+      <projectService serviceImplementation="com.atsebak.raspberrypi.console.PIConsoleView"/>
 
   </extensions>
 
@@ -35,6 +40,7 @@
   </application-components>
 
   <project-components>
+
     <!-- Add your project components here -->
   </project-components>
 
@@ -48,5 +54,6 @@
       <!--<add-to-group group-id="RunMenu"/>-->
       <!--</action>-->
   </actions>
+
 
 </idea-plugin>
