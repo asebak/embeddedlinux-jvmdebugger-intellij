@@ -6,9 +6,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 
-/**
- * Created by asebak on 29/03/15.
- */
 public class PIConnectDebuggerAction extends AnAction {
 
 
@@ -18,7 +15,7 @@ public class PIConnectDebuggerAction extends AnAction {
         assert project != null;
 
         final PIProcessChooserDialog dialog = new PIProcessChooserDialog(project);
-        dialog.show();
+//        dialog.show();
     }
 
 

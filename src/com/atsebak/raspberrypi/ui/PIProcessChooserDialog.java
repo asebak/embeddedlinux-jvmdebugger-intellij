@@ -19,37 +19,62 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
-
 
 public class PIProcessChooserDialog extends DialogWrapper {
     @NonNls
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
 
     private Project project;
-    private JPanel mainLayout;
+    private JPanel contentPane = new JPanel();
+    private JButton buttonOK = new JButton("Debug");
+    private JButton buttonCancel = new JButton("Cancel");
+    private JLabel hostnameText = new JLabel("Hostname");
+    private JLabel porttext = new JLabel("Port");
+    private JTextField hostname = new JFormattedTextField();
+    private JTextField port = new JFormattedTextField();
 
     public PIProcessChooserDialog(@NotNull Project project) {
         super(project);
         this.project = project;
-        setTitle("Pi Settings");
-        mainLayout = new JPanel();
-    }
+        buttonOK.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onOK();
+            }
+        });
 
-    private static RunnerAndConfigurationSettings createRunConfiguration(Project project, String debugPort) {
-        final RemoteConfigurationType remoteConfigurationType = RemoteConfigurationType.getInstance();
+        buttonCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
 
-        final ConfigurationFactory factory = remoteConfigurationType.getFactory();
-        final RunnerAndConfigurationSettings runSettings =
-                RunManager.getInstance(project).createRunConfiguration(getRunConfigurationName(debugPort), factory);
-        final RemoteConfiguration configuration = (RemoteConfiguration) runSettings.getConfiguration();
 
-        configuration.HOST = "localhost";
-        configuration.PORT = debugPort;
-        configuration.USE_SOCKET_TRANSPORT = true;
-        configuration.SERVER_MODE = false;
+// call onCancel() when cross is clicked
+//        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+//        addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent e) {
+//                onCancel();
+//            }
+//        });
 
-        return runSettings;
+// call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        contentPane.add(hostnameText);
+        contentPane.add(hostname);
+        contentPane.add(porttext);
+        contentPane.add(port);
+        contentPane.add(buttonOK);
+        contentPane.add(buttonCancel);
+        onOK();
     }
 
     @NotNull
@@ -60,16 +85,39 @@ public class PIProcessChooserDialog extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        return mainLayout;
+        return contentPane;
     }
 
-    @Override
-    protected void doOKAction() {
+    private void onOK() {
         final PropertiesComponent properties = PropertiesComponent.getInstance(project);
 
-        final String debugPort = "1234";
+        hostname.setText("10.42.0.67");
+        port.setText("765");
+        final String debugPort = port.getText();
 
         closeOldSessionAndRun(debugPort);
+        dispose();
+    }
+
+    private void onCancel() {
+// add your code here if necessary
+        dispose();
+    }
+
+    private RunnerAndConfigurationSettings createRunConfiguration(Project project, String debugPort) {
+        final RemoteConfigurationType remoteConfigurationType = RemoteConfigurationType.getInstance();
+
+        final ConfigurationFactory factory = remoteConfigurationType.getFactory();
+        final RunnerAndConfigurationSettings runSettings =
+                RunManager.getInstance(project).createRunConfiguration(getRunConfigurationName(debugPort), factory);
+        final RemoteConfiguration configuration = (RemoteConfiguration) runSettings.getConfiguration();
+
+        configuration.HOST = hostname.getText();
+        configuration.PORT = debugPort;
+        configuration.USE_SOCKET_TRANSPORT = true;
+        configuration.SERVER_MODE = false;
+
+        return runSettings;
     }
 
     private void closeOldSessionAndRun(final String debugPort) {

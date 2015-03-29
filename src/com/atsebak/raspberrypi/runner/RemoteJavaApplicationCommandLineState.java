@@ -50,8 +50,8 @@ public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState 
 
         CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
         invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
-        params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=" +
-                configuration.getRunnerParameters().getHostname() + ":" + configuration.getRunnerParameters().getPort());
+//        params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=" +
+//                configuration.getRunnerParameters().getHostname() + ":" + configuration.getRunnerParameters().getPort());
 
 
         return params;
