@@ -6,24 +6,31 @@ import com.intellij.execution.configurations.JavaParameters;
 
 import java.util.Map;
 
-/**
- * Created by asebak on 28/03/15.
- */
-public class CommandLineBuilder {
+
+public class CommandLineTargetBuilder {
     private final RaspberryPIRunConfiguration configuration;
     private final JavaParameters parameters;
     private final RaspberryPIRunnerParameters runnerParameters;
 
-    public CommandLineBuilder(final RaspberryPIRunConfiguration configuration, final JavaParameters parameters) {
+    /**
+     * @param configuration PI Configuration
+     * @param parameters    Java Parameters
+     */
+    public CommandLineTargetBuilder(final RaspberryPIRunConfiguration configuration, final JavaParameters parameters) {
         this.configuration = configuration;
         this.runnerParameters = configuration.getRunnerParameters();
         this.parameters = parameters;
     }
 
+    /**
+     * Builds the command line command to invoke the java from the target machine
+     *
+     * @return
+     */
     public String buildCommandLine() {
         StringBuilder cmdBuf = new StringBuilder();
         addRunAsRootOption(cmdBuf);
-        addEnvironmentVariables(cmdBuf, "");
+        addEnvironmentVariables(cmdBuf);
         cmdBuf.append(" java ");
         addDebugOptions(cmdBuf);
         addVMArguments(cmdBuf);
@@ -35,27 +42,35 @@ public class CommandLineBuilder {
     }
 
     private void addArguments(StringBuilder cmdBuf) {
-//        cmdBuf.append(' ').append(parameters.ge);
+        //todo add java arguments
+
     }
 
     private void addMainType(StringBuilder cmdBuf) {
         cmdBuf.append(" ").append(parameters.getMainClass()).append(" ");
     }
 
+    /**
+     * Adds the classpath to java app
+     *
+     * @param cmdBuf
+     */
     private void addClasspath(StringBuilder cmdBuf) {
         cmdBuf.append(" -cp . ");
-//        cmdBuf.append(" -cp classes:lib/'*' ");
     }
 
+    /**
+     * Adds Virtual Machine Arguments
+     * @param cmdBuf
+     */
     private void addVMArguments(StringBuilder cmdBuf) {
-        cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=n,suspend=y,address=" + runnerParameters.getPort());
-//        if (!parameters.getVMParametersList().getParameters().isEmpty()) {
-//            for (String arg : parameters.getVMParametersList().getParameters()) {
-//                cmdBuf.append(' ').append(arg.trim());
-//            }
-//        }
+        cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + runnerParameters.getPort());
     }
 
+    /**
+     * Adds debug options
+     * @param cmdBuf
+     */
     private void addDebugOptions(StringBuilder cmdBuf) {
         if (!parameters.getProgramParametersList().getParameters().isEmpty()) {
             for (String arg : parameters.getProgramParametersList().getParameters()) {
@@ -64,7 +79,12 @@ public class CommandLineBuilder {
         }
     }
 
-    private void addEnvironmentVariables(StringBuilder cmdBuf, String homeFolder) {
+    /**
+     * Adds Environment Variables
+     *
+     * @param cmdBuf
+     */
+    private void addEnvironmentVariables(StringBuilder cmdBuf) {
         cmdBuf.append(" ");
         for (Map.Entry<String, String> entry : parameters.getEnv().entrySet()) {
             String value = entry.getValue().replaceAll("\"", "\\\"");
@@ -73,6 +93,10 @@ public class CommandLineBuilder {
         cmdBuf.append(" ");
     }
 
+    /**
+     * Adds the sudo user to command
+     * @param cmdBuf
+     */
     private void addRunAsRootOption(StringBuilder cmdBuf) {
         if (runnerParameters.isRunAsRoot()) {
             cmdBuf.append(" sudo ");

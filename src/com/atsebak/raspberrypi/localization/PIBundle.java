@@ -25,7 +25,7 @@ import java.lang.ref.SoftReference;
 import java.util.ResourceBundle;
 
 /**
- * The bundle for SSH messages
+ * The bundle for PI messages
  */
 public class PIBundle {
 
@@ -33,13 +33,24 @@ public class PIBundle {
     private static final String BUNDLE = "com.atsebak.raspberrypi.localization.PIBundle";
     private static Reference<ResourceBundle> ourBundle;
 
+    /**
+     * Private Constructor
+     */
     private PIBundle() {
     }
 
+    /**
+     * @param key
+     * @param params
+     * @return
+     */
     public static String message(@NotNull @PropertyKey(resourceBundle = BUNDLE) String key, @NotNull Object... params) {
         return BundleBase.message(getBundle(), key, params);
     }
 
+    /**
+     * @return
+     */
     private static ResourceBundle getBundle() {
         ResourceBundle bundle = com.intellij.reference.SoftReference.dereference(ourBundle);
         if (bundle == null) {
@@ -49,6 +60,10 @@ public class PIBundle {
         return bundle;
     }
 
+    /**
+     * @param key The Key
+     * @return The Localized Text
+     */
     public static String getString(@PropertyKey(resourceBundle = BUNDLE) final String key) {
         return getBundle().getString(key);
     }

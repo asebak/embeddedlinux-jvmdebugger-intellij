@@ -28,7 +28,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@SuppressWarnings("unused")
 public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryPIRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
     private final JreVersionDetector myVersionDetector;
