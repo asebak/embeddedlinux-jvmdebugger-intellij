@@ -12,7 +12,7 @@ public class CommandLineTargetBuilder {
     private final JavaParameters parameters;
     private final RaspberryPIRunnerParameters runnerParameters;
 
-    /**
+    /** Builds command line to be execute on remote device
      * @param configuration PI Configuration
      * @param parameters    Java Parameters
      */
@@ -46,6 +46,11 @@ public class CommandLineTargetBuilder {
 
     }
 
+    /**
+     * Adds Main class
+     *
+     * @param cmdBuf
+     */
     private void addMainType(StringBuilder cmdBuf) {
         cmdBuf.append(" ").append(parameters.getMainClass()).append(" ");
     }

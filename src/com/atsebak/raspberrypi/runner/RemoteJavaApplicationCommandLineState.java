@@ -30,12 +30,17 @@ public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState 
     protected OSProcessHandler startProcess() throws ExecutionException {
         OSProcessHandler handler = super.startProcess();
         handler.setShouldDestroyProcessRecursively(true);
-        //todo fix console view maybe here?
         final RunnerSettings runnerSettings = getRunnerSettings();
         JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(configuration, handler, runnerSettings);
         return handler;
     }
 
+    /**
+     * Creates the necessary Java paramaters for the application.
+     *
+     * @return
+     * @throws ExecutionException
+     */
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
         final JavaParameters params = new JavaParameters();
@@ -50,13 +55,14 @@ public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState 
 
         CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
         invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
-//        params.getVMParametersList().addParametersString("-Xdebug -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=" +
-//                configuration.getRunnerParameters().getHostname() + ":" + configuration.getRunnerParameters().getPort());
-
-
         return params;
     }
 
+    /**
+     * Executes Required SSH Commands
+     * @param projectOutput
+     * @param builder
+     */
     private void invokeSSH(String projectOutput, CommandLineTargetBuilder builder) {
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
         SSHUploader uploader = new SSHUploader();

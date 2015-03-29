@@ -2,6 +2,7 @@ package com.atsebak.raspberrypi.protocol.ssh;
 
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.common.StreamCopier;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
@@ -9,7 +10,6 @@ import net.schmizz.sshj.xfer.FileSystemFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class SSHHandler {
     private final String hostname;
@@ -27,7 +27,7 @@ public class SSHHandler {
         this.password = password;
     }
 
-    /**
+    /** Uploads Java application output folders
      * @param outputDirec Output directory folder where to store the java application
      * @param cmd         The command to execute on the java files
      * @throws IOException
@@ -62,7 +62,7 @@ public class SSHHandler {
     }
 
     /**
-     *
+     *  Runs that java app with the specified command and then takes the console output from target to host machine
      * @param targetPathOnRemote
      * @param cmd
      * @throws IOException
@@ -70,14 +70,14 @@ public class SSHHandler {
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException {
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
+        session.setAutoExpand(true);
         try {
             //kill existing process, change to java folder and run it.
-
             Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
-//            System.out.println(IOUtils.readFully(exec.getInputStream()).toString());
-            exec.join(5, TimeUnit.SECONDS);
-//            System.out.println("\n** exit status: " + exec.getExitStatus());
+            new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
+            new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
+            //todo is this needed?
 //            session.close();
 //            sshClient.close();
         }

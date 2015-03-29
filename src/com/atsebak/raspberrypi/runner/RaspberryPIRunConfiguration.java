@@ -29,10 +29,20 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         SingleClassConfiguration, RefactoringListenerProvider {
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
 
+    /**
+     * Run Configurations To Run App
+     *
+     * @param project
+     * @param factory
+     */
     protected RaspberryPIRunConfiguration(final Project project, final ConfigurationFactory factory) {
         super(new JavaRunConfigurationModule(project, false), factory);
     }
 
+    /**
+     * Settings Editor
+     * @return
+     */
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
@@ -43,15 +53,28 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         return group;
     }
 
+    /**
+     * Creates new running paramters instance
+     * @return
+     */
     protected RaspberryPIRunnerParameters createRunnerParametersInstance() {
         return new RaspberryPIRunnerParameters();
     }
 
+    /**
+     * All modules are valid in the project
+     * @return
+     */
     @Override
     public Collection<Module> getValidModules() {
         return JavaRunConfigurationModule.getModulesForClass(this.getProject(), this.getRunnerParameters().getMainclass());
     }
 
+    /**
+     * Read External
+     * @param element
+     * @throws InvalidDataException
+     */
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
@@ -59,6 +82,11 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         XmlSerializer.deserializeInto(raspberryPIRunnerParameters, element);
     }
 
+    /**
+     * Write External
+     * @param element
+     * @throws WriteExternalException
+     */
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
@@ -67,6 +95,13 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
         }
     }
 
+    /**
+     * Gets the state of the execution environment
+     * @param executor
+     * @param env
+     * @return
+     * @throws ExecutionException
+     */
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
         final JavaCommandLineState state = new RemoteJavaApplicationCommandLineState(this, env);
@@ -77,12 +112,20 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     }
 
 
+    /**
+     * Checks weather all the supplied paramters from the user are correct
+     * @throws RuntimeConfigurationException
+     */
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         RaspberryPiRunnerValidator.checkJavaSettings(this);
         RaspberryPiRunnerValidator.checkPiSettings(getRunnerParameters());
     }
 
+    /**
+     * Gets runner paramters instance
+     * @return
+     */
     public RaspberryPIRunnerParameters getRunnerParameters() {
         return raspberryPIRunnerParameters;
     }
