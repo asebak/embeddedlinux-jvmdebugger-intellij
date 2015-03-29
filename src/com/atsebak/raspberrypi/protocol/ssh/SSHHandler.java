@@ -2,7 +2,6 @@ package com.atsebak.raspberrypi.protocol.ssh;
 
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
@@ -72,15 +71,15 @@ public class SSHHandler {
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         try {
-            //todo figure why ssh client is locking up
             //kill existing process, change to java folder and run it.
-            Session.Command exec = session.exec("sudo killall java || cd " + targetPathOnRemote + " && " + cmd);
-            System.out.println(IOUtils.readFully(exec.getInputStream()).toString());
+
+            Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
+//            System.out.println(IOUtils.readFully(exec.getInputStream()).toString());
             exec.join(5, TimeUnit.SECONDS);
-            System.out.println("\n** exit status: " + exec.getExitStatus());
+//            System.out.println("\n** exit status: " + exec.getExitStatus());
         } finally {
-            session.close();
-            sshClient.close();
+//            session.close();
+//            sshClient.close();
         }
     }
 }
