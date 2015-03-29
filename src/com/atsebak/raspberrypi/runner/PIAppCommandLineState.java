@@ -47,8 +47,8 @@ public class PIAppCommandLineState extends JavaCommandLineState {
         params.setMainClass(configuration.getRunClass());
         PathsList classPath = params.getClassPath();
 
-        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
-        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
+//        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
+//        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
         return params;
     }
 
