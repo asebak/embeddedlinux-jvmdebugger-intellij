@@ -27,6 +27,12 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     @NonNls
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
 
+    /**
+     * Gets the debug runner
+     *
+     * @param debugPort
+     * @return
+     */
     @NotNull
     private static String getRunConfigurationName(String debugPort) {
         return String.format(RUN_CONFIGURATION_NAME_PATTERN, debugPort);
@@ -44,9 +50,10 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
+//            super.doExecute()
             RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
             closeOldSessionAndRun(environment.getProject(), parameters);
-            return null;
+            return super.doExecute(profileState, environment);
             //by returning null it won't execute the java application
         } else {
             return super.doExecute(profileState, environment);

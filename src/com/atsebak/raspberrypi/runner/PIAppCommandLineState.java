@@ -3,11 +3,9 @@ package com.atsebak.raspberrypi.runner;
 import com.atsebak.raspberrypi.protocol.ssh.CommandLineTargetBuilder;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.intellij.execution.ExecutionException;
-import com.intellij.execution.JavaRunConfigurationExtensionManager;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.JavaParametersUtil;
@@ -16,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState {
+public class PIAppCommandLineState extends JavaCommandLineState {
     private final RaspberryPIRunConfiguration configuration;
 
-    public RemoteJavaApplicationCommandLineState(@NotNull final RaspberryPIRunConfiguration configuration,
-                                                 final ExecutionEnvironment environment) {
+    public PIAppCommandLineState(@NotNull final RaspberryPIRunConfiguration configuration,
+                                 final ExecutionEnvironment environment) {
         super(environment);
         this.configuration = configuration;
     }
@@ -28,11 +26,7 @@ public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState 
     @NotNull
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
-        OSProcessHandler handler = super.startProcess();
-        handler.setShouldDestroyProcessRecursively(true);
-        final RunnerSettings runnerSettings = getRunnerSettings();
-        JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(configuration, handler, runnerSettings);
-        return handler;
+        return super.startProcess();
     }
 
     /**

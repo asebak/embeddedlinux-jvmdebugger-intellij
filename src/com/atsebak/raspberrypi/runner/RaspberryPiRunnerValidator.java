@@ -21,16 +21,16 @@ public class RaspberryPiRunnerValidator {
      */
     public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationException {
         if (rp.getDisplay() == null || rp.getDisplay().isEmpty()) {
-            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.xdisplay"));
+            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.xdisplay"));
         }
         if (rp.getHostname() == null || rp.getHostname().isEmpty()) {
-            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.hostname"));
+            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
         if (rp.getPort() == null || rp.getPort().isEmpty()) {
-            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.port"));
+            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.port"));
         }
         if (rp.getUsername() == null || rp.getUsername().isEmpty()) {
-            throw new RuntimeConfigurationException(PIBundle.getString("pi.invalid.username"));
+            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.username"));
         }
     }
 
@@ -42,12 +42,12 @@ public class RaspberryPiRunnerValidator {
      */
     public static void checkJavaSettings(RaspberryPIRunConfiguration configuration) throws RuntimeConfigurationException {
         JavaParametersUtil.checkAlternativeJRE(configuration);
-        JavaRunConfigurationModule var1 = configuration.getConfigurationModule();
-        PsiClass var2 = var1.checkModuleAndClassName(configuration.getRunClass(), ExecutionBundle.message("no.main.class.specified.error.text"));
-        if (!PsiMethodUtil.hasMainMethod(var2)) {
+        JavaRunConfigurationModule javaRunConfigurationModule = configuration.getConfigurationModule();
+        PsiClass psiClass = javaRunConfigurationModule.checkModuleAndClassName(configuration.getRunClass(), ExecutionBundle.message("no.main.class.specified.error.text"));
+        if (!PsiMethodUtil.hasMainMethod(psiClass)) {
             throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.getRunClass()));
         } else {
-            ProgramParametersUtil.checkWorkingDirectoryExist(configuration, configuration.getProject(), var1.getModule());
+            ProgramParametersUtil.checkWorkingDirectoryExist(configuration, configuration.getProject(), javaRunConfigurationModule.getModule());
             JavaRunConfigurationExtensionManager.checkConfigurationIsValid(configuration);
         }
     }

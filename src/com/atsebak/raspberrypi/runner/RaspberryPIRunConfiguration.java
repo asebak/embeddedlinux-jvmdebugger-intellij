@@ -104,7 +104,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
      */
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        final JavaCommandLineState state = new RemoteJavaApplicationCommandLineState(this, env);
+        final PIAppCommandLineState state = new PIAppCommandLineState(this, env);
         final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getProject());
         textConsoleBuilder.setViewer(true);
         state.setConsoleBuilder(textConsoleBuilder);
