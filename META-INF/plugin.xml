@@ -39,14 +39,14 @@
   </project-components>
 
   <actions>
-      <action id="PIConnectDebuggerAction"
-              class="com.atsebak.raspberrypi.actions.PIConnectDebuggerAction"
-              text="Attach debugger to PI process"
-              description="Attach debugger to PI process"
-              icon="/pi.png">
-          <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>
-          <add-to-group group-id="RunMenu"/>
-      </action>
+      <!--<action id="PIConnectDebuggerAction"-->
+      <!--class="com.atsebak.raspberrypi.actions.PIConnectDebuggerAction"-->
+      <!--text="Attach debugger to PI process"-->
+      <!--description="Attach debugger to PI process"-->
+      <!--icon="/pi.png">-->
+      <!--<add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>-->
+      <!--<add-to-group group-id="RunMenu"/>-->
+      <!--</action>-->
   </actions>
 
 </idea-plugin>
