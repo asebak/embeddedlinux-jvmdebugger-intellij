@@ -41,11 +41,11 @@ public class RemoteJavaApplicationCommandLineState extends JavaCommandLineState 
         final JavaParameters params = new JavaParameters();
         final JavaRunConfigurationModule module = configuration.getConfigurationModule();
         final int classPathType = JavaParametersUtil.getClasspathType(module,
-                configuration.MAIN_CLASS_NAME,
+                configuration.getRunClass(),
                 false);
-        final String jreHome = configuration.ALTERNATIVE_JRE_PATH_ENABLED ? configuration.ALTERNATIVE_JRE_PATH : null;
+        final String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
         JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
-        params.setMainClass(configuration.MAIN_CLASS_NAME);
+        params.setMainClass(configuration.getRunClass());
         PathsList classPath = params.getClassPath();
 
         CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);

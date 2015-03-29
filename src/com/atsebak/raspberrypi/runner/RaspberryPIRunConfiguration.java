@@ -23,20 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters,
         SingleClassConfiguration, RefactoringListenerProvider {
-    private final Map<String, String> myEnvs = new LinkedHashMap<String, String>();
-    public String MAIN_CLASS_NAME;
-    public String VM_PARAMETERS;
-    public String PROGRAM_PARAMETERS;
-    public String WORKING_DIRECTORY;
-    public boolean ALTERNATIVE_JRE_PATH_ENABLED;
-    public String ALTERNATIVE_JRE_PATH;
-    public boolean ENABLE_SWING_INSPECTOR;
-    public boolean PASS_PARENT_ENVS;
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
 
     protected RaspberryPIRunConfiguration(final Project project, final ConfigurationFactory factory) {
@@ -59,7 +49,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 
     @Override
     public Collection<Module> getValidModules() {
-        return JavaRunConfigurationModule.getModulesForClass(this.getProject(), this.MAIN_CLASS_NAME);
+        return JavaRunConfigurationModule.getModulesForClass(this.getProject(), this.getRunnerParameters().getMainclass());
     }
 
     @Override
@@ -99,7 +89,7 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 
     @Nullable
     public PsiClass getMainClass() {
-        return this.getConfigurationModule().findClass(this.MAIN_CLASS_NAME);
+        return this.getConfigurationModule().findClass(this.getRunnerParameters().getMainclass());
     }
 
     public void setMainClass(PsiClass var1) {
@@ -111,51 +101,55 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
 
     @Nullable
     public String suggestedName() {
-        return this.MAIN_CLASS_NAME == null ? null : JavaExecutionUtil.getPresentableClassName(this.MAIN_CLASS_NAME);
+        return this.getRunnerParameters().getMainclass() == null ?
+                null
+                : JavaExecutionUtil.getPresentableClassName(this.getRunnerParameters().getMainclass());
     }
 
     public String getActionName() {
-        return this.MAIN_CLASS_NAME != null && this.MAIN_CLASS_NAME.length() != 0 ? ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(this.MAIN_CLASS_NAME), 6) + ".main()" : null;
+        return this.getRunnerParameters().getMainclass()
+                != null && this.getRunnerParameters().getMainclass().length()
+                != 0 ? ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(this.getRunnerParameters().getMainclass()), 6) + ".main()" : null;
     }
 
     public void setMainClassName(String var1) {
-        this.MAIN_CLASS_NAME = var1;
+        this.getRunnerParameters().setMainclass(var1);
     }
 
     @Override
     public String getVMParameters() {
-        return this.VM_PARAMETERS;
+        return this.getRunnerParameters().getVmParameters();
     }
 
     @Override
     public void setVMParameters(String var1) {
-        this.VM_PARAMETERS = var1;
+        this.getRunnerParameters().setVmParameters(var1);
     }
 
     @Override
     public boolean isAlternativeJrePathEnabled() {
-        return this.ALTERNATIVE_JRE_PATH_ENABLED;
+        return this.getRunnerParameters().isAlternateJrePathEnabled();
     }
 
     @Override
     public void setAlternativeJrePathEnabled(boolean var1) {
-        this.ALTERNATIVE_JRE_PATH_ENABLED = var1;
+        this.getRunnerParameters().setAlternateJrePathEnabled(var1);
     }
 
     @Override
     public String getAlternativeJrePath() {
-        return this.ALTERNATIVE_JRE_PATH;
+        return this.getRunnerParameters().getAlternateJrePath();
     }
 
     @Override
     public void setAlternativeJrePath(String s) {
-        this.ALTERNATIVE_JRE_PATH = s;
+        this.getRunnerParameters().setAlternateJrePath(s);
     }
 
     @Nullable
     @Override
     public String getRunClass() {
-        return this.MAIN_CLASS_NAME;
+        return this.getRunnerParameters().getMainclass();
     }
 
     @Nullable
@@ -167,45 +161,53 @@ public class RaspberryPIRunConfiguration extends ModuleBasedConfiguration<JavaRu
     @Nullable
     @Override
     public String getProgramParameters() {
-        return this.PROGRAM_PARAMETERS;
+        return this.getRunnerParameters().getProgramParameters();
     }
 
     @Override
     public void setProgramParameters(@Nullable String var1) {
-        this.PROGRAM_PARAMETERS = var1;
+        this.getRunnerParameters().setProgramParameters(var1);
     }
 
     @Nullable
     @Override
     public String getWorkingDirectory() {
-        return ExternalizablePath.localPathValue(this.WORKING_DIRECTORY);
+        return ExternalizablePath.localPathValue(this.getRunnerParameters().getWorkingDirectory());
     }
 
     @Override
     public void setWorkingDirectory(@Nullable String s) {
-        this.WORKING_DIRECTORY = ExternalizablePath.urlValue(s);
+        this.getRunnerParameters().setWorkingDirectory(ExternalizablePath.urlValue(s));
     }
 
     @NotNull
     @Override
     public Map<String, String> getEnvs() {
-        return myEnvs;
+        return this.getRunnerParameters().getEnvs();
     }
 
     @Override
     public void setEnvs(@NotNull final Map<String, String> envs) {
-        myEnvs.clear();
-        myEnvs.putAll(envs);
+        this.getRunnerParameters().getEnvs().clear();
+        this.getRunnerParameters().getEnvs().putAll(envs);
     }
 
     @Override
     public boolean isPassParentEnvs() {
-        return this.PASS_PARENT_ENVS;
+        return this.getRunnerParameters().isPassParentEnv();
     }
 
     @Override
     public void setPassParentEnvs(boolean b) {
-        this.PASS_PARENT_ENVS = b;
+        this.getRunnerParameters().setPassParentEnv(b);
+    }
+
+    public boolean isEnableSwingInspector() {
+        return this.getRunnerParameters().isEnableSwingInspector();
+    }
+
+    public void setEnableSwingInspector(boolean enableSwingInspector) {
+        this.getRunnerParameters().setEnableSwingInspector(enableSwingInspector);
     }
 
     @Nullable

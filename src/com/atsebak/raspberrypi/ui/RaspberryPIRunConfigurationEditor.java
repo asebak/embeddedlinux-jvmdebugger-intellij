@@ -65,8 +65,8 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     protected void resetEditorFrom(RaspberryPIRunConfiguration configuration) {
         myCommonProgramParameters.reset(configuration);
         myModuleSelector.reset(configuration);
-        getMainClassField().setText(configuration.MAIN_CLASS_NAME != null ? configuration.MAIN_CLASS_NAME.replaceAll("\\$", "\\.") : "");
-        myAlternativeJREPanel.init(configuration.ALTERNATIVE_JRE_PATH, configuration.ALTERNATIVE_JRE_PATH_ENABLED);
+        getMainClassField().setText(configuration.getRunClass() != null ? configuration.getRunClass().replaceAll("\\$", "\\.") : "");
+        myAlternativeJREPanel.init(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
 
         updateShowSwingInspector(configuration);
 
@@ -84,11 +84,15 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         myModuleSelector.applyTo(configuration);
         final String className = getMainClassField().getText();
         final PsiClass aClass = myModuleSelector.findClass(className);
-        configuration.MAIN_CLASS_NAME = aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className;
-        configuration.ALTERNATIVE_JRE_PATH = myAlternativeJREPanel.getPath();
-        configuration.ALTERNATIVE_JRE_PATH_ENABLED = myAlternativeJREPanel.isPathEnabled();
-        configuration.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration)
-                || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox.isSelected();
+
+
+        configuration.setMainClassName(aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className);
+        configuration.setAlternativeJrePath(myAlternativeJREPanel.getPath());
+        configuration.setAlternativeJrePathEnabled(myAlternativeJREPanel.isPathEnabled());
+
+        configuration.setEnableSwingInspector((myVersionDetector.isJre50Configured(configuration)
+                || myVersionDetector.isModuleJre50Configured(configuration)) && myShowSwingInspectorCheckbox.isSelected());
+
         updateShowSwingInspector(configuration);
 
         setPiSettings(configuration.getRunnerParameters());
@@ -108,7 +112,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     private void updateShowSwingInspector(final RaspberryPIRunConfiguration configuration) {
         if (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) {
             myShowSwingInspectorCheckbox.setEnabled(true);
-            myShowSwingInspectorCheckbox.setSelected(configuration.ENABLE_SWING_INSPECTOR);
+            myShowSwingInspectorCheckbox.setSelected(configuration.isEnableSwingInspector());
             myShowSwingInspectorCheckbox.setText(ExecutionBundle.message("show.swing.inspector"));
         }
         else {

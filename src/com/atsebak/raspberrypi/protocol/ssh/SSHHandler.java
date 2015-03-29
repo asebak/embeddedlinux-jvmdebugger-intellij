@@ -39,7 +39,6 @@ public class SSHHandler {
         SSHClient ssh = build(new SSHClient());
         final String remoteDirec = File.separator + "home" + File.separator + username + File.separator + "IdeaProjects";
         try {
-
             final SFTPClient sftp = ssh.newSFTPClient();
             sftp.put(new FileSystemFile(outputDirec), remoteDirec);
         } finally {
@@ -75,7 +74,7 @@ public class SSHHandler {
         try {
             //todo figure why ssh client is locking up
             //kill existing process, change to java folder and run it.
-            Session.Command exec = session.exec("killall java || cd " + targetPathOnRemote + " &&" + cmd);
+            Session.Command exec = session.exec("sudo killall java || cd " + targetPathOnRemote + " && " + cmd);
             System.out.println(IOUtils.readFully(exec.getInputStream()).toString());
             exec.join(5, TimeUnit.SECONDS);
             System.out.println("\n** exit status: " + exec.getExitStatus());

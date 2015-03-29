@@ -43,9 +43,9 @@ public class RaspberryPiRunnerValidator {
     public static void checkJavaSettings(RaspberryPIRunConfiguration configuration) throws RuntimeConfigurationException {
         JavaParametersUtil.checkAlternativeJRE(configuration);
         JavaRunConfigurationModule var1 = configuration.getConfigurationModule();
-        PsiClass var2 = var1.checkModuleAndClassName(configuration.MAIN_CLASS_NAME, ExecutionBundle.message("no.main.class.specified.error.text"));
+        PsiClass var2 = var1.checkModuleAndClassName(configuration.getRunClass(), ExecutionBundle.message("no.main.class.specified.error.text"));
         if (!PsiMethodUtil.hasMainMethod(var2)) {
-            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.MAIN_CLASS_NAME));
+            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.getRunClass()));
         } else {
             ProgramParametersUtil.checkWorkingDirectoryExist(configuration, configuration.getProject(), var1.getModule());
             JavaRunConfigurationExtensionManager.checkConfigurationIsValid(configuration);
