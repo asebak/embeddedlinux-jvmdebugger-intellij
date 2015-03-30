@@ -1,11 +1,9 @@
 package com.atsebak.raspberrypi.ui;
 
-import com.atsebak.raspberrypi.runner.RaspberryPIRunConfiguration;
-import com.atsebak.raspberrypi.runner.RaspberryPIRunConfigurationModule;
-import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.configurations.ConfigurationUtil;
-import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.ui.ClassBrowser;
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
@@ -44,28 +42,19 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     public RaspberryPIRunConfigurationEditor(final Project project) {
         myProject = project;
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
-//        myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
         myModule.getComponent().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String x = "";
-//                myCommonProgramParameters.setModuleContext(myModuleSelector.getModule());
             }
         });
         ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
-//        myVersionDetector = new JreVersionDetector();
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
-
-//        myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myCommonProgramParameters, myAlternativeJREPanel, myModule);
     }
     @Override
     protected void resetEditorFrom(RaspberryPIRunConfiguration configuration) {
-//        myCommonProgramParameters.reset(configuration);
-        RaspberryPIRunConfigurationModule module = new RaspberryPIRunConfigurationModule(configuration.getName(),
-                new JavaRunConfigurationModule(configuration.getProject(), false), configuration.getFactory());
-        myModuleSelector.reset(module);
 
-        getMainClassField().setText(configuration.getRunnerParameters().getMainclass() != null ? configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
+        getMainClassField().setText(configuration.getRunnerParameters().getMainclass() != null ?
+                configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
 
         RaspberryPIRunnerParameters parameters = configuration.getRunnerParameters();
         hostName.setText(parameters.getHostname());
@@ -77,11 +66,6 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     }
     @Override
     protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
-//        myCommonProgramParameters.applyTo(configuration);
-        RaspberryPIRunConfigurationModule module = new RaspberryPIRunConfigurationModule(configuration.getName(),
-                new JavaRunConfigurationModule(configuration.getProject(), false), configuration.getFactory());
-
-        myModuleSelector.applyTo(module);
         final String className = getMainClassField().getText();
         final PsiClass aClass = myModuleSelector.findClass(className);
 

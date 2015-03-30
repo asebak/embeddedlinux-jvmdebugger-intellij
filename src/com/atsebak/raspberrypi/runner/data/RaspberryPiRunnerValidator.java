@@ -1,8 +1,12 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.runner.data;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.intellij.execution.ExecutionBundle;
+import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
+import com.intellij.psi.PsiClass;
 
 
 public class RaspberryPiRunnerValidator {
@@ -34,15 +38,11 @@ public class RaspberryPiRunnerValidator {
      * @throws RuntimeConfigurationException
      */
     public static void checkJavaSettings(RaspberryPIRunConfiguration configuration) throws RuntimeConfigurationException {
-//        JavaParametersUtil.checkAlternativeJRE(configuration);
-//        JavaRunConfigurationModule javaRunConfigurationModule = configuration.getConfigurationModule();
-//        PsiClass psiClass = javaRunConfigurationModule.checkModuleAndClassName(configuration.getRunClass(), ExecutionBundle.message("no.main.class.specified.error.text"));
-//        if (!PsiMethodUtil.hasMainMethod(psiClass)) {
-//            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.getRunClass()));
-//        } else {
-//            ProgramParametersUtil.checkWorkingDirectoryExist(configuration, configuration.getProject(), javaRunConfigurationModule.getModule());
-//            JavaRunConfigurationExtensionManager.checkConfigurationIsValid(configuration);
-//        }
+        JavaRunConfigurationModule javaRunConfigurationModule = new JavaRunConfigurationModule(configuration.getProject(), false);
+        PsiClass psiClass = javaRunConfigurationModule.findClass(configuration.getRunnerParameters().getMainclass());
+        if (psiClass == null) {
+            throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.getRunnerParameters().getMainclass()));
+        }
     }
 
     /**

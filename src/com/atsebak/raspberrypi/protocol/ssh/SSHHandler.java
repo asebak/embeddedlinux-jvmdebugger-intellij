@@ -1,8 +1,12 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
+import lombok.Builder;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.StreamCopier;
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -15,23 +19,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+@Builder
 public class SSHHandler {
-    private final String hostname;
-    private final String username;
-    private final String password;
-    private final Project project;
+    private Project project;
+    private RaspberryPIRunnerParameters piRunnerParameters;
 
-    /**
-     * Constuctor
-     * @param project
-     * @param rp
-     */
-    public SSHHandler(final Project project, final RaspberryPIRunnerParameters rp) {
-        this.project = project;
-        this.hostname = rp.getHostname();
-        this.username = rp.getUsername();
-        this.password = rp.getPassword();
-    }
 
     /** Uploads Java application output folders
      * @param outputDirec Output directory folder where to store the java application
@@ -40,9 +32,10 @@ public class SSHHandler {
      * @throws ClassNotFoundException
      * @throws RuntimeConfigurationException
      */
-    public void upload(final File outputDirec, final String cmd) throws IOException, ClassNotFoundException, RuntimeConfigurationException {
+    public void upload(final File outputDirec, final String cmd)
+            throws IOException, ClassNotFoundException, RuntimeConfigurationException {
         SSHClient ssh = build(new SSHClient());
-        final String remoteDirec = File.separator + "home" + File.separator + username + File.separator + "IdeaProjects";
+        final String remoteDirec = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + "IdeaProjects";
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
             sftp.put(new FileSystemFile(outputDirec), remoteDirec);
@@ -59,11 +52,21 @@ public class SSHHandler {
      * @return Builds an SSh Client
      * @throws IOException
      */
-    private SSHClient build(SSHClient client) throws IOException {
+    private SSHClient build(SSHClient client) throws IOException, RuntimeConfigurationException {
         client.addHostKeyVerifier(new PromiscuousVerifier());
         client.loadKnownHosts();
-        client.connect(hostname);
-        client.authPassword(username, password);
+        client.setConnectTimeout(1500);
+        if (!client.isAuthenticated()) {
+            client.connect(piRunnerParameters.getHostname());
+            client.authPassword(piRunnerParameters.getUsername(), piRunnerParameters.getPassword());
+        }
+        if (!client.isAuthenticated() || !client.isConnected()) {
+            final Notification notification = new Notification(
+                    com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID, "SSH Connection Error", "Could not connect to remote target",
+                    NotificationType.ERROR);
+            Notifications.Bus.notify(notification);
+            throw new RuntimeConfigurationException("Cannot Authenticate With Remote Device");
+        }
         return client;
     }
 
@@ -73,7 +76,7 @@ public class SSHHandler {
      * @param cmd
      * @throws IOException
      */
-    private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException {
+    private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
 //        PrintStream normalStream = new PrintStream(new PINormalOutputStream(project));
 //        PrintStream errorStream = new PrintStream(new PIErrorOutputStream(project));
 

@@ -1,34 +1,30 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
+import lombok.Builder;
 
 import java.io.File;
 import java.io.IOException;
 
+@Builder
 public class SSHUploader {
-
     private final Project project;
-
-    public SSHUploader(Project project) {
-        this.project = project;
-    }
-
+    private final RaspberryPIRunnerParameters rp;
     /**
      * Uploads to the embedded system
      *
-     * @param rp
      * @param outputDirectory
      * @param cmd
      * @throws RuntimeConfigurationException
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void uploadToTarget(final RaspberryPIRunnerParameters rp, final File outputDirectory, final String cmd)
+    public void uploadToTarget(final File outputDirectory, final String cmd)
             throws RuntimeConfigurationException, IOException, ClassNotFoundException {
-        SSHHandler sshHandler = new SSHHandler(project, rp);
-        sshHandler.upload(outputDirectory, cmd);
+        SSHHandler handler = SSHHandler.builder().project(project).piRunnerParameters(rp).build();
+        handler.upload(outputDirectory, cmd);
     }
 }
 
