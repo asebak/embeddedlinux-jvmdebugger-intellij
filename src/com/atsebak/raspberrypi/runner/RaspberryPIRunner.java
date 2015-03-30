@@ -10,6 +10,7 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -50,8 +51,8 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-//            FileDocumentManager.getInstance().saveAllDocuments();
-//            setupConsole(environment.getProject());
+            FileDocumentManager.getInstance().saveAllDocuments();
+            setupConsole(environment.getProject());
 //            ProgramRunner runner = DefaultJavaProgramRunner.getInstance();
 //            Executor executor = DefaultRunExecutor.getRunExecutorInstance();
 //            try {

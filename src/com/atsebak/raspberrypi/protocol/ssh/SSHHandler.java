@@ -55,7 +55,7 @@ public class SSHHandler {
     private SSHClient build(SSHClient client) throws IOException, RuntimeConfigurationException {
         client.addHostKeyVerifier(new PromiscuousVerifier());
         client.loadKnownHosts();
-        client.setConnectTimeout(1500);
+        client.setConnectTimeout(3000);
         if (!client.isAuthenticated()) {
             client.connect(piRunnerParameters.getHostname());
             client.authPassword(piRunnerParameters.getUsername(), piRunnerParameters.getPassword());

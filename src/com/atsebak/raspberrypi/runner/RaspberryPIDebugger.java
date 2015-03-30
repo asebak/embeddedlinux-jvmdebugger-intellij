@@ -6,13 +6,16 @@ import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.*;
-import com.intellij.execution.configurations.*;
+import com.intellij.execution.configurations.ConfigurationFactory;
+import com.intellij.execution.configurations.RunProfile;
+import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -20,7 +23,6 @@ import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -78,15 +80,15 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
      * @return
      * @throws ExecutionException
      */
-    @Nullable
-    @Override
-    protected RunContentDescriptor createContentDescriptor(RunProfileState state, ExecutionEnvironment env)
-            throws ExecutionException {
-        JavaCommandLine javaCommandLine = (JavaCommandLine) state;
-        JavaParameters params = javaCommandLine.getJavaParameters();
-
-        return super.createContentDescriptor(state, env);
-    }
+//    @Nullable
+//    @Override
+//    protected RunContentDescriptor createContentDescriptor(RunProfileState state, ExecutionEnvironment env)
+//            throws ExecutionException {
+//        JavaCommandLine javaCommandLine = (JavaCommandLine) state;
+//        JavaParameters params = javaCommandLine.getJavaParameters();
+//
+//        return super.createContentDescriptor(state, env);
+//    }
 
     /**
      * Executes the runner
@@ -102,10 +104,10 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
     protected RunContentDescriptor doExecute(@NotNull Project project, @NotNull RunProfileState state, RunContentDescriptor contentToReuse, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-//            FileDocumentManager.getInstance().saveAllDocuments();
-//            RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
-//            closeOldSessionAndRun(environment.getProject(), parameters);
-//            setupConsole(environment.getProject());
+            FileDocumentManager.getInstance().saveAllDocuments();
+            RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
+            closeOldSessionAndRun(environment.getProject(), parameters);
+            setupConsole(environment.getProject());
             super.doExecute(project, state, contentToReuse, environment);
         }
         return null;

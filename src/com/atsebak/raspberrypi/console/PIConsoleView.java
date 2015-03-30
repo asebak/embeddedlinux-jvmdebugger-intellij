@@ -41,6 +41,12 @@ public class PIConsoleView implements Disposable {
         Disposer.register(this, myConsoleView);
     }
 
+    /**
+     * Signleton Instance for The Pi Console view
+     *
+     * @param project
+     * @return
+     */
     public static PIConsoleView getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, PIConsoleView.class);
     }
@@ -80,6 +86,9 @@ public class PIConsoleView implements Disposable {
         toolWindow.getContentManager().addContent(content);
     }
 
+    /**
+     * Clears text on console
+     */
     public void clear() {
         if (myConsoleView.isShowing()) {
             myConsoleView.clear();
