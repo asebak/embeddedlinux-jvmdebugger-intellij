@@ -1,7 +1,5 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.console.PIErrorOutputStream;
-import com.atsebak.raspberrypi.console.PINormalOutputStream;
 import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -76,11 +74,11 @@ public class SSHHandler {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException {
-        PrintStream normalStream = new PrintStream(new PINormalOutputStream(project));
-        PrintStream errorStream = new PrintStream(new PIErrorOutputStream(project));
+//        PrintStream normalStream = new PrintStream(new PINormalOutputStream(project));
+//        PrintStream errorStream = new PrintStream(new PIErrorOutputStream(project));
 
-        System.setOut(normalStream);
-        System.setErr(errorStream);
+//        System.setOut(normalStream);
+//        System.setErr(errorStream);
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         session.setAutoExpand(true);

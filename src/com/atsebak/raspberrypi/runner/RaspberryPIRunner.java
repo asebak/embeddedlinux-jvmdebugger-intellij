@@ -18,6 +18,13 @@ import org.jetbrains.annotations.NotNull;
 public class RaspberryPIRunner extends DefaultProgramRunner {
     private static final String RUNNER_ID = "RaspberryPIRunner";
 
+    /**
+     * Constructor
+     */
+    public RaspberryPIRunner() {
+        super();
+    }
+
     @Override
     protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
         return;
