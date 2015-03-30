@@ -1,4 +1,4 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.runner.conf;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;

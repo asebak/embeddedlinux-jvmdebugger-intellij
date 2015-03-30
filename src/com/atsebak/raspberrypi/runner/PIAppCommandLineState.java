@@ -2,6 +2,8 @@ package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.protocol.ssh.CommandLineTargetBuilder;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;

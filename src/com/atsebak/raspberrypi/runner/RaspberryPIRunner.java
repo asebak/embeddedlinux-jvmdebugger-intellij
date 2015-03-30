@@ -2,6 +2,7 @@ package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory;
 import com.atsebak.raspberrypi.console.PIConsoleView;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunProfile;

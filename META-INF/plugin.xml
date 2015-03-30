@@ -28,7 +28,7 @@
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger"/>
 
-      <configurationType implementation="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationType"/>
+      <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
       <toolWindow id="PI Console"
                   anchor="bottom"
                   secondary="true"

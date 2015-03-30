@@ -2,6 +2,8 @@ package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory;
 import com.atsebak.raspberrypi.console.PIConsoleView;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;

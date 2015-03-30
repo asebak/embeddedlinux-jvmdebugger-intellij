@@ -1,7 +1,7 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.runner.RaspberryPIRunConfiguration;
-import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
 
 import java.util.Map;

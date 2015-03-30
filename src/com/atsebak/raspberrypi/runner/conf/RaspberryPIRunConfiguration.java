@@ -1,5 +1,8 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.runner.conf;
 
+import com.atsebak.raspberrypi.runner.PIAppCommandLineState;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.data.RaspberryPiRunnerValidator;
 import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;

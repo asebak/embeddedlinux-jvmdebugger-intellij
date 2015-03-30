@@ -1,4 +1,4 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.runner.data;
 
 
 import java.util.LinkedHashMap;

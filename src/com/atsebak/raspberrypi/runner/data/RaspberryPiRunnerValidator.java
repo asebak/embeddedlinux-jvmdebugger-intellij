@@ -1,6 +1,7 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.runner.data;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
+import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
 

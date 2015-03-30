@@ -1,6 +1,6 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
 import net.schmizz.sshj.SSHClient;
