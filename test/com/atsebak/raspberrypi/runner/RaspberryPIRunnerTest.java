@@ -1,25 +1,25 @@
-package com.atsebak.raspberrypi.runner
+package com.atsebak.raspberrypi.runner;
 
-import com.intellij.execution.configurations.RunProfile
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.powermock.modules.junit4.PowerMockRunner
-import org.powermock.reflect.Whitebox
+import com.intellij.execution.configurations.RunProfile;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
-import static org.junit.Assert.*
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 public class RaspberryPIRunnerTest {
     @Test
-    void testGetRunnerId() {
+    public void testGetRunnerId() {
         RaspberryPIRunner debugger = Whitebox.newInstance(RaspberryPIRunner.class);
         String runnerId = debugger.getRunnerId();
         assertEquals("RaspberryPI", runnerId);
     }
 
     @Test
-    void testCanRun() {
+    public void testCanRun() {
         RunProfile profile = Mockito.mock(RaspberryPIRunConfiguration.class);
 
         RaspberryPIRunner runner = Whitebox.newInstance(RaspberryPIRunner.class);

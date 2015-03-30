@@ -1,7 +1,10 @@
 package com.atsebak.raspberrypi.runner;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
 public class RaspberryPIConfigurationTypeTest {
     private RaspberryPIConfigurationType configurationType = new RaspberryPIConfigurationType();
 
@@ -12,4 +15,5 @@ public class RaspberryPIConfigurationTypeTest {
         assert (displayName == "Raspberry PI");
         assert (description != null && description != "");
     }
+
 }
