@@ -17,5 +17,6 @@
     <orderEntry type="library" name="slf4j-log4j12-1.7.12" level="project" />
     <orderEntry type="library" name="slf4j-api-1.7.10" level="project" />
     <orderEntry type="library" name="bcprov-ext-jdk15on-1.47" level="project" />
+    <orderEntry type="library" name="mockito-all-1.9.5" level="project" />
   </component>
 </module>

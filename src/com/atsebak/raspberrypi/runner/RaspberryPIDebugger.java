@@ -27,7 +27,7 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
 
     @NonNls
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
-    private static final String RUNNER_ID = "RaspberryPIDebugger";
+    private static final String RUNNER_ID = "RaspberryPI";
 
     /**
      * Constructor

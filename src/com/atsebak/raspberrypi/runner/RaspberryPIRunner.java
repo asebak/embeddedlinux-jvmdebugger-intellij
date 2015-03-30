@@ -16,7 +16,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 
 public class RaspberryPIRunner extends DefaultProgramRunner {
-    private static final String RUNNER_ID = "RaspberryPIRunner";
+    private static final String RUNNER_ID = "RaspberryPI";
 
     /**
      * Constructor
