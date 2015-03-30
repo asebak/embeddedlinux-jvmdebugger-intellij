@@ -1,6 +1,10 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
+import com.atsebak.raspberrypi.console.PIErrorOutputStream;
+import com.atsebak.raspberrypi.console.PINormalOutputStream;
+import com.atsebak.raspberrypi.runner.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.openapi.project.Project;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.StreamCopier;
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -10,21 +14,25 @@ import net.schmizz.sshj.xfer.FileSystemFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class SSHHandler {
     private final String hostname;
     private final String username;
     private final String password;
+    private final Project project;
 
     /**
-     * @param hostname The Address
-     * @param username The username
-     * @param password The Password
+     * Constuctor
+     * @param project
+     * @param rp
      */
-    public SSHHandler(final String hostname, final String username, final String password) {
-        this.hostname = hostname;
-        this.username = username;
-        this.password = password;
+    public SSHHandler(final Project project, final RaspberryPIRunnerParameters rp) {
+        this.project = project;
+        this.hostname = rp.getHostname();
+        this.username = rp.getUsername();
+        this.password = rp.getPassword();
     }
 
     /** Uploads Java application output folders
@@ -68,14 +76,29 @@ public class SSHHandler {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException {
+        PrintStream normalStream = new PrintStream(new PINormalOutputStream(project));
+        PrintStream errorStream = new PrintStream(new PIErrorOutputStream(project));
+
+        System.setOut(normalStream);
+        System.setErr(errorStream);
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         session.setAutoExpand(true);
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int arg0) throws IOException {
+                // TODO Auto-generated method stub
+
+            }
+        }));
         try {
             //kill existing process, change to java folder and run it.
             Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
+
+//            new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
+//            new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
             //todo is this needed?
 //            session.close();

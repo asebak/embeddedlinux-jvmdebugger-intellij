@@ -18,6 +18,11 @@ import org.jetbrains.annotations.NotNull;
 public class RaspberryPIRunner extends DefaultProgramRunner {
     private static final String RUNNER_ID = "RaspberryPIRunner";
 
+    @Override
+    protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
+        return;
+    }
+
     /**
      * Executes the Runner, This only gets called in run mode.
      * It returns null because you want to show only the PI Console

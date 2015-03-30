@@ -78,8 +78,8 @@ public class PIAppCommandLineState extends JavaCommandLineState {
         params.setMainClass(configuration.getRunClass());
         PathsList classPath = params.getClassPath();
 
-//        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
-//        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
+        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
+        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
         return params;
     }
 
@@ -90,7 +90,7 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      */
     private void invokeSSH(String projectOutput, CommandLineTargetBuilder builder) {
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        SSHUploader uploader = new SSHUploader();
+        SSHUploader uploader = new SSHUploader(getEnvironment().getProject());
         try {
             uploader.uploadToTarget(runnerParameters, new File(projectOutput), builder.buildCommandLine());
         } catch (Exception e) {
