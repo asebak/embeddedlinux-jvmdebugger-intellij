@@ -22,7 +22,7 @@ public class RaspberryPIConfigurationType implements ConfigurationType {
         configurationFactory = new ConfigurationFactory(this) {
             @Override
             public RunConfiguration createTemplateConfiguration(Project project) {
-                return new RaspberryPIRunConfiguration(project, this);
+                return new RaspberryPIRunConfiguration(project, this, NAME);
             }
         };
     }

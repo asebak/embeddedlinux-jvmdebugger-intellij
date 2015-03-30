@@ -3,11 +3,14 @@ package com.atsebak.raspberrypi.runner;
 import com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
 import com.intellij.execution.executors.DefaultRunExecutor;
+import com.intellij.execution.impl.DefaultJavaProgramRunner;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
@@ -16,7 +19,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 
 public class RaspberryPIRunner extends DefaultProgramRunner {
-    private static final String RUNNER_ID = "RaspberryPI";
+    private static final String RUNNER_ID = "RaspberryPIRunner";
 
     /**
      * Constructor
@@ -25,10 +28,10 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         super();
     }
 
-    @Override
-    protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
-        return;
-    }
+//    @Override
+//    protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
+//        return;
+//    }
 
     /**
      * Executes the Runner, This only gets called in run mode.
@@ -45,6 +48,13 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
             FileDocumentManager.getInstance().saveAllDocuments();
             setupConsole(environment.getProject());
+            ProgramRunner runner = DefaultJavaProgramRunner.getInstance();
+            Executor executor = DefaultRunExecutor.getRunExecutorInstance();
+            try {
+                runner.execute(new ExecutionEnvironment(executor, runner, environment.getRunnerAndConfigurationSettings(), environment.getProject()));
+            } catch (ExecutionException e) {
+//                MavenUtil.showError(project, "Failed to execute Maven goal", e);
+            }
         }
         return null;
     }
@@ -83,4 +93,6 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
             PIConsoleView.getInstance(p).clear();
         }
     }
+
+
 }

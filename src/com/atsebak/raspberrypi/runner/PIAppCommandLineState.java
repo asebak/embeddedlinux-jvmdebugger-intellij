@@ -1,6 +1,5 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.protocol.ssh.CommandLineTargetBuilder;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.intellij.execution.ExecutionException;
@@ -8,23 +7,21 @@ import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaParameters;
-import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.util.JavaParametersUtil;
-import com.intellij.util.PathsList;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 public class PIAppCommandLineState extends JavaCommandLineState {
     private final RaspberryPIRunConfiguration configuration;
+    private final ExecutionEnvironment environment;
 
-    public PIAppCommandLineState(@NotNull final RaspberryPIRunConfiguration configuration,
-                                 final ExecutionEnvironment environment) {
+    public PIAppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
-        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
+        this.environment = environment;
+//        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
     }
 
     @NotNull
@@ -77,14 +74,14 @@ public class PIAppCommandLineState extends JavaCommandLineState {
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
         final JavaParameters params = new JavaParameters();
-        final JavaRunConfigurationModule module = configuration.getConfigurationModule();
-        final int classPathType = JavaParametersUtil.getClasspathType(module,
-                configuration.getRunClass(),
-                false);
-        final String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
-        JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
-        params.setMainClass(configuration.getRunClass());
-        PathsList classPath = params.getClassPath();
+//        final JavaRunConfigurationModule module = configuration.getConfigurationModule();
+//        final int classPathType = JavaParametersUtil.getClasspathType(module,
+//                configuration.getRunClass(),
+//                false);
+//        final String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
+//        JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
+//        params.setMainClass(configuration.getRunClass());
+//        PathsList classPath = params.getClassPath();
 
 //        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
 //        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
