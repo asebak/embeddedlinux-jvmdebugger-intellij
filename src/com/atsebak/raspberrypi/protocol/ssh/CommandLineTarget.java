@@ -1,33 +1,23 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
-import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
+import lombok.Builder;
 
 import java.util.Map;
 
-
-public class CommandLineTargetBuilder {
-    private final RaspberryPIRunConfiguration configuration;
+@Builder
+public class CommandLineTarget {
     private final JavaParameters parameters;
-    private final RaspberryPIRunnerParameters runnerParameters;
-
-    /** Builds command line to be execute on remote device
-     * @param configuration PI Configuration
-     * @param parameters    Java Parameters
-     */
-    public CommandLineTargetBuilder(final RaspberryPIRunConfiguration configuration, final JavaParameters parameters) {
-        this.configuration = configuration;
-        this.runnerParameters = configuration.getRunnerParameters();
-        this.parameters = parameters;
-    }
-
+    private final RaspberryPIRunConfiguration raspberryPIRunConfiguration;
+    private final boolean isDebugging;
     /**
      * Builds the command line command to invoke the java from the target machine
      *
      * @return
      */
-    public String buildCommandLine() {
+
+    public String toCommand() {
         StringBuilder cmdBuf = new StringBuilder();
         addRunAsRootOption(cmdBuf);
         addEnvironmentVariables(cmdBuf);
@@ -69,7 +59,11 @@ public class CommandLineTargetBuilder {
      * @param cmdBuf
      */
     private void addVMArguments(StringBuilder cmdBuf) {
-        cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + runnerParameters.getPort());
+        if (isDebugging) {
+            //debugging with the port this is added on the remote device command line
+            cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
+                    raspberryPIRunConfiguration.getRunnerParameters().getPort());
+        }
     }
 
     /**
@@ -103,7 +97,7 @@ public class CommandLineTargetBuilder {
      * @param cmdBuf
      */
     private void addRunAsRootOption(StringBuilder cmdBuf) {
-        if (runnerParameters.isRunAsRoot()) {
+        if (raspberryPIRunConfiguration.getRunnerParameters().isRunAsRoot()) {
             cmdBuf.append(" sudo ");
         }
     }

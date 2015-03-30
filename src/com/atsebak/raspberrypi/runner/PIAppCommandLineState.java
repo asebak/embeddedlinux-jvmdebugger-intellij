@@ -1,16 +1,26 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.raspberrypi.protocol.ssh.CommandLineTargetBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.CommandLineTarget;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.ExecutionResult;
 import com.intellij.execution.Executor;
+import com.intellij.execution.configurations.DebuggingRunnerData;
 import com.intellij.execution.configurations.JavaCommandLineState;
 import com.intellij.execution.configurations.JavaParameters;
+import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.util.PathsList;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -18,11 +28,15 @@ import java.io.File;
 public class PIAppCommandLineState extends JavaCommandLineState {
     private final RaspberryPIRunConfiguration configuration;
     private final ExecutionEnvironment environment;
+    private final RunnerSettings runnerSettings;
+    private boolean isDebugMode;
 
     public PIAppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
         this.environment = environment;
+        this.runnerSettings = environment.getRunnerSettings();
+        isDebugMode = runnerSettings instanceof DebuggingRunnerData;
 //        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
     }
 
@@ -75,19 +89,30 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      */
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
-        final JavaParameters params = new JavaParameters();
-//        final JavaRunConfigurationModule module = configuration.getConfigurationModule();
-//        final int classPathType = JavaParametersUtil.getClasspathType(module,
-//                configuration.getRunClass(),
-//                false);
-//        final String jreHome = configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null;
-//        JavaParametersUtil.configureModule(module, params, classPathType, jreHome);
-//        params.setMainClass(configuration.getRunClass());
-//        PathsList classPath = params.getClassPath();
+        JavaParameters javaParams = new JavaParameters();
+        Project project = this.environment.getProject();
+        ProjectRootManager manager = ProjectRootManager.getInstance(project);
+        javaParams.setJdk(manager.getProjectSdk());
+        // All modules to use the same things
+        Module[] modules = ModuleManager.getInstance(project).getModules();
+        if (modules != null && modules.length > 0) {
+            for (Module module : modules) {
+                javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
+            }
+        }
+        javaParams.setMainClass(this.configuration.getRunnerParameters().getMainclass());
+        String basePath = project.getBasePath();
+        javaParams.setWorkingDirectory(basePath);
+        String classes = this.configuration.getOutputFilePath();
+        javaParams.getProgramParametersList().addParametersString(classes);
+        PathsList classPath = javaParams.getClassPath();
 
-//        CommandLineTargetBuilder cmdBuilder = new CommandLineTargetBuilder(configuration, params);
-//        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), cmdBuilder);
-        return params;
+        CommandLineTarget build = CommandLineTarget.builder()
+                .raspberryPIRunConfiguration(configuration)
+                .isDebugging(isDebugMode)
+                .parameters(javaParams).build();
+        invokeSSH(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+        return javaParams;
     }
 
     /**
@@ -95,12 +120,16 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      * @param projectOutput
      * @param builder
      */
-    private void invokeSSH(String projectOutput, CommandLineTargetBuilder builder) {
+    private void invokeSSH(String projectOutput, CommandLineTarget builder) {
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        SSHUploader uploader = new SSHUploader(getEnvironment().getProject());
+        SSHUploader uploader = SSHUploader.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
         try {
-            uploader.uploadToTarget(runnerParameters, new File(projectOutput), builder.buildCommandLine());
+            uploader.uploadToTarget(new File(projectOutput), builder.toCommand());
         } catch (Exception e) {
+            final Notification notification = new Notification(
+                    com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID, "SSH Connection Error", e.getLocalizedMessage(),
+                    NotificationType.ERROR);
+            Notifications.Bus.notify(notification);
         }
     }
 

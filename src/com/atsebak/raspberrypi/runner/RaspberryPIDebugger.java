@@ -13,7 +13,6 @@ import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -103,10 +102,11 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
     protected RunContentDescriptor doExecute(@NotNull Project project, @NotNull RunProfileState state, RunContentDescriptor contentToReuse, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-            FileDocumentManager.getInstance().saveAllDocuments();
-            RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
-            closeOldSessionAndRun(environment.getProject(), parameters);
-            setupConsole(environment.getProject());
+//            FileDocumentManager.getInstance().saveAllDocuments();
+//            RaspberryPIRunnerParameters parameters = ((RaspberryPIRunConfiguration) runProfileRaw).getRunnerParameters();
+//            closeOldSessionAndRun(environment.getProject(), parameters);
+//            setupConsole(environment.getProject());
+            super.doExecute(project, state, contentToReuse, environment);
         }
         return null;
     }
