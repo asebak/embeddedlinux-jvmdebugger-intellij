@@ -1,5 +1,4 @@
-sudo: true
 language: java
 jdk: oraclejdk8
 install: true
-script: chmod a+x .build.sh
+script: chmod a+x ./build.sh
