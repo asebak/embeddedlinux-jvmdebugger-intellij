@@ -16,8 +16,6 @@ import net.schmizz.sshj.xfer.FileSystemFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 
 @Builder
 public class SSHHandler {
@@ -85,13 +83,6 @@ public class SSHHandler {
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         session.setAutoExpand(true);
-        System.setOut(new PrintStream(new OutputStream() {
-            @Override
-            public void write(int arg0) throws IOException {
-                // TODO Auto-generated method stub
-
-            }
-        }));
         try {
             //kill existing process, change to java folder and run it.
             Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
