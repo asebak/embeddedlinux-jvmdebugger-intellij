@@ -1,9 +1,8 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.raspberrypi.commandline;
 
 import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
-import com.atsebak.raspberrypi.protocol.ssh.CommandLineTarget;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -36,9 +35,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collection;
 
-public class PIAppCommandLineState extends JavaCommandLineState {
+public class AppCommandLineState extends JavaCommandLineState {
     @NonNls
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
+    @NonNls
+    private static final String DEBUG_TCP_MESSAGE = "Listening for transport dt_socket at address: %s";
     private final RaspberryPIRunConfiguration configuration;
     private final ExecutionEnvironment environment;
     private final RunnerSettings runnerSettings;
@@ -51,7 +52,7 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      * @param environment
      * @param configuration
      */
-    public PIAppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
+    public AppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
         this.environment = environment;
@@ -157,6 +158,10 @@ public class PIAppCommandLineState extends JavaCommandLineState {
                 .parameters(javaParams).build();
         invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
         if (isDebugMode) {
+            final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
+            //this should wait until the deployment states that it's listening to the port
+            while (!outputForwarder.toString().contains(initializeMsg)) {
+            }
             closeOldSessionAndDebug(project, configuration.getRunnerParameters());
         }
         return javaParams;
