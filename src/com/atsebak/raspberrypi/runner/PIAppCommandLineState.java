@@ -44,6 +44,12 @@ public class PIAppCommandLineState extends JavaCommandLineState {
     private final RunnerSettings runnerSettings;
     private boolean isDebugMode;
 
+    /**
+     * Command line state when runner is launch
+     *
+     * @param environment
+     * @param configuration
+     */
     public PIAppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
@@ -64,6 +70,13 @@ public class PIAppCommandLineState extends JavaCommandLineState {
         return String.format(RUN_CONFIGURATION_NAME_PATTERN, debugPort);
     }
 
+    /**
+     * Called when either debug or run mode executed, overrides console with a new handler
+     * @param executor
+     * @param runner
+     * @return
+     * @throws ExecutionException
+     */
     @NotNull
     @Override
     public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
@@ -74,6 +87,11 @@ public class PIAppCommandLineState extends JavaCommandLineState {
         return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
     }
 
+    /**
+     * Starts console process
+     * @return
+     * @throws ExecutionException
+     */
     @NotNull
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {

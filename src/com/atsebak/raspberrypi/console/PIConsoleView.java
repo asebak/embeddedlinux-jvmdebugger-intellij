@@ -51,6 +51,12 @@ public class PIConsoleView implements Disposable {
         return ServiceManager.getService(project, PIConsoleView.class);
     }
 
+    /**
+     * Should Ignore?
+     *
+     * @param action
+     * @return
+     */
     private static boolean shouldIgnoreAction(@NotNull AnAction action) {
         for (Class<?> actionType : IGNORED_CONSOLE_ACTION_TYPES) {
             if (actionType.isInstance(action)) {
@@ -60,6 +66,10 @@ public class PIConsoleView implements Disposable {
         return false;
     }
 
+    /**
+     * Creats the tool window content
+     * @param toolWindow
+     */
     public void createToolWindowContent(@NotNull ToolWindow toolWindow) {
         //Create runner UI layout
         RunnerLayoutUi.Factory factory = RunnerLayoutUi.Factory.getInstance(myProject);
@@ -80,8 +90,6 @@ public class PIConsoleView implements Disposable {
 
         JComponent layoutComponent = layoutUi.getComponent();
         myConsolePanel.add(layoutComponent, BorderLayout.CENTER);
-
-        //noinspection ConstantConditions
         Content content = ContentFactory.SERVICE.getInstance().createContent(layoutComponent, null, true);
         toolWindow.getContentManager().addContent(content);
     }
@@ -93,18 +101,20 @@ public class PIConsoleView implements Disposable {
         if (myConsoleView.isShowing()) {
             myConsoleView.clear();
         } else {
-            // "clear" does not work when the console is not visible. We need to flush the text from previous sessions. It has to be done in the
-            // UI thread, but we cannot call "invokeLater" because it will delete text belonging to the current session.
             ApplicationManager.getApplication().invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    // "flushDeferredText" is really "delete text from previous sessions and leave the text of the current session untouched."
                     myConsoleView.flushDeferredText();
                 }
             }, ModalityState.NON_MODAL);
         }
     }
 
+    /**
+     * Prints on the Console
+     * @param text
+     * @param contentType
+     */
     public void print(@NotNull String text, @NotNull ConsoleViewContentType contentType) {
         myConsoleView.print(text, contentType);
     }

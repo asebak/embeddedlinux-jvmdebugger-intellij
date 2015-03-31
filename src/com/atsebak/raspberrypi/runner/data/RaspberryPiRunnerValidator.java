@@ -54,10 +54,6 @@ public class RaspberryPiRunnerValidator {
      */
     private static boolean isValidHost(String ip) throws RuntimeConfigurationWarning {
         return !(ip == null || ip.isEmpty());
-        //        try {
-//            return InetAddress.getByName(ip).isReachable(200);
-//        } catch (IOException e) {
-//            throw new RuntimeConfigurationWarning("Hostname could not be reached.");
-//        }
+        //todo validate if real ipv4/v6 address
     }
 }

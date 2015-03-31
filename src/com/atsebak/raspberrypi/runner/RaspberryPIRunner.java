@@ -26,18 +26,6 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         super();
     }
 
-//    @Override
-//    protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
-//        //compile
-////        ExecutionManager.getInstance(environment.getProject()).getContentManager().showRunContent(environment.getExecutor(), environment.getContentToReuse());
-//
-////        ExecutionManager.getInstance(environment.getProject()).startRunProfile(new RunProfileStarter() {
-////            public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws ExecutionException {
-////                return BaseProgramRunner.postProcess(environment, GenericProgramRunner.this.doExecute(state, environment), callback);
-////            }
-////        }, state, environment);
-//    }
-
     /**
      * Executes the Runner, This only gets called in run mode.
      * It returns null because you want to show only the PI Console
@@ -53,13 +41,6 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
             FileDocumentManager.getInstance().saveAllDocuments();
             setupConsole(environment.getProject());
-//            ProgramRunner runner = DefaultJavaProgramRunner.getInstance();
-//            Executor executor = DefaultRunExecutor.getRunExecutorInstance();
-//            try {
-//                runner.execute(new ExecutionEnvironment(executor, runner, environment.getRunnerAndConfigurationSettings(), environment.getProject()));
-//            } catch (ExecutionException e) {
-////                MavenUtil.showError(project, "Failed to execute Maven goal", e);
-//            }
             return super.doExecute(profileState, environment);
         }
         return null;

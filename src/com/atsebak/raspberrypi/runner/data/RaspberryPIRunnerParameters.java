@@ -14,6 +14,11 @@ public class RaspberryPIRunnerParameters implements Cloneable {
     private String password;
     private String classesDirectory;
 
+    /**
+     * Clones members
+     *
+     * @return
+     */
     @Override
     protected RaspberryPIRunnerParameters clone() {
         try {

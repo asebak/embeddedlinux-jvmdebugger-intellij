@@ -11,12 +11,12 @@ public class CommandLineTarget {
     private final JavaParameters parameters;
     private final RaspberryPIRunConfiguration raspberryPIRunConfiguration;
     private final boolean isDebugging;
+
     /**
      * Builds the command line command to invoke the java from the target machine
      *
      * @return
      */
-
     public String toCommand() {
         StringBuilder cmdBuf = new StringBuilder();
         addRunAsRootOption(cmdBuf);

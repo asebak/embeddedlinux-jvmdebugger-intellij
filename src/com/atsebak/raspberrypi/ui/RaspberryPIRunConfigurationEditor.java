@@ -39,6 +39,11 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     private JPasswordField password;
     private JComponent myAnchor;
 
+    /**
+     * Constructor for run configuration form
+     *
+     * @param project
+     */
     public RaspberryPIRunConfigurationEditor(final Project project) {
         myProject = project;
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
@@ -50,6 +55,11 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
     }
+
+    /**
+     * Called when application loaded/ when cancelling the settings
+     * @param configuration
+     */
     @Override
     protected void resetEditorFrom(RaspberryPIRunConfiguration configuration) {
 
@@ -64,6 +74,12 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         username.setText(parameters.getUsername());
         password.setText(parameters.getPassword());
     }
+
+    /**
+     * When you click the apply button
+     * @param configuration
+     * @throws ConfigurationException
+     */
     @Override
     protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
         final String className = getMainClassField().getText();
@@ -75,7 +91,10 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         setPiSettings(configuration.getRunnerParameters());
     }
 
-
+    /**
+     * Specific settings for this runner
+     * @param parameters
+     */
     private void setPiSettings(RaspberryPIRunnerParameters parameters) {
         parameters.setHostname(hostName.getText());
         parameters.setDisplay(xDisplay.getText());
@@ -85,12 +104,19 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         parameters.setPassword(password.getText());
     }
 
+    /**
+     * Returns the layout
+     * @return
+     */
     @NotNull
     @Override
     protected JComponent createEditor() {
         return mainPanel;
     }
 
+    /**
+     * Creates UI Components
+     */
     private void createUIComponents() {
         myMainClass = new LabeledComponent<EditorTextFieldWithBrowseButton>();
         myMainClass.setComponent(new EditorTextFieldWithBrowseButton(myProject, true, new JavaCodeFragment.VisibilityChecker() {
@@ -106,15 +132,28 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
             }
         }));
     }
+
+    /**
+     * Gets the main class to execute java app against
+     * @return
+     */
     public EditorTextFieldWithBrowseButton getMainClassField() {
         return myMainClass.getComponent();
     }
 
+    /**
+     * Anchor getter
+     * @return
+     */
     @Override
     public JComponent getAnchor() {
         return myAnchor;
     }
 
+    /**
+     * Anchor setter
+     * @param anchor
+     */
     @Override
     public void setAnchor(@Nullable JComponent anchor) {
         this.myAnchor = anchor;
