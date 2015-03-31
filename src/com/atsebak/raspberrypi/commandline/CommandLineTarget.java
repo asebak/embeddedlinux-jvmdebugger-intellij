@@ -17,7 +17,8 @@ public class CommandLineTarget {
      *
      * @return
      */
-    public String toCommand() {
+    @Override
+    public String toString() {
         StringBuilder cmdBuf = new StringBuilder();
         addRunAsRootOption(cmdBuf);
         addEnvironmentVariables(cmdBuf);

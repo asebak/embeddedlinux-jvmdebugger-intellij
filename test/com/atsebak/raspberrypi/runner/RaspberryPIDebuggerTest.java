@@ -16,7 +16,7 @@ public class RaspberryPIDebuggerTest {
     public void testGetRunnerId() {
         RaspberryPIDebugger debugger = Whitebox.newInstance(RaspberryPIDebugger.class);
         String runnerId = debugger.getRunnerId();
-        assertEquals("RaspberryPI", runnerId);
+        assertEquals("RaspberryPIDebugger", runnerId);
     }
 
 

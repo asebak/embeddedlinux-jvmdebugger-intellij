@@ -15,36 +15,49 @@ import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.xfer.FileSystemFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 
 @Builder
-public class SSHHandler {
+public class SSHHandlerTarget {
     private Project project;
     private RaspberryPIRunnerParameters piRunnerParameters;
 
 
     /** Uploads Java application output folders
-     * @param outputDirec Output directory folder where to store the java application
+     * @param compileOutput Output directory folder where to store the java application
      * @param cmd         The command to execute on the java files
      * @throws IOException
      * @throws ClassNotFoundException
      * @throws RuntimeConfigurationException
      */
-    public void upload(final File outputDirec, final String cmd)
+    public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        SSHClient ssh = build(new SSHClient());
         final String remoteDirec = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + "IdeaProjects";
+        genericUpload(remoteDirec, compileOutput);
+        PIConsoleView.getInstance(project).print("Finished Deploying App\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+        String appPath = remoteDirec + File.separator + compileOutput.getName();
+        runJavaApp(appPath, cmd);
+    }
+
+    /**
+     * Generic SSh Ftp uploader
+     *
+     * @param uploadTo     the remote location
+     * @param fileToUpload files to upload
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
+    public void genericUpload(@NotNull final String uploadTo, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
+        SSHClient ssh = build(new SSHClient());
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
-            sftp.put(new FileSystemFile(outputDirec), remoteDirec);
-            PIConsoleView.getInstance(project).print("Finished Deploying App\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+            sftp.put(new FileSystemFile(fileToUpload), uploadTo);
         } finally {
             ssh.disconnect();
         }
-        String appPath = remoteDirec + File.separator + outputDirec.getName();
-        runJavaApp(appPath, cmd);
     }
 
     /**
@@ -79,7 +92,6 @@ public class SSHHandler {
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
         PIConsoleView.getInstance(project).print(">>>>>>>>> You're Building on Embedded Linux <<<<<<<<\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
-
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         //kill existing process, change to java folder and run it.
