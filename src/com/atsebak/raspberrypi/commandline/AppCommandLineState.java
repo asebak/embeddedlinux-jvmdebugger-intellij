@@ -3,7 +3,7 @@ package com.atsebak.raspberrypi.commandline;
 import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
-import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
+import com.atsebak.raspberrypi.deploy.DeploymentTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.*;
@@ -170,14 +170,14 @@ public class AppCommandLineState extends JavaCommandLineState {
     /**
      * Executes Deploys and Runs App on remote target
      * @param projectOutput
-     * @param builder
+     * @param commandLineTarget
      */
-    private void invokeDeployment(String projectOutput, CommandLineTarget builder) {
+    private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) {
         PIConsoleView.getInstance(environment.getProject()).print("Deploying to the Raspberry PI\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        SSHUploader uploader = SSHUploader.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
+        DeploymentTarget target = DeploymentTarget.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
         try {
-            uploader.uploadToTarget(new File(projectOutput), builder.toCommand());
+            target.upload(new File(projectOutput), commandLineTarget.toString());
         } catch (Exception e) {
             PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
                     ConsoleViewContentType.ERROR_OUTPUT);

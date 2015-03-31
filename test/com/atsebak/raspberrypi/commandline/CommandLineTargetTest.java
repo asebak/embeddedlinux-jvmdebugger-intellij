@@ -36,7 +36,7 @@ public class CommandLineTargetTest {
                 .isDebugging(false)
                 .parameters(javaParameters)
                 .raspberryPIRunConfiguration(piRunConfiguration)
-                .build().toCommand();
+                .build().toString();
         assert (runCommand.contains(String.format("sudo java -cp . %s ;", parameters.getMainclass())));
     }
 
@@ -46,7 +46,7 @@ public class CommandLineTargetTest {
                 .isDebugging(true)
                 .parameters(javaParameters)
                 .raspberryPIRunConfiguration(piRunConfiguration)
-                .build().toCommand();
+                .build().toString();
         assert (debugCommand.contains("sudo java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + parameters.getPort()));
     }
 }

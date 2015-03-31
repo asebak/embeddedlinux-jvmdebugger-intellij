@@ -26,12 +26,21 @@ public class PIOutputForwarder {
 
     private ConsoleViewContentType myPreviousContentType;
 
+    /**
+     * Constructor
+     *
+     * @param consoleView
+     */
     public PIOutputForwarder(@NotNull PIConsoleView consoleView) {
         myConsoleView = consoleView;
         myStdErr = new ByteArrayOutputStream(SIZE);
         myOutput = new ByteArrayOutputStream(SIZE * 2);
     }
 
+    /**
+     * Start listening
+     * @param listener
+     */
     public void attachTo(@Nullable Listener listener) {
         OutputStream stdout = new ConsoleAwareOutputStream(this, NORMAL_OUTPUT, listener);
         OutputStream stderr = new ConsoleAwareOutputStream(this, ERROR_OUTPUT, listener);
@@ -40,24 +49,36 @@ public class PIOutputForwarder {
         System.setErr(new PrintStream(stderr));
     }
 
+    /**
+     * Close Stream
+     */
     void close() {
         try {
-            Closeables.close(myOutput, true /* swallowIOException */);
-            Closeables.close(myStdErr, true /* swallowIOException */);
+            Closeables.close(myOutput, true);
+            Closeables.close(myStdErr, true);
         } catch (IOException e) {
-            // Cannot happen
+
         }
     }
 
+    /**
+     * Get the error ouput
+     * @return
+     */
     @NotNull
     String getStdErr() {
         return myStdErr.toString();
     }
 
+    /**
+     * Writer Parser
+     * @param contentType
+     * @param b
+     * @param off
+     * @param len
+     */
     void write(@NotNull ConsoleViewContentType contentType, @NotNull byte[] b, int off, int len) {
         boolean addNewLine = false;
-        // We are combining input from stdout and stderr and that we want to make sure that whenever the output is mixed it starts on a new
-        // line.
         if (contentType != myPreviousContentType) {
             addNewLine = myPreviousContentType != null;
             myPreviousContentType = contentType;
@@ -81,15 +102,25 @@ public class PIOutputForwarder {
         myConsoleView.print(text, contentType);
     }
 
+    /**
+     * Standard output
+     * @return
+     */
     @Override
     public String toString() {
         return myOutput.toString();
     }
 
+    /**
+     * Listener interface
+     */
     interface Listener {
         void onOutput(@NotNull ConsoleViewContentType contentType, @NotNull byte[] data, int offset, int length);
     }
 
+    /**
+     * Handles incoming text
+     */
     private static class ConsoleAwareOutputStream extends OutputStream {
         @NotNull
         private final PIOutputForwarder myOutput;
@@ -106,6 +137,10 @@ public class PIOutputForwarder {
             myListener = listener;
         }
 
+        /**
+         * Do Nothing
+         * @param b
+         */
         @Override
         public void write(int b) {
         }

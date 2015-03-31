@@ -70,7 +70,7 @@
         </constraints>
         <properties>
           <labelFor value="c60bd"/>
-          <text value="Hostname"/>
+          <text resource-bundle="com/atsebak/raspberrypi/localization/PIBundle" key="pi.hostname"/>
         </properties>
       </component>
       <component id="60c26" class="javax.swing.JLabel">
@@ -78,7 +78,7 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Debug Port"/>
+          <text resource-bundle="com/atsebak/raspberrypi/localization/PIBundle" key="pi.port"/>
         </properties>
       </component>
       <component id="137e5" class="javax.swing.JCheckBox" binding="runAsRootCheckBox" default-binding="true">
@@ -87,7 +87,7 @@
         </constraints>
         <properties>
           <selected value="true"/>
-          <text value="Run as Root"/>
+          <text resource-bundle="com/atsebak/raspberrypi/localization/PIBundle" key="pi.sudo"/>
         </properties>
       </component>
       <component id="54499" class="javax.swing.JTextField" binding="debugPort">
@@ -111,7 +111,7 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Username"/>
+          <text resource-bundle="com/atsebak/raspberrypi/localization/PIBundle" key="pi.username"/>
         </properties>
       </component>
       <component id="ff411" class="javax.swing.JTextField" binding="username">
@@ -127,7 +127,7 @@
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Password"/>
+          <text resource-bundle="com/atsebak/raspberrypi/localization/PIBundle" key="pi.password"/>
         </properties>
       </component>
       <component id="5909c" class="javax.swing.JPasswordField" binding="password">
