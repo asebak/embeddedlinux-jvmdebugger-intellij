@@ -17,9 +17,6 @@ public class RaspberryPiRunnerValidator {
      * @throws RuntimeConfigurationException
      */
     public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationException {
-        if (rp.getDisplay() == null || rp.getDisplay().isEmpty()) {
-            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.xdisplay"));
-        }
         if (!isValidHost(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
@@ -54,10 +51,6 @@ public class RaspberryPiRunnerValidator {
      */
     private static boolean isValidHost(String ip) throws RuntimeConfigurationWarning {
         return !(ip == null || ip.isEmpty());
-        //        try {
-//            return InetAddress.getByName(ip).isReachable(200);
-//        } catch (IOException e) {
-//            throw new RuntimeConfigurationWarning("Hostname could not be reached.");
-//        }
+        //todo validate if real ipv4/v6 address
     }
 }

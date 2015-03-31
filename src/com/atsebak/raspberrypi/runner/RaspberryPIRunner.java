@@ -10,6 +10,7 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.runners.DefaultProgramRunner;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -25,18 +26,6 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
         super();
     }
 
-//    @Override
-//    protected void execute(@NotNull ExecutionEnvironment environment, Callback callback, @NotNull RunProfileState state) throws ExecutionException {
-//        //compile
-////        ExecutionManager.getInstance(environment.getProject()).getContentManager().showRunContent(environment.getExecutor(), environment.getContentToReuse());
-//
-////        ExecutionManager.getInstance(environment.getProject()).startRunProfile(new RunProfileStarter() {
-////            public RunContentDescriptor execute(@NotNull RunProfileState state, @NotNull ExecutionEnvironment environment) throws ExecutionException {
-////                return BaseProgramRunner.postProcess(environment, GenericProgramRunner.this.doExecute(state, environment), callback);
-////            }
-////        }, state, environment);
-//    }
-
     /**
      * Executes the Runner, This only gets called in run mode.
      * It returns null because you want to show only the PI Console
@@ -50,15 +39,8 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
         if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
-//            FileDocumentManager.getInstance().saveAllDocuments();
-//            setupConsole(environment.getProject());
-//            ProgramRunner runner = DefaultJavaProgramRunner.getInstance();
-//            Executor executor = DefaultRunExecutor.getRunExecutorInstance();
-//            try {
-//                runner.execute(new ExecutionEnvironment(executor, runner, environment.getRunnerAndConfigurationSettings(), environment.getProject()));
-//            } catch (ExecutionException e) {
-////                MavenUtil.showError(project, "Failed to execute Maven goal", e);
-//            }
+            FileDocumentManager.getInstance().saveAllDocuments();
+            setupConsole(environment.getProject());
             return super.doExecute(profileState, environment);
         }
         return null;

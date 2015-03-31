@@ -38,11 +38,6 @@ public class RaspberryPIRunConfiguration extends LocatableConfigurationBase impl
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
         return new RaspberryPIRunConfigurationEditor(getProject());
-//        SettingsEditorGroup<RaspberryPIRunConfiguration> group = new SettingsEditorGroup<RaspberryPIRunConfiguration>();
-//        group.addEditor(ExecutionBundle.message("run.configuration.configuration.tab.title"), new RaspberryPIRunConfigurationEditor(getProject()));
-//        JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-//        group.addEditor(ExecutionBundle.message("logs.tab.title"), new LogConfigurationPanel<RaspberryPIRunConfiguration>());
-//        return group;
     }
 
     /**
@@ -110,6 +105,11 @@ public class RaspberryPIRunConfiguration extends LocatableConfigurationBase impl
         return raspberryPIRunnerParameters;
     }
 
+    /**
+     * Gets modules
+     *
+     * @return
+     */
     @NotNull
     @Override
     public Module[] getModules() {

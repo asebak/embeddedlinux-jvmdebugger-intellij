@@ -10,19 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-/**
- * Created by asebak on 3/29/2015.
- */
 public class PIConsoleFilter implements Filter {
-
-
     private Project project;
-
     public PIConsoleFilter(@NotNull Project project) {
-
         this.project = project;
     }
 
+    /**
+     * Applys a text filter from the output
+     *
+     * @param line
+     * @param entireLength
+     * @return
+     */
     @Nullable
     @Override
     public Result applyFilter(String line, int entireLength) {

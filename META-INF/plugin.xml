@@ -30,6 +30,7 @@
 
       <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
       <toolWindow id="PI Console"
+                  icon="/console.png"
                   anchor="bottom"
                   secondary="true"
                   factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
