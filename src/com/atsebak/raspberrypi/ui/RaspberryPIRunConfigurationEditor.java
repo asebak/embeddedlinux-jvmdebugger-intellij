@@ -31,7 +31,6 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     private LabeledComponent<JComboBox> myModule;
     private JPanel myGenericPanel;
     private JCheckBox runAsRootCheckBox;
-    private JTextField xDisplay;
     private JTextField debugPort;
     private JTextField hostName;
     private JPanel mainPanel;
@@ -69,7 +68,6 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
         RaspberryPIRunnerParameters parameters = configuration.getRunnerParameters();
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
-        xDisplay.setText(parameters.getDisplay());
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
         password.setText(parameters.getPassword());
@@ -97,7 +95,6 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
      */
     private void setPiSettings(RaspberryPIRunnerParameters parameters) {
         parameters.setHostname(hostName.getText());
-        parameters.setDisplay(xDisplay.getText());
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
         parameters.setUsername(username.getText());

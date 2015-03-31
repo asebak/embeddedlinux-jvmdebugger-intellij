@@ -1,6 +1,8 @@
 package com.atsebak.raspberrypi.runner;
 
 import com.atsebak.raspberrypi.console.PIConsoleFilter;
+import com.atsebak.raspberrypi.console.PIConsoleView;
+import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.protocol.ssh.CommandLineTarget;
 import com.atsebak.raspberrypi.protocol.ssh.SSHUploader;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
@@ -15,11 +17,9 @@ import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.javadoc.JavadocBundle;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -43,6 +43,7 @@ public class PIAppCommandLineState extends JavaCommandLineState {
     private final ExecutionEnvironment environment;
     private final RunnerSettings runnerSettings;
     private boolean isDebugMode;
+    private PIOutputForwarder outputForwarder;
 
     /**
      * Command line state when runner is launch
@@ -57,6 +58,8 @@ public class PIAppCommandLineState extends JavaCommandLineState {
         this.runnerSettings = environment.getRunnerSettings();
         isDebugMode = runnerSettings instanceof DebuggingRunnerData;
         addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
+        outputForwarder = new PIOutputForwarder(PIConsoleView.getInstance(environment.getProject()));
+        outputForwarder.attachTo(null);
     }
 
     /**
@@ -82,7 +85,7 @@ public class PIAppCommandLineState extends JavaCommandLineState {
     public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
         OSProcessHandler handler = this.startProcess();
         final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
-        textConsoleBuilder.setViewer(false);
+        textConsoleBuilder.setViewer(true);
         textConsoleBuilder.getConsole().attachToProcess(handler);
         return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
     }
@@ -129,6 +132,7 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      */
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
+        PIConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
         Project project = this.environment.getProject();
         ProjectRootManager manager = ProjectRootManager.getInstance(project);
@@ -164,15 +168,14 @@ public class PIAppCommandLineState extends JavaCommandLineState {
      * @param builder
      */
     private void invokeDeployment(String projectOutput, CommandLineTarget builder) {
+        PIConsoleView.getInstance(environment.getProject()).print("Deploying to the Raspberry PI\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
         SSHUploader uploader = SSHUploader.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
         try {
             uploader.uploadToTarget(new File(projectOutput), builder.toCommand());
         } catch (Exception e) {
-            final Notification notification = new Notification(
-                    com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID, "SSH Connection Error", e.getLocalizedMessage(),
-                    NotificationType.ERROR);
-            Notifications.Bus.notify(notification);
+            PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
+                    ConsoleViewContentType.ERROR_OUTPUT);
         }
     }
 

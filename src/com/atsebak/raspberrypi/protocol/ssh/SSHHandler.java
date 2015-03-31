@@ -1,9 +1,9 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.console.PIErrorOutputStream;
-import com.atsebak.raspberrypi.console.PINormalOutputStream;
+import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -18,7 +18,6 @@ import net.schmizz.sshj.xfer.FileSystemFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 
 @Builder
 public class SSHHandler {
@@ -40,6 +39,7 @@ public class SSHHandler {
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
             sftp.put(new FileSystemFile(outputDirec), remoteDirec);
+            PIConsoleView.getInstance(project).print("Finished Deploying App\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
         } finally {
             ssh.disconnect();
         }
@@ -78,22 +78,17 @@ public class SSHHandler {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
-        PrintStream normalStream = new PrintStream(PINormalOutputStream.builder().project(project).build());
-        PrintStream errorStream = new PrintStream(PIErrorOutputStream.builder().project(project).build());
-        System.setOut(normalStream);
-        System.setErr(errorStream);
+        PIConsoleView.getInstance(project).print(">>>>>>>> You're Building on Embedded Linux <<<<<<<<\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
 
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
         session.setAutoExpand(true);
         try {
+            PIConsoleView.getInstance(project).print("Executing Command: " + cmd + " \n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
             //kill existing process, change to java folder and run it.
             Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
-
-//            new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
-//            new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
             //todo is this needed?
 //            session.close();

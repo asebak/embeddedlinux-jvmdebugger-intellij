@@ -28,12 +28,11 @@ public class CommandLineTarget {
         addMainType(cmdBuf);
         addArguments(cmdBuf);
         cmdBuf.append(" ;");
-        return cmdBuf.toString();
+        return cmdBuf.toString().replaceAll("\\s{2,}", " ").trim();
     }
 
     private void addArguments(StringBuilder cmdBuf) {
         //todo add java arguments
-
     }
 
     /**

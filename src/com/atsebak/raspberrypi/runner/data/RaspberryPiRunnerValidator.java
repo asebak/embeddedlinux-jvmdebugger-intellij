@@ -17,9 +17,6 @@ public class RaspberryPiRunnerValidator {
      * @throws RuntimeConfigurationException
      */
     public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationException {
-        if (rp.getDisplay() == null || rp.getDisplay().isEmpty()) {
-            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.xdisplay"));
-        }
         if (!isValidHost(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
