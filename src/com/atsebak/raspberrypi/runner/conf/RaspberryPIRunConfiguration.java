@@ -1,6 +1,6 @@
 package com.atsebak.raspberrypi.runner.conf;
 
-import com.atsebak.raspberrypi.runner.PIAppCommandLineState;
+import com.atsebak.raspberrypi.commandline.AppCommandLineState;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.atsebak.raspberrypi.runner.data.RaspberryPiRunnerValidator;
 import com.atsebak.raspberrypi.ui.RaspberryPIRunConfigurationEditor;
@@ -83,7 +83,7 @@ public class RaspberryPIRunConfiguration extends LocatableConfigurationBase impl
      */
     @Override
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        return new PIAppCommandLineState(env, this);
+        return new AppCommandLineState(env, this);
     }
 
 

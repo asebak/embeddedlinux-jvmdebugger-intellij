@@ -78,15 +78,17 @@ public class SSHHandler {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
-        PIConsoleView.getInstance(project).print(">>>>>>>> You're Building on Embedded Linux <<<<<<<<\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+        PIConsoleView.getInstance(project).print(">>>>>>>>> You're Building on Embedded Linux <<<<<<<<\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
 
         final SSHClient sshClient = build(new SSHClient());
         final Session session = sshClient.startSession();
+        //kill existing process, change to java folder and run it.
+        //todo kill only the java process using that tcp port, how to do that in one line?
+        final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; " + cmd;
         session.setAutoExpand(true);
         try {
-            PIConsoleView.getInstance(project).print("Executing Command: " + cmd + " \n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
-            //kill existing process, change to java folder and run it.
-            Session.Command exec = session.exec("sudo killall java; cd " + targetPathOnRemote + "; " + cmd);
+            PIConsoleView.getInstance(project).print("Executing Command: " + cmdExecute + " \n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+            Session.Command exec = session.exec(cmdExecute);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {

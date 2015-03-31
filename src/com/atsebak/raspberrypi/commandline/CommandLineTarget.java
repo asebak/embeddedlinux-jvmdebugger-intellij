@@ -1,4 +1,4 @@
-package com.atsebak.raspberrypi.protocol.ssh;
+package com.atsebak.raspberrypi.commandline;
 
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.intellij.execution.configurations.JavaParameters;
