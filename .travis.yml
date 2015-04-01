@@ -1,4 +1,7 @@
 language: java
-jdk: oraclejdk8
-install: true
-script: chmod a+x ./build.sh
+jdk:
+- oraclejdk8
+script: "./ci-build.sh"
+cache:
+directories:
+- idea-IC
