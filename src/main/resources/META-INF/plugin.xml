@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <id>RaspberryPIIntellij</id>
+    <id>${project.artifactId}</id>
     <name>Raspberry Pi</name>
     <version>${project.version}</version>
     <vendor email="${vendor.email}" url="${vendor.url}">${vendor.name}</vendor>

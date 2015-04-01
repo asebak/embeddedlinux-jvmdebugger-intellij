@@ -54,7 +54,8 @@ public class RaspberryPIConfigurationType implements ConfigurationType {
      */
     @Override
     public Icon getIcon() {
-        return IconLoader.getIcon("/main/resources/pi.png");
+        System.out.print("NEW TEXT");
+        return IconLoader.getIcon("/pi.png");
     }
 
     /**
