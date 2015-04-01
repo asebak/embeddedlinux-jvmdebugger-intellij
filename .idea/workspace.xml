@@ -1,23 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5210382f-4a74-404c-bf4b-de1664b1d589" name="Default" comment="Fixed up running and debuggin configurations mixing">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Resources/console.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleFilter.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleView.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java" afterPath="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java" />
+    <list default="true" id="975d5e1b-cf91-45fa-a56b-c385c2df07cd" name="Default" comment="fixed test">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/commandline/AppCommandLineState.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/commandline/CommandLineTarget.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/commandline/CommandLineTargetTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/deploy/DeploymentTarget.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_hierynomus_sshj_0_11_0.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_jcraft_jzlib_1_1_3.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_11.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bouncycastle_bcpkix_jdk15on_1_51.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_bouncycastle_bcprov_jdk15on_1_51.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_javassist_javassist_3_19_0_GA.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_objenesis_objenesis_2_1.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_powermock_powermock_api_mockito_1_6_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_powermock_powermock_api_support_1_6_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_powermock_powermock_core_1_6_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_powermock_powermock_reflect_1_6_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_16_2.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_12.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/utils/Notifications.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/localization/PIBundle.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/PIBundle.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/console/PIConsoleFilter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/console/PIConsoleView.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/console/PIOutputForwarder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/conf/RaspberryPIConfigurationType.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationTypeTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIDebuggerTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/conf/RaspberryPIRunConfiguration.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.form" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/data/RaspberryPIRunnerParameters.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIRunnerTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/data/RaspberryPiRunnerValidator.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/data/RaspberryPiRunnerValidatorTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/protocol/ssh/SSHHandlerTarget.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\bcprov_ext_jdk15on_1_47.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\lombok.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\mockito_all_1_9_5.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\slf4j_api_1_7_10.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\slf4j_log4j12_1_7_12.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\sshj_0_11_0.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\libraries\trilead_ssh2.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\.idea\scopes\scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\META-INF\plugin.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\bcprov-ext-jdk15on-1.47.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\lombok.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\mockito-all-1.9.5.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\powermock-mockito-1.5.5-full.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\slf4j-api-1.7.10.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\sshj-0.11.0.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\lib\trilead-ssh2.jar" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\commandline\AppCommandLineState.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\commandline\CommandLineTarget.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\console\PIConsoleFilter.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\console\PIConsoleToolWindowFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\console\PIConsoleView.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\console\PIOutputForwarder.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\deploy\DeploymentTarget.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\localization\PIBundle.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\localization\PIBundle.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\protocol\ssh\SSHHandlerTarget.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\RaspberryPIDebugger.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\RaspberryPIRunner.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\conf\RaspberryPIConfigurationType.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\conf\RaspberryPIRunConfiguration.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\data\RaspberryPIRunnerParameters.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\runner\data\RaspberryPiRunnerValidator.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\ui\RaspberryPIRunConfigurationEditor.form" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\ui\RaspberryPIRunConfigurationEditor.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\src\com\atsebak\raspberrypi\utils\Notifications.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\test\com\atsebak\raspberrypi\commandline\CommandLineTargetTest.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\test\com\atsebak\raspberrypi\runner\RaspberryPIConfigurationTypeTest.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\test\com\atsebak\raspberrypi\runner\RaspberryPIDebuggerTest.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\test\com\atsebak\raspberrypi\runner\RaspberryPIRunnerTest.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\test\com\atsebak\raspberrypi\runner\data\RaspberryPiRunnerValidatorTest.java" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\Resources\console.png" afterPath="$PROJECT_DIR$/src/main/resources/console.png" />
+      <change type="MOVED" beforePath="C:\Users\abdo\Documents\raspberrypi-intellij\Resources\pi.png" afterPath="$PROJECT_DIR$/src/main/resources/pi.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/raspberrypi-intellij.iml" afterPath="$PROJECT_DIR$/raspberrypi-intellij.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="raspberrypi-intellij.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,124 +112,113 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="RaspberryPIDebugger.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+            <state vertical-scroll-proportion="-10.264706">
+              <caret line="29" column="43" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="console.png" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Resources/console.png">
-          <provider selected="true" editor-type-id="images">
-            <state />
+      <file leaf-file-name="RaspberryPIConfigurationTypeTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationTypeTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PIAppCommandLineState.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.54545456">
-              <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.7156704">
+              <caret line="29" column="14" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RaspberryPIConfigurationType.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/conf/RaspberryPIConfigurationType.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConfigurationFactory.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/ConfigurationFactory.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-7.32">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+              <folding>
+                <element signature="e#1102#1103#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PowerMockJUnit44RunnerDelegateImpl.java" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/powermock/powermock-module-junit4/1.6.2/powermock-module-junit4-1.6.2-sources.jar!/org/powermock/modules/junit4/internal/impl/PowerMockJUnit44RunnerDelegateImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="314" column="0" selection-start-line="314" selection-start-column="0" selection-end-line="314" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResourceBundle.java" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0/src.zip!/java/util/ResourceBundle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1563" column="0" selection-start-line="1563" selection-start-column="0" selection-end-line="1563" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PIBundle.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/PIBundle.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PIBundle.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/localization/PIBundle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="46" column="74" selection-start-line="46" selection-start-column="74" selection-end-line="46" selection-end-column="74" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommandLineTargetTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/commandline/CommandLineTargetTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3592#3593#0" expanded="true" />
-                <element signature="e#3650#3651#0" expanded="true" />
-                <element signature="e#3910#3911#0" expanded="true" />
-                <element signature="e#3972#3973#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RaspberryPIRunner.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="57" column="25" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SSHUploader.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHUploader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SSHHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="57" column="37" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PIConsoleView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="96" column="4" selection-start-line="96" selection-start-column="4" selection-end-line="102" selection-end-column="40" />
-              <folding>
-                <element signature="e#3964#4272#0" expanded="true" />
-                <element signature="e#4271#4272#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PIConsoleToolWindowFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="13" column="69" selection-start-line="13" selection-start-column="69" selection-end-line="13" selection-end-column="69" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandLineTarget.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/CommandLineTarget.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-              <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
-    <option name="UPDATE_TYPE" value="REBASE" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
@@ -163,60 +229,24 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/build-deploy.sh" />
-        <option value="$PROJECT_DIR$/build.sh" />
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunConfigurationEditor.java" />
-        <option value="$PROJECT_DIR$/ci.sh" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunConfigurationEditor.form" />
-        <option value="$PROJECT_DIR$/raspberrypi-intellij.iml" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/SSHMain.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/GitSSHXmlRpcClient.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHConfig.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/console/SshUploader.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/localization/PIBundle.properties" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/CommandLineBuilder.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/localization/PIBundle.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SShUploader.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunnerParameters.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.form" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/PIProcessChooserDialog2.form" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/PIProcessChooserDialog2.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/PIProcessChooserDialog.form" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/actions/PIConnectDebuggerAction.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/PIProcessChooserDialog.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/CommandLineTargetBuilder.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHUploader.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIOSProcessHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RemoteJavaApplicationCommandLineState.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIOutputView.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PlainTextView.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIRunContentDescriptorBuilder.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIContentDescriptor.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationType.java" />
-        <option value="$PROJECT_DIR$/.travis.yml" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPiRunnerValidator.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIJavaCommandLineState.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunConfiguration.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleFilter.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleView.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java" />
-        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java" />
-        <option value="$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationTypeTest.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
-  <component name="LogFilters">
-    <option name="FILTER_ERRORS" value="false" />
-    <option name="FILTER_WARNINGS" value="false" />
-    <option name="FILTER_INFO" value="true" />
-    <option name="FILTER_DEBUG" value="true" />
-    <option name="CUSTOM_FILTER" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
   </component>
   <component name="NamedScopeManager">
     <order />
@@ -231,14 +261,11 @@
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="false" id="Update" />
+    <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
-  </component>
-  <component name="ProjectReloadState">
-    <option name="STATE" value="1" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -253,7 +280,7 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -287,6 +314,14 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="raspberrypi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -305,33 +340,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi" />
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="runner" />
+              <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -349,11 +362,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi" />
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ssh" />
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="raspberrypi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -368,6 +385,14 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -379,59 +404,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="console" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="raspberrypi-intellij" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="META-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -441,39 +416,100 @@
     <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="preferences.pluginManager" />
-    <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="OverrideImplement.combined" value="true" />
-    <property name="OverrideImplement.overriding.sorted" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="FullScreen" value="false" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="466" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="recentsLimit" value="5" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.atsebak.raspberrypi.console" />
-      <recent name="com.atsebak.raspberrypi.ui" />
-      <recent name="com.atsebak.raspberrypi.runner" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/lib" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.atsebak.raspberrypi.console" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\abdo\Documents\raspberrypi-intellij\src\main\resources" />
+      <recent name="C:\Users\abdo\Documents\raspberrypi-intellij\src\test\java" />
+      <recent name="C:\Users\abdo\Documents\raspberrypi-intellij\src\main\java" />
     </key>
   </component>
-  <component name="RunManager" selected="Plugin.Plugin">
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+  <component name="RunManager" selected="JUnit.RaspberryPIConfigurationTypeTest">
+    <configuration default="false" name="CommandLineTargetTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.atsebak.raspberrypi.commandline.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <module name="raspberrypi-intellij" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.atsebak.raspberrypi.commandline" />
+      <option name="MAIN_CLASS_NAME" value="com.atsebak.raspberrypi.commandline.CommandLineTargetTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="RaspberryPIConfigurationTypeTest.testSettings" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.atsebak.raspberrypi.runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="raspberrypi-intellij" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.atsebak.raspberrypi.runner" />
+      <option name="MAIN_CLASS_NAME" value="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationTypeTest" />
+      <option name="METHOD_NAME" value="testSettings" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="RaspberryPIConfigurationTypeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.atsebak.raspberrypi.runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="raspberrypi-intellij" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.atsebak.raspberrypi.runner" />
+      <option name="MAIN_CLASS_NAME" value="com.atsebak.raspberrypi.runner.RaspberryPIConfigurationTypeTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
       <method />
@@ -521,11 +557,9 @@
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <module />
-      <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -582,37 +616,14 @@
     </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="JAR_PATH" value="$PROJECT_DIR$/lib/bcprov-ext-jdk15on-1.47.jar" />
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
-      <MavenSettings>
-        <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
-        <option name="myRunnerParameters">
-          <MavenRunnerParameters>
-            <option name="profiles">
-              <set />
-            </option>
-            <option name="goals">
-              <list />
-            </option>
-            <option name="profilesMap">
-              <map />
-            </option>
-            <option name="resolveToWorkspace" value="false" />
-            <option name="workingDirPath" value="" />
-          </MavenRunnerParameters>
-        </option>
-      </MavenSettings>
       <method />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
       <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="10.42.0.25" />
+      <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
       <method />
     </configuration>
@@ -644,403 +655,71 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="false" name="Plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="raspberrypi-intellij" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <log_file path="$USER_HOME$/.IdeaIC13/system/plugins-sandbox/system/log/idea.log" checked="true" skipped="true" show_all="false" alias="IDEA LOG" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unnamed" type="Remote" factoryName="Remote">
-      <module name="raspberrypi-intellij" />
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="true" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="5005" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="false" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method />
-    </configuration>
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="Plugin.Plugin" />
-      <item index="1" class="java.lang.String" itemvalue="Remote.Unnamed" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.CommandLineTargetTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.RaspberryPIConfigurationTypeTest.testSettings" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.RaspberryPIConfigurationTypeTest" />
     </list>
+    <recent_temporary>
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.RaspberryPIConfigurationTypeTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.RaspberryPIConfigurationTypeTest.testSettings" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.CommandLineTargetTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration">
-    <configuration />
-  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="5210382f-4a74-404c-bf4b-de1664b1d589" name="Default" comment="" />
-      <created>1427332930381</created>
+      <changelist id="975d5e1b-cf91-45fa-a56b-c385c2df07cd" name="Default" comment="" />
+      <created>1427848105509</created>
       <option name="number" value="Default" />
-      <updated>1427332930381</updated>
+      <updated>1427848105509</updated>
     </task>
-    <task id="LOCAL-00001" summary="added basic project and classes for running from ui">
-      <created>1427335967352</created>
-      <option name="number" value="00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1427335967352</updated>
-    </task>
-    <task id="LOCAL-00002" summary="adding missing idea project files">
-      <created>1427363026182</created>
-      <option name="number" value="00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1427363026182</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Added travis file">
-      <created>1427406382590</created>
-      <option name="number" value="00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1427406382590</updated>
-    </task>
-    <task id="LOCAL-00004" summary="added more script changes">
-      <created>1427406837741</created>
-      <option name="number" value="00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1427406837741</updated>
-    </task>
-    <task id="LOCAL-00005" summary="delete build files">
-      <created>1427407195728</created>
-      <option name="number" value="00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1427407195728</updated>
-    </task>
-    <task id="LOCAL-00006" summary="new travis">
-      <created>1427409716797</created>
-      <option name="number" value="00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1427409716797</updated>
-    </task>
-    <task id="LOCAL-00007" summary="added sudo">
-      <created>1427409843613</created>
-      <option name="number" value="00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1427409843613</updated>
-    </task>
-    <task id="LOCAL-00008" summary="delete and cleanup">
-      <created>1427411350464</created>
-      <option name="number" value="00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1427411350464</updated>
-    </task>
-    <task id="LOCAL-00009" summary="git implementations">
-      <created>1427545844106</created>
-      <option name="number" value="00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1427545844106</updated>
-    </task>
-    <task id="LOCAL-00010" summary="better ssh uploading and communicating">
-      <created>1427551856983</created>
-      <option name="number" value="00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1427551856983</updated>
-    </task>
-    <task id="LOCAL-00011" summary="delete files and clean up. Managed to remotely upload output directory to target machine">
-      <created>1427552759927</created>
-      <option name="number" value="00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1427552759927</updated>
-    </task>
-    <task id="LOCAL-00012" summary="added vm options">
-      <created>1427576113649</created>
-      <option name="number" value="00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1427576113649</updated>
-    </task>
-    <task id="LOCAL-00013" summary="added java runner on remote server">
-      <created>1427582662046</created>
-      <option name="number" value="00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1427582662046</updated>
-    </task>
-    <task id="LOCAL-00014" summary="more changes to jvm options">
-      <created>1427585083265</created>
-      <option name="number" value="00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1427585083265</updated>
-    </task>
-    <task id="LOCAL-00015" summary="massive clean up">
-      <created>1427630033734</created>
-      <option name="number" value="00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1427630033734</updated>
-    </task>
-    <task id="LOCAL-00016" summary="clean up standards naming convention">
-      <created>1427632377988</created>
-      <option name="number" value="00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1427632377988</updated>
-    </task>
-    <task id="LOCAL-00017" summary="minor changes and a pi debugger">
-      <created>1427638226766</created>
-      <option name="number" value="00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1427638226766</updated>
-    </task>
-    <task id="LOCAL-00018" summary="managed to get remote configuration working">
-      <created>1427642148871</created>
-      <option name="number" value="00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1427642148871</updated>
-    </task>
-    <task id="LOCAL-00019" summary="clean up">
-      <created>1427642793148</created>
-      <option name="number" value="00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1427642793148</updated>
-    </task>
-    <task id="LOCAL-00020" summary="more clean up">
-      <created>1427644037534</created>
-      <option name="number" value="00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1427644037534</updated>
-    </task>
-    <task id="LOCAL-00021" summary="more clean up">
-      <created>1427644745858</created>
-      <option name="number" value="00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1427644745858</updated>
-    </task>
-    <task id="LOCAL-00022" summary="minor changes">
-      <created>1427649727578</created>
-      <option name="number" value="00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1427649727578</updated>
-    </task>
-    <task id="LOCAL-00023" summary="minor changes">
-      <created>1427653532664</created>
-      <option name="number" value="00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1427653532664</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Finished Creating console window">
-      <created>1427658275472</created>
-      <option name="number" value="00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1427658275472</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Fixed up running and debuggin configurations mixing">
-      <created>1427659922669</created>
-      <option name="number" value="00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1427659922669</updated>
-    </task>
-    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="2066" height="1122" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281893" sideWeight="0.4997236" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.24378109" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31875" sideWeight="0.4997236" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281893" sideWeight="0.4997236" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27277276" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="CQ Node Properties" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281893" sideWeight="0.4997236" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32921812" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32921812" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32921812" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24974975" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39917696" sideWeight="0.7562189" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39917696" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
-  <component name="UpdateCopyrightCheckinHandler">
-    <option name="UPDATE_COPYRIGHT" value="true" />
-  </component>
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
-  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="added basic project and classes for running from ui" />
-    <MESSAGE value="adding missing idea project files" />
-    <MESSAGE value="Added travis file" />
-    <MESSAGE value="added more script changes" />
-    <MESSAGE value="delete build files" />
-    <MESSAGE value="new travis" />
-    <MESSAGE value="added sudo" />
-    <MESSAGE value="delete and cleanup" />
-    <MESSAGE value="git implementations" />
-    <MESSAGE value="better ssh uploading and communicating" />
-    <MESSAGE value="delete files and clean up. Managed to remotely upload output directory to target machine" />
-    <MESSAGE value="added vm options" />
-    <MESSAGE value="added java runner on remote server" />
-    <MESSAGE value="more changes to jvm options" />
-    <MESSAGE value="massive clean up" />
-    <MESSAGE value="clean up standards naming convention" />
-    <MESSAGE value="minor changes and a pi debugger" />
-    <MESSAGE value="managed to get remote configuration working" />
-    <MESSAGE value="clean up" />
-    <MESSAGE value="more clean up" />
-    <MESSAGE value="minor changes" />
-    <MESSAGE value="Finished Creating console window" />
-    <MESSAGE value="Fixed up running and debuggin configurations mixing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed up running and debuggin configurations mixing" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/runners/DefaultProgramRunner.class</url>
-          <line>21</line>
+          <url>file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationTypeTest.java</url>
+          <line>17</line>
           <properties />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java</url>
-          <line>78</line>
-          <properties />
-          <option name="timeStamp" value="130" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>95</line>
-          <properties />
-          <option name="timeStamp" value="170" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleFilter.java</url>
-          <line>27</line>
-          <properties />
-          <option name="timeStamp" value="192" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>71</line>
-          <properties />
-          <option name="timeStamp" value="202" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>66</line>
-          <properties />
-          <option name="timeStamp" value="203" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>123</line>
-          <properties />
-          <option name="timeStamp" value="209" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>55</line>
-          <properties />
-          <option name="timeStamp" value="213" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>76</line>
-          <properties />
-          <option name="timeStamp" value="214" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>81</line>
-          <properties />
-          <option name="timeStamp" value="215" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java</url>
-          <line>86</line>
-          <properties />
-          <option name="timeStamp" value="216" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java</url>
-          <line>55</line>
-          <properties />
-          <option name="timeStamp" value="217" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java</url>
-          <line>104</line>
-          <properties />
-          <option name="timeStamp" value="218" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java</url>
-          <line>85</line>
-          <properties />
-          <option name="timeStamp" value="222" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/JavaCommandLineState.class</url>
-          <line>48</line>
-          <properties class="com.intellij.execution.configurations.JavaCommandLineState" />
-          <option name="timeStamp" value="79" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/projectRoots/JdkUtil.class</url>
-          <line>140</line>
-          <properties class="com.intellij.openapi.projectRoots.JdkUtil" />
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/debugger/engine/RemoteDebugProcessHandler.class</url>
-          <line>32</line>
-          <properties class="com.intellij.debugger.engine.RemoteDebugProcessHandler" />
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/debugger/engine/RemoteDebugProcessHandler.class</url>
-          <line>22</line>
-          <properties class="com.intellij.debugger.engine.RemoteDebugProcessHandler" />
-          <option name="timeStamp" value="101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/debugger/engine/RemoteDebugProcessHandler.class</url>
-          <line>23</line>
-          <properties class="com.intellij.debugger.engine.RemoteDebugProcessHandler" />
-          <option name="timeStamp" value="102" />
         </line-breakpoint>
       </breakpoints>
-      <breakpoints-dialog>
-        <breakpoints-dialog />
-      </breakpoints-dialog>
-      <option name="time" value="224" />
+      <option name="time" value="1" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1049,170 +728,31 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/lib/sshj-0.11.0.jar!/net/schmizz/sshj/connection/Connection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.2">
-          <caret line="48" column="8" selection-start-line="48" selection-start-column="8" selection-end-line="48" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/sshj-0.11.0.jar!/net/schmizz/sshj/connection/ConnectionImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.9107144">
-          <caret line="44" column="22" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/sshj-0.11.0.jar!/net/schmizz/sshj/common/StreamCopier.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.0019194">
-          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/sshj-0.11.0.jar!/net/schmizz/sshj/common/IOUtils.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7024952">
-          <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/sshj-0.11.0.jar!/net/schmizz/sshj/connection/channel/direct/SessionChannel.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.232143">
-          <caret line="63" column="43" selection-start-line="63" selection-start-column="43" selection-end-line="63" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.form">
-      <provider selected="true" editor-type-id="ui-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/RunProfileState.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.76">
-          <caret line="16" column="27" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/util/ProgramParametersConfigurator.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46859083">
-          <caret line="77" column="28" selection-start-line="77" selection-start-column="24" selection-end-line="77" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/util/ProgramParametersUtil.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49235994">
-          <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/process/OSProcessHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.32">
-          <caret line="23" column="29" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/executors/DefaultRunExecutor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29834256">
-          <caret line="28" column="40" selection-start-line="28" selection-start-column="40" selection-end-line="28" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/Executor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.32">
-          <caret line="38" column="27" selection-start-line="38" selection-start-column="27" selection-end-line="38" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/impl/ExecutionManagerImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.92">
-          <caret line="240" column="0" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/GeneralCommandLine.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.0">
-          <caret line="262" column="13" selection-start-line="262" selection-start-column="13" selection-end-line="262" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/runners/GenericProgramRunner.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.72">
-          <caret line="1" column="23" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/ui/RunContentDescriptor.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.6">
-          <caret line="44" column="116" selection-start-line="44" selection-start-column="102" selection-end-line="44" selection-end-column="116" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/runners/BaseProgramRunner.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.2">
-          <caret line="66" column="28" selection-start-line="66" selection-start-column="28" selection-end-line="66" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/wm/ToolWindowEP.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.6">
-          <caret line="29" column="18" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/wm/ToolWindowManager.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.28">
-          <caret line="76" column="31" selection-start-line="76" selection-start-column="31" selection-end-line="76" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/wm/ToolWindow.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.12">
-          <caret line="39" column="28" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/openapi/application/impl/LaterInvocator.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.92">
-          <caret line="303" column="20" selection-start-line="303" selection-start-column="20" selection-end-line="303" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/localization/PIBundle.java">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="37" selection-start-line="56" selection-start-column="37" selection-end-line="56" selection-end-column="37" />
+          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/executors/DefaultDebugExecutor.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.form">
+      <provider selected="true" editor-type-id="ui-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58733207">
-          <caret line="56" column="23" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/ui/RaspberryPIRunConfigurationEditor.java">
+    <entry file="file://$PROJECT_DIR$/build.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="33" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1221,217 +761,104 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_38/src.zip!/java/net/InetAddress.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6379127">
-          <caret line="370" column="66" selection-start-line="370" selection-start-column="66" selection-end-line="370" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_38/src.zip!/java/lang/Object.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43920144">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/impl/SingleConfigurationConfigurable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.32">
-          <caret line="149" column="29" selection-start-line="149" selection-start-column="29" selection-end-line="149" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/com/intellij/execution/ProgramRunnerUtil.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34790874">
-          <caret line="101" column="23" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/filters/CompositeFilter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33269963">
-          <caret line="41" column="18" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/JavaRunConfigurationModule.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.28">
-          <caret line="29" column="58" selection-start-line="29" selection-start-column="58" selection-end-line="29" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/RunConfigurationModule.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.6692015">
-          <caret line="34" column="11" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/JavaCommandLineState.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54562736">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/util.jar!/com/intellij/execution/process/ProcessAdapter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="31" selection-start-line="24" selection-start-column="16" selection-end-line="24" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/util.jar!/com/intellij/execution/process/ProcessListener.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIErrorOutputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PINormalOutputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="31" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/openapi/application/ModalityState.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22184874">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/data/RaspberryPIRunnerParameters.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleFilter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="43" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#527#528#0" expanded="true" />
-            <element signature="e#565#566#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="96" column="4" selection-start-line="96" selection-start-column="4" selection-end-line="102" selection-end-column="40" />
-          <folding>
-            <element signature="e#3964#4272#0" expanded="true" />
-            <element signature="e#4271#4272#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/console/PIConsoleToolWindowFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="69" selection-start-line="13" selection-start-column="69" selection-end-line="13" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/CommandLineState.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5570342">
-          <caret line="73" column="9" selection-start-line="73" selection-start-column="9" selection-end-line="73" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/CommandLineTarget.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="37" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/protocol/ssh/SSHUploader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Resources/console.png">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/pi.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/data/RaspberryPiRunnerValidatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIRunner.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/commandline/CommandLineTargetTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="25" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/RaspberryPIDebugger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/atsebak/raspberrypi/runner/PIAppCommandLineState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54545456">
-          <caret line="71" column="39" selection-start-line="71" selection-start-column="39" selection-end-line="71" selection-end-column="39" />
+          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3592#3593#0" expanded="true" />
-            <element signature="e#3650#3651#0" expanded="true" />
-            <element signature="e#3910#3911#0" expanded="true" />
-            <element signature="e#3972#3973#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.264706">
+          <caret line="29" column="43" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0/src.zip!/java/util/ResourceBundle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1563" column="0" selection-start-line="1563" selection-start-column="0" selection-end-line="1563" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/PIBundle.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/localization/PIBundle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="46" column="74" selection-start-line="46" selection-start-column="74" selection-end-line="46" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/powermock/powermock-module-junit4/1.6.2/powermock-module-junit4-1.6.2-sources.jar!/org/powermock/modules/junit4/internal/impl/PowerMockJUnit44RunnerDelegateImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="314" column="0" selection-start-line="314" selection-start-column="0" selection-end-line="314" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/com/intellij/execution/configurations/ConfigurationFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.32">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#1102#1103#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/atsebak/raspberrypi/runner/conf/RaspberryPIConfigurationType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/atsebak/raspberrypi/runner/RaspberryPIConfigurationTypeTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7156704">
+          <caret line="29" column="14" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1475,7 +902,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>1.6</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1499,7 +926,6 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>lombok</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
