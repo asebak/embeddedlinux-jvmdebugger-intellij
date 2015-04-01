@@ -19,7 +19,7 @@
     </path>
     <path id="my.classpath">
         <pathelement location="${build}"/>
-        <fileset dir="{lib.location}">
+        <fileset dir="${lib.location}">
             <include name="*.jar"/>
         </fileset>
     </path>
