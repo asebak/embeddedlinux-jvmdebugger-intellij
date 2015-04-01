@@ -3,16 +3,10 @@
     <!-- set global properties for this build -->
     <property name="build.compiler" value="modern"/>
     <property name="src" location="${basedir}/src"/>
-    <property name="gen" location="${basedir}/gen"/>
-    <property name="jps" location="${basedir}/jps-plugin"/>
-    <property name="google-app-engine" location="${basedir}/google-app-engine"/>
-    <property name="google-app-engine-yaml" location="${google-app-engine}/google-app-engine-yaml"/>
-    <property name="utils" location="${basedir}/utils"/>
-    <property name="test.src" location="${basedir}/tests"/>
+    <property name="test.src" location="${basedir}/test"/>
     <property name="build" location="build"/>
     <property name="test.build" location="build_test"/>
-    <property name="resources" value="${basedir}/resources"/>
-    <property name="go.plugin.name" value="com.goide"/>
+    <property name="resources" value="${basedir}/Resources"/>
     <property name="idea.community.build" location="${basedir}/idea-IC/"/>
     <path id="idea.classpath">
         <fileset dir="${idea.community.build}/lib">
@@ -66,21 +60,6 @@
                 <fileset dir="${src}">
                     <patternset refid="resources"/>
                 </fileset>
-                <fileset dir="${gen}">
-                    <patternset refid="resources"/>
-                </fileset>
-                <fileset dir="${jps}">
-                    <patternset refid="resources"/>
-                </fileset>
-                <fileset dir="${google-app-engine}">
-                    <patternset refid="resources"/>
-                </fileset>
-                <fileset dir="${google-app-engine-yaml}">
-                    <patternset refid="resources"/>
-                </fileset>
-                <fileset dir="${jps}/src">
-                    <include name="META-INF/services/**"/>
-                </fileset>
                 <fileset dir="${test.src}">
                     <patternset refid="resources"/>
                 </fileset>
@@ -123,9 +102,6 @@
         <compile dest="${build}"/>
         <copy todir="${build}">
             <fileset dir="${resources}">
-                <include name="*/**"/>
-            </fileset>
-            <fileset dir="${google-app-engine}/resources">
                 <include name="*/**"/>
             </fileset>
         </copy>
