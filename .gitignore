@@ -28,6 +28,7 @@ buildNumber.properties
 !.idea/modules.xml
 !.idea/runConfigurations
 !.idea/vcs.xml
+.idea/workspace.xml
 classes
 cookies.txt
 node_modules
