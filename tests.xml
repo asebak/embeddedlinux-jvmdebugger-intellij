@@ -30,6 +30,9 @@
     <path id="classpath.test">
         <pathelement location="${build}"/>
         <pathelement location="${test.build}"/>
+        <fileset dir="${lib.location}">
+            <include name="*.jar"/>
+        </fileset>
         <fileset dir="${idea.community.build}/lib">
             <include name="**/*.jar"/>
             <exclude name="ant/lib/**/*.jar"/>
