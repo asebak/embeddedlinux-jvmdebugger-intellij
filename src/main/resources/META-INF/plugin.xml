@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <id>${project.groupId}</id>
+    <id>com.atsebak.raspberrypi</id>
     <name>Raspberry Pi</name>
     <version>${project.version}</version>
     <vendor email="${vendor.email}" url="${vendor.url}">${vendor.name}</vendor>
