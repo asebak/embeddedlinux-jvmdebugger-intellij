@@ -1,0 +1,42 @@
+<idea-plugin version="2">
+    <id>${project.artifactId}</id>
+    <name>Raspberry Pi</name>
+    <version>${project.version}</version>
+    <vendor email="${vendor.email}" url="${vendor.url}">${vendor.name}</vendor>
+    <description>
+        <![CDATA[
+        ${project.description}
+        ]]>
+    </description>
+
+    <change-notes>
+        <![CDATA[
+        Latest Changes: <a href="https://github.com/asebak/raspberrypi-intellij/releases"></a>.
+        ]]>
+    </change-notes>
+    <idea-version since-build="131"/>
+    <extensions defaultExtensionNs="com.intellij">
+        <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
+        <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger"/>
+
+        <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
+        <toolWindow id="PI Console"
+                    icon="/console.png"
+                    anchor="bottom"
+                    secondary="true"
+                    factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
+        <projectService serviceImplementation="com.atsebak.raspberrypi.console.PIConsoleView"/>
+
+    </extensions>
+
+    <application-components>
+    </application-components>
+
+    <project-components>
+    </project-components>
+
+    <actions>
+    </actions>
+
+
+</idea-plugin>
