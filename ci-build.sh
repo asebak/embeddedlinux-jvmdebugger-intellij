@@ -7,7 +7,6 @@ then
 cp ~/Tools/ideaIC-${ideaVersion}.tar.gz .
 else
 wget http://download.jetbrains.com/idea/ideaIC-${ideaVersion}.tar.gz
-# wget http://download.labs.intellij.net/idea/ideaIC-${ideaVersion}.tar.gz
 fi
 # Unzip IDEA
 tar zxf ideaIC-${ideaVersion}.tar.gz
@@ -18,17 +17,17 @@ mv ${ideaPath} ./idea-IC
 fi
 
 
-# Tests
+# Run Tests
 if [ "$1" = "-d" ]; then
 ant -d -f tests.xml -DIDEA_HOME=./idea-IC
 else
 ant -f tests.xml -DIDEA_HOME=./idea-IC
 fi
-# Build Status
+# get build status
 stat=$?
 if [ "${TRAVIS}" != true ]; then
 ant -f tests.xml -q clean
 rm -rf idea-IC
 fi
-# build status
+# return build status
 exit ${stat}

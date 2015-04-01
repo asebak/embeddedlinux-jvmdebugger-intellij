@@ -1,7 +1,8 @@
-<project name="Idea Google Go language scripted test file" default="test" basedir=".">
-    <property file="build.properties"/>
+<project name="Ra" default="test" basedir=".">
+    <!--<property file="build.properties"/>-->
     <!-- set global properties for this build -->
     <property name="build.compiler" value="modern"/>
+    <property name="lib.location" location="${basedir}/lib"/>
     <property name="src" location="${basedir}/src"/>
     <property name="test.src" location="${basedir}/test"/>
     <property name="build" location="build"/>
@@ -18,6 +19,9 @@
     </path>
     <path id="my.classpath">
         <pathelement location="${build}"/>
+        <fileset dir="{lib.location}">
+            <include name="*.jar"/>
+        </fileset>
     </path>
     <path id="classpath">
         <path refid="my.classpath"/>
