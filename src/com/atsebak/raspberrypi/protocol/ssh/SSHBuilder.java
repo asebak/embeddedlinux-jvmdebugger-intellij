@@ -15,7 +15,6 @@ public class SSHBuilder {
     private String password;
 
     public SSHClient toClient() {
-        sshClient = new SSHClient();
         try {
             sshClient.addHostKeyVerifier(new PromiscuousVerifier());
             sshClient.loadKnownHosts();

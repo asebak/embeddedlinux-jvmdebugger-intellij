@@ -31,6 +31,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
+import net.schmizz.sshj.SSHClient;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -184,6 +185,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                         .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
                         .sshBuilder(SSHBuilder
                                 .builder()
+                                .sshClient(new SSHClient())
                                 .connectionTimeout(3000)
                                 .timeout(3000)
                                 .password(runnerParameters.getPassword())
