@@ -67,7 +67,7 @@ public class PIOutputForwarder {
      * @return
      */
     @NotNull
-    String getStdErr() {
+    public String getStdErr() {
         return myStdErr.toString();
     }
 
