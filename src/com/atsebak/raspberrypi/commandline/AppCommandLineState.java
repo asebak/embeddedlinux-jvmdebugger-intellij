@@ -1,9 +1,10 @@
 package com.atsebak.raspberrypi.commandline;
 
-import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
+import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.*;
@@ -29,6 +30,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
+import net.schmizz.sshj.SSHClient;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,13 +54,12 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param environment
      * @param configuration
      */
-    public AppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
+    public AppCommandLineState(@NotNull ExecutionEnvironment environment, @NotNull RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
         this.environment = environment;
         this.runnerSettings = environment.getRunnerSettings();
         isDebugMode = runnerSettings instanceof DebuggingRunnerData;
-        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
         outputForwarder = new PIOutputForwarder(PIConsoleView.getInstance(environment.getProject()));
         outputForwarder.attachTo(null);
     }
@@ -70,7 +71,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @return
      */
     @NotNull
-    private static String getRunConfigurationName(String debugPort) {
+    public static String getRunConfigurationName(String debugPort) {
         return String.format(RUN_CONFIGURATION_NAME_PATTERN, debugPort);
     }
 
@@ -175,7 +176,19 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) {
         PIConsoleView.getInstance(environment.getProject()).print("Deploying to the Raspberry PI\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        DeploymentTarget target = DeploymentTarget.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
+
+        DeploymentTarget target = DeploymentTarget.builder()
+                .sshHandlerTarget(SSHHandlerTarget.builder()
+                        .piRunnerParameters(runnerParameters)
+                        .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
+                        .sshBuilder(SSHBuilder
+                                .builder()
+                                .sshClient(new SSHClient())
+                                .connectionTimeout(3000)
+                                .timeout(3000)
+                                .password(runnerParameters.getPassword())
+                                .username(runnerParameters.getUsername())
+                                .build()).build()).build();
         try {
             target.upload(new File(projectOutput), commandLineTarget.toString());
         } catch (Exception e) {

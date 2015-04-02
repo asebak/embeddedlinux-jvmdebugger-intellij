@@ -1,9 +1,7 @@
 package com.atsebak.raspberrypi.deploy;
 
 import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
-import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
-import com.intellij.openapi.project.Project;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,17 +10,7 @@ import java.io.IOException;
 
 @Builder
 public class DeploymentTarget {
-    private final Project project;
-    private final RaspberryPIRunnerParameters rp;
-
-    /**
-     * Gets SSh Handler by Building it
-     *
-     * @return
-     */
-    private SSHHandlerTarget getSSHHandler() {
-        return SSHHandlerTarget.builder().project(project).piRunnerParameters(rp).build();
-    }
+    private final SSHHandlerTarget sshHandlerTarget;
 
     /**
      * Uploads to the embedded system for a given Java Project storing it in /home/{username}/IdeaProjects
@@ -33,8 +21,8 @@ public class DeploymentTarget {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void upload(final File outputDirectory, final String cmd) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
-        getSSHHandler().uploadAndRunJavaApp(outputDirectory, cmd);
+    public void upload(@NotNull final File outputDirectory, @NotNull final String cmd) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
+        sshHandlerTarget.uploadAndRunJavaApp(outputDirectory, cmd);
     }
 
     /**
@@ -44,6 +32,6 @@ public class DeploymentTarget {
      * @param fileToUpload
      */
     public void upload(@NotNull final String uploadTo, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
-        getSSHHandler().genericUpload(uploadTo, fileToUpload);
+        sshHandlerTarget.genericUpload(uploadTo, fileToUpload);
     }
 }
