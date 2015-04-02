@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.runner.data;
 
+import com.intellij.execution.configurations.RuntimeConfigurationWarning;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
@@ -17,7 +18,12 @@ public class RaspberryPiRunnerValidatorTest {
         try {
             RaspberryPiRunnerValidator.checkPiSettings(piRunnerParameters);
         } catch (Exception e) {
-            fail("Should not have thrown any RuntimeConfigurationException");
+            fail("Should not have thrown any RuntimeConfigurationWarning");
         }
+    }
+
+    @Test(expected = RuntimeConfigurationWarning.class)
+    public void nullRunnerSettings() throws RuntimeConfigurationWarning {
+        RaspberryPiRunnerValidator.checkPiSettings(piRunnerParameters);
     }
 }

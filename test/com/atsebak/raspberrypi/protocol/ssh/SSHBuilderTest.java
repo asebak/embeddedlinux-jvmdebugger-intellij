@@ -15,7 +15,6 @@ public class SSHBuilderTest {
     @Test
     public void testToClient() throws Exception {
         SSHClient sshClientMock = mock(SSHClient.class);
-        SSHBuilder sshBuilder = mock(SSHBuilder.class);
         when(sshClientMock.isAuthenticated()).thenReturn(true);
         Mockito.doNothing().when(sshClientMock).addHostKeyVerifier(Matchers.<HostKeyVerifier>anyObject());
         verify(sshClientMock, never()).authPassword("ahmad", "sebak");

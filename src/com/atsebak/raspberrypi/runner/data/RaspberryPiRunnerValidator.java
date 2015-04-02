@@ -16,7 +16,7 @@ public class RaspberryPiRunnerValidator {
      * @param rp
      * @throws RuntimeConfigurationException
      */
-    public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationException {
+    public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationWarning {
         if (!isValidHost(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
