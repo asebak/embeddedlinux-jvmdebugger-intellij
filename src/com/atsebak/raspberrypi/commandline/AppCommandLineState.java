@@ -1,6 +1,5 @@
 package com.atsebak.raspberrypi.commandline;
 
-import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
@@ -55,13 +54,12 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param environment
      * @param configuration
      */
-    public AppCommandLineState(@NotNull ExecutionEnvironment environment, RaspberryPIRunConfiguration configuration) {
+    public AppCommandLineState(@NotNull ExecutionEnvironment environment, @NotNull RaspberryPIRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
         this.environment = environment;
         this.runnerSettings = environment.getRunnerSettings();
         isDebugMode = runnerSettings instanceof DebuggingRunnerData;
-        addConsoleFilters(new PIConsoleFilter(getEnvironment().getProject()));
         outputForwarder = new PIOutputForwarder(PIConsoleView.getInstance(environment.getProject()));
         outputForwarder.attachTo(null);
     }
@@ -73,7 +71,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @return
      */
     @NotNull
-    private static String getRunConfigurationName(String debugPort) {
+    public static String getRunConfigurationName(String debugPort) {
         return String.format(RUN_CONFIGURATION_NAME_PATTERN, debugPort);
     }
 
