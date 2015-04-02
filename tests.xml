@@ -1,6 +1,4 @@
-<project name="Ra" default="test" basedir=".">
-    <!--<property file="build.properties"/>-->
-    <!-- set global properties for this build -->
+<project name="Raspberry PI Intellij Plugin" default="test" basedir=".">
     <property name="build.compiler" value="modern"/>
     <property name="lib.location" location="${basedir}/lib"/>
     <property name="src" location="${basedir}/src"/>
