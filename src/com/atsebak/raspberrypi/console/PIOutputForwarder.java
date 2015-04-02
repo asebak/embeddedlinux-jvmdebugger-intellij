@@ -2,6 +2,7 @@ package com.atsebak.raspberrypi.console;
 
 import com.google.common.io.Closeables;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,7 +78,7 @@ public class PIOutputForwarder {
      * @param off
      * @param len
      */
-    void write(@NotNull ConsoleViewContentType contentType, @NotNull byte[] b, int off, int len) {
+    public void write(@NotNull ConsoleViewContentType contentType, @NotNull byte[] b, int off, int len) {
         boolean addNewLine = false;
         if (contentType != myPreviousContentType) {
             addNewLine = myPreviousContentType != null;
@@ -121,21 +122,14 @@ public class PIOutputForwarder {
     /**
      * Handles incoming text
      */
-    private static class ConsoleAwareOutputStream extends OutputStream {
+    @AllArgsConstructor
+    public class ConsoleAwareOutputStream extends OutputStream {
         @NotNull
         private final PIOutputForwarder myOutput;
         @NotNull
         private final ConsoleViewContentType myContentType;
         @Nullable
         private final Listener myListener;
-
-        ConsoleAwareOutputStream(@NotNull PIOutputForwarder output,
-                                 @NotNull ConsoleViewContentType contentType,
-                                 @Nullable Listener listener) {
-            myOutput = output;
-            myContentType = contentType;
-            myListener = listener;
-        }
 
         /**
          * Do Nothing

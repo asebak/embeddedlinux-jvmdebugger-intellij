@@ -4,6 +4,8 @@ import com.atsebak.raspberrypi.console.PIConsoleFilter;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
+import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.*;
@@ -175,7 +177,18 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) {
         PIConsoleView.getInstance(environment.getProject()).print("Deploying to the Raspberry PI\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        DeploymentTarget target = DeploymentTarget.builder().project(getEnvironment().getProject()).rp(runnerParameters).build();
+
+        DeploymentTarget target = DeploymentTarget.builder()
+                .sshHandlerTarget(SSHHandlerTarget.builder()
+                        .piRunnerParameters(runnerParameters)
+                        .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
+                        .sshBuilder(SSHBuilder
+                                .builder()
+                                .connectionTimeout(3000)
+                                .timeout(3000)
+                                .password(runnerParameters.getPassword())
+                                .username(runnerParameters.getUsername())
+                                .build()).build()).build();
         try {
             target.upload(new File(projectOutput), commandLineTarget.toString());
         } catch (Exception e) {
