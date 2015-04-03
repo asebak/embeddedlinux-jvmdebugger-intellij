@@ -1,32 +1,22 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Raspberry Pi</name>
-  <version>1.0</version>
+    <version>0.1</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+    <p>Raspberry PI Intellij Plugin</p>
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
     ]]>
   </change-notes>
 
-  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="131"/>
-
-  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
 
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
-      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger"/>
+      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger "/>
 
       <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
       <toolWindow id="PI Console"
@@ -35,27 +25,16 @@
                   secondary="true"
                   factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
       <projectService serviceImplementation="com.atsebak.raspberrypi.console.PIConsoleView"/>
-
+      <moduleBuilder builderClass="com.atsebak.raspberrypi.project.PIJavaModuleBuilder"/>
   </extensions>
 
   <application-components>
-    <!-- Add your application components here -->
   </application-components>
 
   <project-components>
-
-    <!-- Add your project components here -->
   </project-components>
 
   <actions>
-      <!--<action id="PIConnectDebuggerAction"-->
-      <!--class="com.atsebak.raspberrypi.actions.PIConnectDebuggerAction"-->
-      <!--text="Attach debugger to PI process"-->
-      <!--description="Attach debugger to PI process"-->
-      <!--icon="/pi.png">-->
-      <!--<add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="RunnerActions"/>-->
-      <!--<add-to-group group-id="RunMenu"/>-->
-      <!--</action>-->
   </actions>
 
 

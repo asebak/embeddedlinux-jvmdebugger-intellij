@@ -6,6 +6,7 @@ import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 
 
@@ -20,10 +21,10 @@ public class RaspberryPiRunnerValidator {
         if (!isValidHost(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
-        if (rp.getPort() == null || rp.getPort().isEmpty()) {
+        if (StringUtil.isEmptyOrSpaces(rp.getPort())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.port"));
         }
-        if (rp.getUsername() == null || rp.getUsername().isEmpty()) {
+        if (StringUtil.isEmptyOrSpaces(rp.getUsername())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.username"));
         }
     }
@@ -50,7 +51,7 @@ public class RaspberryPiRunnerValidator {
      * @throws RuntimeConfigurationWarning
      */
     private static boolean isValidHost(String ip) throws RuntimeConfigurationWarning {
-        return !(ip == null || ip.isEmpty());
+        return !(StringUtil.isEmptyOrSpaces(ip));
         //todo validate if real ipv4/v6 address
     }
 }

@@ -215,6 +215,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         } catch (Exception e) {
             PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
                     ConsoleViewContentType.ERROR_OUTPUT);
+            //todo fix locks up IDE
             throw new RuntimeException("Cannot deploy to remote device");
         }
     }

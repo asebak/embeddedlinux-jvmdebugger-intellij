@@ -3,6 +3,7 @@ package com.atsebak.raspberrypi.runner.conf;
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
+import com.intellij.execution.configurations.ConfigurationTypeUtil;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
@@ -25,6 +26,10 @@ public class RaspberryPIConfigurationType implements ConfigurationType {
                 return new RaspberryPIRunConfiguration(project, this, NAME);
             }
         };
+    }
+
+    public static RaspberryPIConfigurationType getInstance() {
+        return ConfigurationTypeUtil.findConfigurationType(RaspberryPIConfigurationType.class);
     }
 
     /**
@@ -73,5 +78,9 @@ public class RaspberryPIConfigurationType implements ConfigurationType {
     @Override
     public ConfigurationFactory[] getConfigurationFactories() {
         return new ConfigurationFactory[]{configurationFactory};
+    }
+
+    public ConfigurationFactory getFactory() {
+        return configurationFactory;
     }
 }
