@@ -3,6 +3,8 @@ package com.atsebak.raspberrypi.protocol.ssh;
 import net.schmizz.sshj.SSHClient;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 
 public class SSHBuilderTest {
 
@@ -14,8 +16,8 @@ public class SSHBuilderTest {
                 .build()
                 .toClient();
 
-//        assertEquals(sshClient.getTimeout(), 200);
-//        assertEquals(sshClient.getConnectTimeout(), 100);
+        assertEquals(sshClient.getTimeout(), 200);
+        assertEquals(sshClient.getConnectTimeout(), 100);
 
     }
 

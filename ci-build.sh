@@ -17,17 +17,17 @@ mv ${ideaPath} ./idea-IC
 fi
 
 
-# Run Tests
+# Run Ant Build
 if [ "$1" = "-d" ]; then
-ant -d -f tests.xml -DIDEA_HOME=./idea-IC
+ant -d -f build.xml -DIDEA_HOME=./idea-IC
 else
-ant -f tests.xml -DIDEA_HOME=./idea-IC
+ant -f build.xml -DIDEA_HOME=./idea-IC
 fi
 # get build status
 stat=$?
 if [ "${TRAVIS}" != true ]; then
-ant -f tests.xml -q clean
-rm -rf idea-IC
+ant -f build.xml -q clean
+#rm -rf idea-IC
 fi
 # return build status
 exit ${stat}

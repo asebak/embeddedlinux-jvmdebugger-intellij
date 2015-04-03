@@ -8,13 +8,12 @@ import java.io.IOException;
 
 @Builder
 public class SSHBuilder {
-    private SSHClient sshClient;
     private int timeout;
     private int connectionTimeout;
 
     public SSHClient toClient() {
+        SSHClient sshClient = new SSHClient();
         try {
-            sshClient = new SSHClient();
             sshClient.addHostKeyVerifier(new PromiscuousVerifier());
             sshClient.loadKnownHosts();
             sshClient.setConnectTimeout(connectionTimeout);

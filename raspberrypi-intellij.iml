@@ -20,5 +20,6 @@
     <orderEntry type="library" name="bcprov-ext-jdk15on-1.47" level="project" />
     <orderEntry type="library" name="bcprov-ext-jdk15on-1.47" level="project" />
     <orderEntry type="library" name="bcprov-ext-jdk15on-1.47" level="project" />
+    <orderEntry type="library" name="sshj-0.12.0-SNAPSHOT" level="project" />
   </component>
 </module>

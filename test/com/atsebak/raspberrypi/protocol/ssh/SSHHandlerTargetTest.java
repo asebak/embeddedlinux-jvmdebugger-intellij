@@ -62,7 +62,6 @@ public class SSHHandlerTargetTest {
 
         target.genericUpload("/home/pi", sampleFile);
     }
-
     @Test(expected = IllegalArgumentException.class)
     public void nullUploadPath() throws IOException, RuntimeConfigurationException {
         Mockito.when(sshClient.isAuthenticated()).thenReturn(true);
