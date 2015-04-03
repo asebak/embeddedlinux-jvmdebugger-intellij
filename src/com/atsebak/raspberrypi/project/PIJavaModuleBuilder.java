@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.project;
 
+import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.ui.PIJavaModuleStep;
 import com.atsebak.raspberrypi.utils.FileZip;
 import com.atsebak.raspberrypi.utils.ProjectUtils;
@@ -186,7 +187,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
      */
     @Override
     public String getDescription() {
-        return "A basic java application project that uses <b>PI4J/b> library as the backbone.";
+        return PIBundle.getString("pi.project.description");
     }
 
     /**

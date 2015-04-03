@@ -3,7 +3,9 @@ package com.atsebak.raspberrypi.commandline;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
+import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -19,7 +21,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.javadoc.JavadocBundle;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 public class AppCommandLineState extends JavaCommandLineState {
@@ -103,7 +105,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
         final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
-        ProcessTerminatedListener.attach(handler, configuration.getProject(), JavadocBundle.message("javadoc.generate.exited"));
+        ProcessTerminatedListener.attach(handler, configuration.getProject(), PIBundle.message("pi.console.exited"));
         handler.addProcessListener(new ProcessAdapter() {
             @Override
             public void startNotified(ProcessEvent event) {
@@ -169,7 +171,12 @@ public class AppCommandLineState extends JavaCommandLineState {
                 ApplicationManager.getApplication().runReadAction(new Runnable() {
                     @Override
                     public void run() {
-                        invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                        try {
+                            invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                        } catch (Exception e) {
+                            PIConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
+                                    ConsoleViewContentType.ERROR_OUTPUT);
+                        }
                     }
                 });
             }
@@ -197,8 +204,8 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param projectOutput
      * @param commandLineTarget
      */
-    private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) {
-        PIConsoleView.getInstance(environment.getProject()).print("Deploying to the Raspberry PI\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+    private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
+        PIConsoleView.getInstance(environment.getProject()).print(PIBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
 
         DeploymentTarget target = DeploymentTarget.builder()
@@ -210,14 +217,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                                 .connectionTimeout(3000)
                                 .timeout(3000)
                                 .build()).build()).build();
-        try {
-            target.upload(new File(projectOutput), commandLineTarget.toString());
-        } catch (Exception e) {
-            PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
-                    ConsoleViewContentType.ERROR_OUTPUT);
-            //todo fix locks up IDE
-            throw new RuntimeException("Cannot deploy to remote device");
-        }
+        target.upload(new File(projectOutput), commandLineTarget.toString());
     }
 
     /**
@@ -244,13 +244,8 @@ public class AppCommandLineState extends JavaCommandLineState {
         return runSettings;
     }
 
-    /**
-     * Closes an old descriptor and creates a new one in debug mode connecting to remote target
-     *
-     * @param project
-     * @param parameters
-     */
-    private void closeOldSessionAndDebug(final Project project, RaspberryPIRunnerParameters parameters) {
+
+    private void closeOldSession(final Project project, RaspberryPIRunnerParameters parameters) {
         final String configurationName = getRunConfigurationName(parameters.getPort());
         final Collection<RunContentDescriptor> descriptors =
                 ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
@@ -280,6 +275,15 @@ public class AppCommandLineState extends JavaCommandLineState {
                 }
             }
         }
+    }
+    /**
+     * Closes an old descriptor and creates a new one in debug mode connecting to remote target
+     *
+     * @param project
+     * @param parameters
+     */
+    private void closeOldSessionAndDebug(final Project project, RaspberryPIRunnerParameters parameters) {
+        closeOldSession(project, parameters);
         runSession(project, parameters);
     }
 
@@ -292,6 +296,19 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void runSession(final Project project, RaspberryPIRunnerParameters parameters) {
         final RunnerAndConfigurationSettings settings = createRunConfiguration(project, parameters.getPort(), parameters.getHostname());
         ProgramRunnerUtil.executeConfiguration(project, settings, DefaultDebugExecutor.getDebugExecutorInstance());
+    }
+
+    /**
+     * Can ping the hostname?
+     *
+     * @return
+     */
+    private boolean isAllowedToRun() {
+        return SSHConnectionValidator
+                .builder()
+                .ip(configuration.getRunnerParameters().getHostname())
+                .build()
+                .canConnectToHostname();
     }
 
 

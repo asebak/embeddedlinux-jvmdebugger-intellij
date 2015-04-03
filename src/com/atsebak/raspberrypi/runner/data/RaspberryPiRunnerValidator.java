@@ -18,7 +18,7 @@ public class RaspberryPiRunnerValidator {
      * @throws RuntimeConfigurationException
      */
     public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationWarning {
-        if (!isValidHost(rp.getHostname())) {
+        if (StringUtil.isEmptyOrSpaces(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
         }
         if (StringUtil.isEmptyOrSpaces(rp.getPort())) {
@@ -41,17 +41,5 @@ public class RaspberryPiRunnerValidator {
         if (psiClass == null) {
             throw new RuntimeConfigurationWarning(ExecutionBundle.message("main.method.not.found.in.class.error.message", configuration.getRunnerParameters().getMainclass()));
         }
-    }
-
-    /**
-     * Validates host can be contacted
-     *
-     * @param ip
-     * @return
-     * @throws RuntimeConfigurationWarning
-     */
-    private static boolean isValidHost(String ip) throws RuntimeConfigurationWarning {
-        return !(StringUtil.isEmptyOrSpaces(ip));
-        //todo validate if real ipv4/v6 address
     }
 }

@@ -1,6 +1,7 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
 import com.atsebak.raspberrypi.console.PIConsoleView;
+import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -21,6 +22,7 @@ import java.io.IOException;
 @Builder
 public class SSHHandlerTarget {
     private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final String OUTPUT_LOCATION = "IdeaProjects";
     private RaspberryPIRunnerParameters piRunnerParameters;
     private PIConsoleView consoleView;
     private SSHBuilder sshBuilder;
@@ -34,10 +36,10 @@ public class SSHHandlerTarget {
      */
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        final String remoteDirec = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + "IdeaProjects";
-        genericUpload(remoteDirec, compileOutput);
-        consoleView.print("Finished Deploying App" + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-        String appPath = remoteDirec + File.separator + compileOutput.getName();
+        final String remoteDir = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + OUTPUT_LOCATION;
+        genericUpload(remoteDir, compileOutput);
+        consoleView.print(PIBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        String appPath = remoteDir + File.separator + compileOutput.getName();
         runJavaApp(appPath, cmd);
     }
 
@@ -67,14 +69,14 @@ public class SSHHandlerTarget {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
-        consoleView.print(NEW_LINE + ">>>>>>>>> You're Building on Embedded Linux <<<<<<<<" + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(NEW_LINE + PIBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         final SSHClient sshClient = sshBuilder.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
         final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; " + cmd;
         session.setAutoExpand(true);
         try {
-            consoleView.print("Executing Command: " + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
             Session.Command exec = session.exec(cmdExecute);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
@@ -89,10 +91,11 @@ public class SSHHandlerTarget {
         }
         if (!client.isAuthenticated() && !client.isConnected()) {
             final Notification notification = new Notification(
-                    com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID, "SSH Connection Error", "Could not connect to remote target",
+                    com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID,
+                    PIBundle.getString("pi.ssh.connection.error"), PIBundle.getString("pi.ssh.remote.error"),
                     NotificationType.ERROR);
             Notifications.Bus.notify(notification);
-            throw new RuntimeConfigurationException("Cannot Authenticate With Remote Device");
+            throw new RuntimeConfigurationException(PIBundle.getString("pi.ssh.remote.error"));
         }
     }
 }
