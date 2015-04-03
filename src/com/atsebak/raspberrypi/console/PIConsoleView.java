@@ -29,16 +29,16 @@ public class PIConsoleView implements Disposable {
             {PreviousOccurenceToolbarAction.class, NextOccurenceToolbarAction.class, ConsoleViewImpl.ClearAllAction.class, PrintAction.class};
 
     @NotNull
-    private final Project myProject;
+    private final Project project;
     @NotNull
-    private final ConsoleViewImpl myConsoleView;
+    private final ConsoleViewImpl consoleView;
 
     private JPanel myConsolePanel = new JPanel();
 
     public PIConsoleView(@NotNull Project project) {
-        myProject = project;
-        myConsoleView = new ConsoleViewImpl(myProject, false);
-        Disposer.register(this, myConsoleView);
+        this.project = project;
+        consoleView = new ConsoleViewImpl(project, false);
+        Disposer.register(this, consoleView);
     }
 
     /**
@@ -66,21 +66,25 @@ public class PIConsoleView implements Disposable {
         return false;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     /**
      * Creats the tool window content
      * @param toolWindow
      */
     public void createToolWindowContent(@NotNull ToolWindow toolWindow) {
         //Create runner UI layout
-        RunnerLayoutUi.Factory factory = RunnerLayoutUi.Factory.getInstance(myProject);
-        RunnerLayoutUi layoutUi = factory.create("", "", "session", myProject);
+        RunnerLayoutUi.Factory factory = RunnerLayoutUi.Factory.getInstance(project);
+        RunnerLayoutUi layoutUi = factory.create("", "", "session", project);
 
         // Adding actions
         DefaultActionGroup group = new DefaultActionGroup();
         layoutUi.getOptions().setLeftToolbar(group, ActionPlaces.UNKNOWN);
 
-        Content console = layoutUi.createContent(PIConsoleToolWindowFactory.ID, myConsoleView.getComponent(), "", null, null);
-        AnAction[] consoleActions = myConsoleView.createConsoleActions();
+        Content console = layoutUi.createContent(PIConsoleToolWindowFactory.ID, consoleView.getComponent(), "", null, null);
+        AnAction[] consoleActions = consoleView.createConsoleActions();
         for (AnAction action : consoleActions) {
             if (!shouldIgnoreAction(action)) {
                 group.add(action);
@@ -98,13 +102,13 @@ public class PIConsoleView implements Disposable {
      * Clears text on console
      */
     public void clear() {
-        if (myConsoleView.isShowing()) {
-            myConsoleView.clear();
+        if (consoleView.isShowing()) {
+            consoleView.clear();
         } else {
             ApplicationManager.getApplication().invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    myConsoleView.flushDeferredText();
+                    consoleView.flushDeferredText();
                 }
             }, ModalityState.NON_MODAL);
         }
@@ -116,7 +120,7 @@ public class PIConsoleView implements Disposable {
      * @param contentType
      */
     public void print(@NotNull String text, @NotNull ConsoleViewContentType contentType) {
-        myConsoleView.print(text, contentType);
+        consoleView.print(text, contentType);
     }
 
     @Override

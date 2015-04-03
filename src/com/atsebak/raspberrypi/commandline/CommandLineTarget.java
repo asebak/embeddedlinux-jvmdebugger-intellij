@@ -51,8 +51,7 @@ public class CommandLineTarget {
      * @param cmdBuf
      */
     private void addClasspath(StringBuilder cmdBuf) {
-        //todo classpath needs to be resolved better
-        cmdBuf.append(" -cp . ");
+        cmdBuf.append(" -cp classes:lib/'*' ");
     }
 
     /**

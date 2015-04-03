@@ -9,6 +9,7 @@ import com.atsebak.raspberrypi.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -39,7 +40,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class AppCommandLineState extends JavaCommandLineState {
     @NonNls
@@ -172,7 +175,9 @@ public class AppCommandLineState extends JavaCommandLineState {
                     @Override
                     public void run() {
                         try {
-                            invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                            List<File> files = invokeClassPathResolver(classPath.getPathList());
+                            File classpathArchive = FileUtilities.createClasspathArchive(files, project);
+                            invokeDeployment(classpathArchive.getPath(), build);
                         } catch (Exception e) {
                             PIConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
                                     ConsoleViewContentType.ERROR_OUTPUT);
@@ -197,6 +202,14 @@ public class AppCommandLineState extends JavaCommandLineState {
         }, ModalityState.NON_MODAL);
 
         return javaParams;
+    }
+
+    private List<File> invokeClassPathResolver(List<String> librariesNeeded) {
+        List<File> classPaths = new ArrayList<File>();
+        for (String library : librariesNeeded) {
+            classPaths.add(new File(library));
+        }
+        return classPaths;
     }
 
     /**
@@ -245,6 +258,12 @@ public class AppCommandLineState extends JavaCommandLineState {
     }
 
 
+    /**
+     * Closes old session only
+     *
+     * @param project
+     * @param parameters
+     */
     private void closeOldSession(final Project project, RaspberryPIRunnerParameters parameters) {
         final String configurationName = getRunConfigurationName(parameters.getPort());
         final Collection<RunContentDescriptor> descriptors =

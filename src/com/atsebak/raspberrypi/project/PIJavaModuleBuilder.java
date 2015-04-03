@@ -2,7 +2,7 @@ package com.atsebak.raspberrypi.project;
 
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.ui.PIJavaModuleStep;
-import com.atsebak.raspberrypi.utils.FileZip;
+import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.atsebak.raspberrypi.utils.ProjectUtils;
 import com.atsebak.raspberrypi.utils.UrlDownloader;
 import com.google.common.io.Files;
@@ -215,7 +215,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
                 String output = System.getProperty("java.io.tmpdir") + File.separator + "pi4j";
                 File pi4jUnziped = new File(output);
                 if (!pi4jUnziped.exists()) {
-                    FileZip.unzip(pi4jZip.getPath(), output);
+                    FileUtilities.unzip(pi4jZip.getPath(), output);
                 }
                 addJarFiles(module, pi4jUnziped.listFiles());
             } catch (IOException e) {

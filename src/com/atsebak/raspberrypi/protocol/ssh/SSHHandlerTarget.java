@@ -37,26 +37,44 @@ public class SSHHandlerTarget {
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
         final String remoteDir = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + OUTPUT_LOCATION;
-        genericUpload(remoteDir, compileOutput);
+        String deploymentPath = remoteDir + File.separator + consoleView.getProject().getName();
+        genericUpload(deploymentPath, compileOutput);
         consoleView.print(PIBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-        String appPath = remoteDir + File.separator + compileOutput.getName();
-        runJavaApp(appPath, cmd);
+        runJavaApp(deploymentPath, cmd);
+    }
+
+    /**
+     * Force create directories, if it exists it won't do anything
+     *
+     * @param path
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
+    private void forceCreateDirectories(String path) throws IOException, RuntimeConfigurationException {
+        SSHClient ssh = sshBuilder.toClient();
+        connect(ssh);
+        final Session session = ssh.startSession();
+        final String cmdExecute = "mkdir -p " + path + "; cd " + path + "; rm -rf *";
+        consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        session.exec(cmdExecute);
     }
 
     /**
      * Generic SSh Ftp uploader
      *
-     * @param uploadTo     the remote location
+     * @param deploymentPath     the remote location storing the compressed file
      * @param fileToUpload files to upload
      * @throws IOException
      * @throws RuntimeConfigurationException
      */
-    public void genericUpload(@NotNull final String uploadTo, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
+    public void genericUpload(@NotNull final String deploymentPath, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
+        forceCreateDirectories(deploymentPath);
         SSHClient ssh = sshBuilder.toClient();
         connect(ssh);
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
-            sftp.put(new FileSystemFile(fileToUpload), uploadTo);
+            sftp.getFileTransfer().setTransferListener(new SFTPListener(deploymentPath, consoleView));
+            sftp.put(new FileSystemFile(fileToUpload), deploymentPath);
         } finally {
             ssh.disconnect();
         }
@@ -73,7 +91,8 @@ public class SSHHandlerTarget {
         final SSHClient sshClient = sshBuilder.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
-        final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; " + cmd;
+        final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; tar -xvf "
+                + consoleView.getProject().getName() + ".tar; rm *.tar; " + cmd;
         session.setAutoExpand(true);
         try {
             consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
