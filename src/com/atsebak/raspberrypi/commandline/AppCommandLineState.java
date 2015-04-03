@@ -164,18 +164,24 @@ public class AppCommandLineState extends JavaCommandLineState {
         final Application app = ApplicationManager.getApplication();
 
         //deploy on Non-read thread so can execute right away
-        app.executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
-            invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+        app.executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(new Runnable() {
+            @Override
+            public void run() {
+                AppCommandLineState.this.invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+            }
         }));
 
         //invoke later because it reads from other threads(debugging executer)
-        app.invokeLater(() -> {
-            if (isDebugMode) {
-                final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
-                //this should wait until the deployment states that it's listening to the port
-                while (!outputForwarder.toString().contains(initializeMsg)) {
+        app.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (isDebugMode) {
+                    final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
+                    //this should wait until the deployment states that it's listening to the port
+                    while (!outputForwarder.toString().contains(initializeMsg)) {
+                    }
+                    AppCommandLineState.this.closeOldSessionAndDebug(project, configuration.getRunnerParameters());
                 }
-                closeOldSessionAndDebug(project, configuration.getRunnerParameters());
             }
         }, ModalityState.NON_MODAL);
 
