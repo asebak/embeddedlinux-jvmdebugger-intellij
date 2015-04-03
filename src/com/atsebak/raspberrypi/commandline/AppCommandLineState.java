@@ -20,6 +20,9 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.javadoc.JavadocBundle;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -136,7 +139,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     protected JavaParameters createJavaParameters() throws ExecutionException {
         PIConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
-        Project project = this.environment.getProject();
+        Project project = environment.getProject();
         ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
         // All modules to use the same things
@@ -146,10 +149,10 @@ public class AppCommandLineState extends JavaCommandLineState {
                 javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
             }
         }
-        javaParams.setMainClass(this.configuration.getRunnerParameters().getMainclass());
+        javaParams.setMainClass(configuration.getRunnerParameters().getMainclass());
         String basePath = project.getBasePath();
         javaParams.setWorkingDirectory(basePath);
-        String classes = this.configuration.getOutputFilePath();
+        String classes = configuration.getOutputFilePath();
         javaParams.getProgramParametersList().addParametersString(classes);
         final PathsList classPath = javaParams.getClassPath();
 
@@ -157,14 +160,25 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .raspberryPIRunConfiguration(configuration)
                 .isDebugging(isDebugMode)
                 .parameters(javaParams).build();
-        invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
-        if (isDebugMode) {
-            final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
-            //this should wait until the deployment states that it's listening to the port
-            while (!outputForwarder.toString().contains(initializeMsg)) {
+
+        final Application app = ApplicationManager.getApplication();
+
+        //deploy on Non-read thread so can execute right away
+        app.executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
+            invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+        }));
+
+        //invoke later because it reads from other threads(debugging executer)
+        app.invokeLater(() -> {
+            if (isDebugMode) {
+                final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
+                //this should wait until the deployment states that it's listening to the port
+                while (!outputForwarder.toString().contains(initializeMsg)) {
+                }
+                closeOldSessionAndDebug(project, configuration.getRunnerParameters());
             }
-            closeOldSessionAndDebug(project, configuration.getRunnerParameters());
-        }
+        }, ModalityState.NON_MODAL);
+
         return javaParams;
     }
 

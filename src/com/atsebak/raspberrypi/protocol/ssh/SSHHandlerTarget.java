@@ -20,6 +20,7 @@ import java.io.IOException;
 
 @Builder
 public class SSHHandlerTarget {
+    private static final String NEW_LINE = System.getProperty("line.separator");
     private RaspberryPIRunnerParameters piRunnerParameters;
     private PIConsoleView consoleView;
     private SSHBuilder sshBuilder;
@@ -35,7 +36,7 @@ public class SSHHandlerTarget {
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
         final String remoteDirec = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + "IdeaProjects";
         genericUpload(remoteDirec, compileOutput);
-        consoleView.print("Finished Deploying App\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print("Finished Deploying App" + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         String appPath = remoteDirec + File.separator + compileOutput.getName();
         runJavaApp(appPath, cmd);
     }
@@ -66,14 +67,14 @@ public class SSHHandlerTarget {
      * @throws IOException
      */
     private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
-        consoleView.print(">>>>>>>>> You're Building on Embedded Linux <<<<<<<<\n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(NEW_LINE + ">>>>>>>>> You're Building on Embedded Linux <<<<<<<<" + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         final SSHClient sshClient = sshBuilder.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
         final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; " + cmd;
         session.setAutoExpand(true);
         try {
-            consoleView.print("Executing Command: " + cmdExecute + " \n\r", ConsoleViewContentType.SYSTEM_OUTPUT);
+            consoleView.print("Executing Command: " + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
             Session.Command exec = session.exec(cmdExecute);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
