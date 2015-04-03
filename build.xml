@@ -56,7 +56,6 @@
                 <include name="**/*.properties"/>
                 <include name="**/*.xml"/>
                 <include name="**/*.txt"/>
-                <include name="**/*.go"/>
             </patternset>
             <copy toDir="@{dest}">
                 <fileset dir="${resources}">
@@ -76,7 +75,7 @@
         <sequential>
             <pathconvert property="classpathProp" refid="classpath"/>
             <echo>Classpath is ${classpathProp}</echo>
-            <javac2 destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" source="1.8" target="1.8"
+            <javac2 destdir="@{dest}" classpathref="classpath" verbose="false" debug="true" source="1.6" target="1.6"
                     includeantruntime="false">
                 <src path="${src}"/>
                 <src path="${test.src}"/>
