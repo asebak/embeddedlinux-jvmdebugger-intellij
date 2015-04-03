@@ -11,18 +11,14 @@ public class SSHBuilder {
     private SSHClient sshClient;
     private int timeout;
     private int connectionTimeout;
-    private String username;
-    private String password;
 
     public SSHClient toClient() {
         try {
+            sshClient = new SSHClient();
             sshClient.addHostKeyVerifier(new PromiscuousVerifier());
             sshClient.loadKnownHosts();
             sshClient.setConnectTimeout(connectionTimeout);
             sshClient.setTimeout(timeout);
-            if (!sshClient.isAuthenticated()) {
-                sshClient.authPassword(username, password);
-            }
         } catch (IOException e) {
 
         }

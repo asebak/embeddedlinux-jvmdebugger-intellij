@@ -20,6 +20,9 @@ import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.javadoc.JavadocBundle;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -45,8 +48,8 @@ public class AppCommandLineState extends JavaCommandLineState {
     private final RaspberryPIRunConfiguration configuration;
     private final ExecutionEnvironment environment;
     private final RunnerSettings runnerSettings;
+    private final PIOutputForwarder outputForwarder;
     private boolean isDebugMode;
-    private PIOutputForwarder outputForwarder;
 
     /**
      * Command line state when runner is launch
@@ -136,7 +139,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     protected JavaParameters createJavaParameters() throws ExecutionException {
         PIConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
-        Project project = this.environment.getProject();
+        final Project project = environment.getProject();
         ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
         // All modules to use the same things
@@ -146,10 +149,10 @@ public class AppCommandLineState extends JavaCommandLineState {
                 javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
             }
         }
-        javaParams.setMainClass(this.configuration.getRunnerParameters().getMainclass());
+        javaParams.setMainClass(configuration.getRunnerParameters().getMainclass());
         String basePath = project.getBasePath();
         javaParams.setWorkingDirectory(basePath);
-        String classes = this.configuration.getOutputFilePath();
+        String classes = configuration.getOutputFilePath();
         javaParams.getProgramParametersList().addParametersString(classes);
         final PathsList classPath = javaParams.getClassPath();
 
@@ -157,14 +160,36 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .raspberryPIRunConfiguration(configuration)
                 .isDebugging(isDebugMode)
                 .parameters(javaParams).build();
-        invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
-        if (isDebugMode) {
-            final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
-            //this should wait until the deployment states that it's listening to the port
-            while (!outputForwarder.toString().contains(initializeMsg)) {
+
+        final Application app = ApplicationManager.getApplication();
+
+        //deploy on Non-read thread so can execute right away
+        app.executeOnPooledThread(new Runnable() {
+            @Override
+            public void run() {
+                ApplicationManager.getApplication().runReadAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                    }
+                });
             }
-            closeOldSessionAndDebug(project, configuration.getRunnerParameters());
-        }
+        });
+
+        //invoke later because it reads from other threads(debugging executer)
+        app.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (isDebugMode) {
+                    final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
+                    //this should wait until the deployment states that it's listening to the port
+                    while (!outputForwarder.toString().contains(initializeMsg)) {
+                    }
+                    closeOldSessionAndDebug(project, configuration.getRunnerParameters());
+                }
+            }
+        }, ModalityState.NON_MODAL);
+
         return javaParams;
     }
 
@@ -186,14 +211,13 @@ public class AppCommandLineState extends JavaCommandLineState {
                                 .sshClient(new SSHClient())
                                 .connectionTimeout(3000)
                                 .timeout(3000)
-                                .password(runnerParameters.getPassword())
-                                .username(runnerParameters.getUsername())
                                 .build()).build()).build();
         try {
             target.upload(new File(projectOutput), commandLineTarget.toString());
         } catch (Exception e) {
             PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
                     ConsoleViewContentType.ERROR_OUTPUT);
+            throw new RuntimeException("Cannot deploy to remote device");
         }
     }
 
