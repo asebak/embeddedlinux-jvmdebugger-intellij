@@ -16,7 +16,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
-      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger"/>
+      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger "/>
 
       <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
       <toolWindow id="PI Console"
@@ -25,7 +25,7 @@
                   secondary="true"
                   factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
       <projectService serviceImplementation="com.atsebak.raspberrypi.console.PIConsoleView"/>
-      <projectTemplatesFactory implementation="com.atsebak.raspberrypi.project.PIProjectTemplateFactory"/>
+      <moduleBuilder builderClass="com.atsebak.raspberrypi.project.PIJavaModuleBuilder"/>
   </extensions>
 
   <application-components>
