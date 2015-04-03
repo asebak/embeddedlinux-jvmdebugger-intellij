@@ -185,7 +185,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                     //this should wait until the deployment states that it's listening to the port
                     while (!outputForwarder.toString().contains(initializeMsg)) {
                     }
-                    AppCommandLineState.this.closeOldSessionAndDebug(project, configuration.getRunnerParameters());
+                    closeOldSessionAndDebug(project, configuration.getRunnerParameters());
                 }
             }
         }, ModalityState.NON_MODAL);
