@@ -164,12 +164,17 @@ public class AppCommandLineState extends JavaCommandLineState {
         final Application app = ApplicationManager.getApplication();
 
         //deploy on Non-read thread so can execute right away
-        app.executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(new Runnable() {
+        app.executeOnPooledThread(new Runnable() {
             @Override
             public void run() {
-                AppCommandLineState.this.invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                ApplicationManager.getApplication().runReadAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppCommandLineState.this.invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                    }
+                });
             }
-        }));
+        });
 
         //invoke later because it reads from other threads(debugging executer)
         app.invokeLater(new Runnable() {
