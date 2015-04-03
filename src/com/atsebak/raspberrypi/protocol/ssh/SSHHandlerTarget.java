@@ -86,7 +86,7 @@ public class SSHHandlerTarget {
             client.connect(piRunnerParameters.getHostname());
             client.authPassword(piRunnerParameters.getUsername(), piRunnerParameters.getPassword());
         }
-        if (!client.isAuthenticated() || !client.isConnected()) {
+        if (!client.isAuthenticated() && !client.isConnected()) {
             final Notification notification = new Notification(
                     com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID, "SSH Connection Error", "Could not connect to remote target",
                     NotificationType.ERROR);

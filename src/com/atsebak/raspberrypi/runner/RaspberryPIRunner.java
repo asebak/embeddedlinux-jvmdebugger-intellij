@@ -43,7 +43,7 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
             setupConsole(environment.getProject());
             return super.doExecute(profileState, environment);
         }
-        return null;
+        return super.doExecute(profileState, environment);
     }
 
     /**

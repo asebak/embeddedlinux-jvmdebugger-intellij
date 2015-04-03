@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -20,14 +20,13 @@ public class SSHBuilderTest {
         verify(sshClientMock, never()).authPassword("ahmad", "sebak");
         SSHClient sshClient = SSHBuilder.builder()
                 .sshClient(sshClientMock)
-                .username("ahmad")
-                .password("sebak")
                 .connectionTimeout(100)
                 .timeout(200)
                 .build()
                 .toClient();
 
-        assertNotEquals(sshClient, null);
+        assertEquals(sshClient.getTimeout(), 200);
+        assertEquals(sshClient.getConnectTimeout(), 100);
 
     }
 

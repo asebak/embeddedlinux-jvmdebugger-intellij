@@ -186,14 +186,13 @@ public class AppCommandLineState extends JavaCommandLineState {
                                 .sshClient(new SSHClient())
                                 .connectionTimeout(3000)
                                 .timeout(3000)
-                                .password(runnerParameters.getPassword())
-                                .username(runnerParameters.getUsername())
                                 .build()).build()).build();
         try {
             target.upload(new File(projectOutput), commandLineTarget.toString());
         } catch (Exception e) {
             PIConsoleView.getInstance(environment.getProject()).print("Cannot connect to the Raspberry PI: " + e.getLocalizedMessage(),
                     ConsoleViewContentType.ERROR_OUTPUT);
+            throw new RuntimeException("Cannot deploy to remote device");
         }
     }
 

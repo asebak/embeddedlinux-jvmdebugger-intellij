@@ -68,7 +68,7 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
             setupConsole(environment.getProject());
             super.doExecute(project, state, contentToReuse, environment);
         }
-        return null;
+        return super.doExecute(project, state, contentToReuse, environment);
     }
 
     /**
