@@ -47,14 +47,20 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 public class PIJavaModuleBuilder extends JavaModuleBuilder {
     public static final ProjectType PI_PROJECT_TYPE = new ProjectType("PI_JAVA");
+    private static final String PROJECT_NAME = "Raspberry PI";
     private static final String PI4J_DOWNLOAD = "http://get.pi4j.com/download/";
     private static final String PI4J_FILENAME = "pi4j-1.1-SNAPSHOT.zip";
     private static final String PI4J_INSTALLPATH = "/opt/pi4j/lib";
     private String packageName;
-    private String mainName;
 
+    /**
+     * Used to define the hierachy of the project definition
+     *
+     * @param rootModel
+     * @throws ConfigurationException
+     */
     @Override
-    public void setupRootModel(ModifiableRootModel rootModel) throws ConfigurationException {
+    public void setupRootModel(final ModifiableRootModel rootModel) throws ConfigurationException {
         super.setupRootModel(rootModel);
 
         final Project project = rootModel.getProject();
@@ -95,57 +101,92 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
 
                 }
 
-                ProjectUtils.addProjectConfiguration();
+                ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
             }
         });
 
     }
 
+    /**
+     * Creates directory for project
+     * @return
+     */
     private VirtualFile createAndGetContentEntry() {
         String path = FileUtil.toSystemIndependentName(getContentEntryPath());
         new File(path).mkdirs();
         return LocalFileSystem.getInstance().refreshAndFindFileByPath(path);
     }
 
+    /**
+     * Returns the Module type
+     * @return
+     */
     @Override
     public ModuleType getModuleType() {
         return StdModuleTypes.JAVA;
     }
 
+    /**
+     * Big icon is Java modules
+     * @return
+     */
     @Override
     public Icon getBigIcon() {
         return AllIcons.Modules.Types.JavaModule;
     }
 
+    /**
+     * The icon displayed in the project creator dialog
+     * @return
+     */
     @Override
     public Icon getNodeIcon() {
         return IconLoader.findIcon("/pi.png");
     }
 
+    /**
+     * Build for module
+     * @return
+     */
     @Override
     public String getBuilderId() {
         return getClass().getName();
     }
 
+    /**
+     * Module name
+     * @return
+     */
     @Override
     public String getPresentableName() {
-        return "Raspberry PI Java";
+        return PROJECT_NAME;
     }
 
+    /**
+     * Parent group in project creator dialog
+     * @return
+     */
     @Override
     public String getParentGroup() {
         return JavaModuleType.BUILD_TOOLS_GROUP;
     }
 
+    /**
+     * get weight
+     * @return
+     */
     @Override
     public int getWeight() {
         return JavaModuleBuilder.BUILD_SYSTEM_WEIGHT;
     }
 
+    /**
+     * Help description of the module
+     * @return
+     */
     @Override
     public String getDescription() {
-        return "Maven modules are used for developing <b>JVM-based</b> applications with dependencies managed by <b>Maven</b>. " +
-                "You can create either a blank Maven module or a module based on a <b>Maven archetype</b>.";
+        return "A basic java application project that uses <b>PI4J/b> library as the backbone.";
     }
 
     /**
@@ -181,6 +222,10 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         }
     }
 
+    /**
+     * Project Type
+     * @return
+     */
     @Override
     protected ProjectType getProjectType() {
         return PI_PROJECT_TYPE;
@@ -194,6 +239,12 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         }
     }
 
+    /**
+     * Adds a custom wizard GUI
+     * @param context
+     * @param parentDisposable
+     * @return
+     */
     @Nullable
     @Override
     public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
@@ -202,16 +253,19 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         return step;
     }
 
-//    @Override
-//    public List<Pair<String, String>> getSourcePaths() throws ConfigurationException {
-//        return Collections.emptyList();
-//    }
-
+    /**
+     * Not Needed
+     * @param list
+     */
     @Override
     public void setSourcePaths(List<Pair<String, String>> list) {
 
     }
 
+    /**
+     * Not Needed
+     * @param pair
+     */
     @Override
     public void addSourcePath(Pair<String, String> pair) {
 
