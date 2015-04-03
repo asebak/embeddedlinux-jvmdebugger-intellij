@@ -48,8 +48,8 @@ public class AppCommandLineState extends JavaCommandLineState {
     private final RaspberryPIRunConfiguration configuration;
     private final ExecutionEnvironment environment;
     private final RunnerSettings runnerSettings;
+    private final PIOutputForwarder outputForwarder;
     private boolean isDebugMode;
-    private PIOutputForwarder outputForwarder;
 
     /**
      * Command line state when runner is launch
@@ -139,7 +139,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     protected JavaParameters createJavaParameters() throws ExecutionException {
         PIConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
-        Project project = environment.getProject();
+        final Project project = environment.getProject();
         ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
         // All modules to use the same things
