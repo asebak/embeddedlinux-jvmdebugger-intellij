@@ -1,5 +1,7 @@
 package com.atsebak.raspberrypi.ui;
 
+import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.JavaExecutionUtil;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryPIRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
@@ -36,6 +39,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
     private JPanel mainPanel;
     private JTextField username;
     private JPasswordField password;
+    private JButton validateConnection;
     private JComponent myAnchor;
 
     /**
@@ -45,6 +49,24 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
      */
     public RaspberryPIRunConfigurationEditor(final Project project) {
         myProject = project;
+        validateConnection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    SSHConnectionValidator
+                            .builder()
+                            .ip(hostName.getText())
+                            .password(password.getText())
+                            .username(username.getText())
+                            .build().checkSSHConnection(SSHBuilder.builder()
+                            .connectionTimeout(1000)
+                            .timeout(1000)
+                            .build().toClient(), project);
+                } catch (IOException e1) {
+
+                }
+            }
+        });
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
         myModule.getComponent().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

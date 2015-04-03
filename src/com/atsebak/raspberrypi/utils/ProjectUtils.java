@@ -1,9 +1,12 @@
 package com.atsebak.raspberrypi.utils;
 
+import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbService;
@@ -73,12 +76,18 @@ public class ProjectUtils {
                         createRunConfiguration(module.getName(), RaspberryPIConfigurationType.getInstance().getFactory());
                 final RaspberryPIRunConfiguration configuration = (RaspberryPIRunConfiguration) settings.getConfiguration();
 
-                configuration.setName("Launch PI App");
+                configuration.setName(PIBundle.getString("pi.runner.name"));
                 configuration.getRunnerParameters().setRunAsRoot(true);
                 configuration.getRunnerParameters().setMainclass(mainClass);
 
                 runManager.addConfiguration(settings, false);
                 runManager.setSelectedConfiguration(settings);
+
+                final Notification notification = new Notification(
+                        com.atsebak.raspberrypi.utils.Notifications.GROUPDISPLAY_ID,
+                        PIBundle.getString("pi.connection.required"), PIBundle.getString("pi.connection.notsetup"),
+                        NotificationType.INFORMATION);
+                com.intellij.notification.Notifications.Bus.notify(notification);
             }
         };
         r.run();
