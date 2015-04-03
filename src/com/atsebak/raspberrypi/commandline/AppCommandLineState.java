@@ -170,7 +170,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                 ApplicationManager.getApplication().runReadAction(new Runnable() {
                     @Override
                     public void run() {
-                        AppCommandLineState.this.invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
+                        invokeDeployment(classPath.getPathList().get(classPath.getPathList().size() - 1), build);
                     }
                 });
             }
