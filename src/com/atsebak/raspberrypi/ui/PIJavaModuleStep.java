@@ -39,6 +39,12 @@ public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
         }
     }
 
+    /**
+     * Proper Identifier
+     *
+     * @param candidate
+     * @return
+     */
     public static boolean isIdentifier(@NotNull String candidate) {
         return StringUtil.isJavaIdentifier(candidate) && !JavaLexer.isKeyword(candidate, LanguageLevel.JDK_1_6);
     }
@@ -48,6 +54,11 @@ public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
 
     }
 
+    /**
+     * Validates project configuration for module
+     * @return
+     * @throws ConfigurationException
+     */
     @Override
     public boolean validate() throws ConfigurationException {
         if (StringUtil.isEmptyOrSpaces(packageField.getText()) ||
@@ -58,15 +69,33 @@ public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
         return true;
     }
 
+    /**
+     * get component
+     * @return
+     */
     @Override
     public JComponent getComponent() {
         return main;
     }
 
+    /**
+     * Update data
+     */
     @Override
     public void updateDataModel() {
         piJavaModuleBuilder.setPackageName(packageField.getText());
     }
 
+    /**
+     * set package field
+     *
+     * @return
+     */
+    public void setPackageName(String packageName) {
+        if (packageField == null) {
+            packageField = new JTextField();
+        }
+        packageField.setText(packageName);
+    }
 
 }
