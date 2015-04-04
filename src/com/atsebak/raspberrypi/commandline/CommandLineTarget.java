@@ -28,7 +28,6 @@ public class CommandLineTarget {
         addClasspath(cmdBuf);
         addMainType(cmdBuf);
         addArguments(cmdBuf);
-        cmdBuf.append(" ;");
         return cmdBuf.toString().replaceAll("\\s{2,}", " ").trim();
     }
 

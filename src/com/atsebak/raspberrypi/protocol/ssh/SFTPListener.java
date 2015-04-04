@@ -24,11 +24,6 @@ public class SFTPListener implements TransferListener {
     public StreamCopier.Listener file(String name, final long size) {
         return new StreamCopier.Listener() {
             public void reportProgress(long transferred) throws IOException {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-
-                }
                 consoleView.print(String.format("Transferred %s of %s \n\r", transferred, size), ConsoleViewContentType.SYSTEM_OUTPUT);
             }
         };

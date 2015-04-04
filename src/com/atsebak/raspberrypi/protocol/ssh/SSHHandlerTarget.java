@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
+import com.atsebak.raspberrypi.commandline.LinuxCommand;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Builder
 public class SSHHandlerTarget {
@@ -54,9 +56,15 @@ public class SSHHandlerTarget {
         SSHClient ssh = sshBuilder.toClient();
         connect(ssh);
         final Session session = ssh.startSession();
-        final String cmdExecute = "mkdir -p " + path + "; cd " + path + "; rm -rf *";
-        consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-        session.exec(cmdExecute);
+        String cmd = LinuxCommand.builder()
+                .commands(Arrays.asList(
+                        String.format("mkdir -p %s", path),
+                        String.format("cd %s", path),
+                        "rm -rf *"
+                )).build().toString();
+
+        consoleView.print(PIBundle.getString("pi.deployment.command") + cmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        session.exec(cmd);
     }
 
     /**
@@ -82,21 +90,29 @@ public class SSHHandlerTarget {
 
     /**
      *  Runs that java app with the specified command and then takes the console output from target to host machine
-     * @param targetPathOnRemote
+     * @param path
      * @param cmd
      * @throws IOException
      */
-    private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
+    private void runJavaApp(String path, String cmd) throws IOException, RuntimeConfigurationException {
         consoleView.print(NEW_LINE + PIBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         final SSHClient sshClient = sshBuilder.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
-        final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; tar -xvf "
-                + consoleView.getProject().getName() + ".tar; rm *.tar; " + cmd;
+
+
+        String jarCmd = LinuxCommand.builder()
+                .commands(Arrays.asList(
+                        "sudo killall java",
+                        String.format("cd %s", path),
+                        String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
+                        "rm *.tar",
+                        cmd
+                )).build().toString();
         session.setAutoExpand(true);
         try {
-            consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-            Session.Command exec = session.exec(cmdExecute);
+            consoleView.print(PIBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            Session.Command exec = session.exec(jarCmd);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
