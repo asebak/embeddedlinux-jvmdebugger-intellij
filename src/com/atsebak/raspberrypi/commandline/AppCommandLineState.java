@@ -5,7 +5,6 @@ import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
-import com.atsebak.raspberrypi.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -207,6 +206,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     private List<File> invokeClassPathResolver(List<String> librariesNeeded) {
         List<File> classPaths = new ArrayList<File>();
         for (String library : librariesNeeded) {
+            //todo somehow filter the libraries we don't need so the deployment can be faster
             classPaths.add(new File(library));
         }
         return classPaths;
@@ -315,19 +315,6 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void runSession(final Project project, RaspberryPIRunnerParameters parameters) {
         final RunnerAndConfigurationSettings settings = createRunConfiguration(project, parameters.getPort(), parameters.getHostname());
         ProgramRunnerUtil.executeConfiguration(project, settings, DefaultDebugExecutor.getDebugExecutorInstance());
-    }
-
-    /**
-     * Can ping the hostname?
-     *
-     * @return
-     */
-    private boolean isAllowedToRun() {
-        return SSHConnectionValidator
-                .builder()
-                .ip(configuration.getRunnerParameters().getHostname())
-                .build()
-                .canConnectToHostname();
     }
 
 

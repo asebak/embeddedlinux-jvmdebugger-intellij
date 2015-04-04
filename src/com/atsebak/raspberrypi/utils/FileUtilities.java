@@ -93,7 +93,7 @@ public class FileUtilities {
             }
             return archiveFile;
         } catch (ArchiveException e) {
-            throw new IOException("Failed to create classpath archive", e);
+            throw new IOException();
         } finally {
             if (archiveOutputStream != null) {
                 archiveOutputStream.close();
@@ -107,18 +107,18 @@ public class FileUtilities {
     /**
      * @param pathElements
      * @param entry
-     * @param os
+     * @param archiveOutputStream
      * @throws IOException
      */
-    private static void writeClassPath(LinkedList<String> pathElements, File entry, ArchiveOutputStream os) throws IOException {
+    private static void writeClassPath(LinkedList<String> pathElements, File entry, ArchiveOutputStream archiveOutputStream) throws IOException {
         if (entry.isFile()) {
-            os.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + File.separator + entry.getName()));
-            copy(entry, os);
-            os.closeArchiveEntry();
+            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + File.separator + entry.getName()));
+            copy(entry, archiveOutputStream);
+            archiveOutputStream.closeArchiveEntry();
         } else {
             pathElements.addLast(entry.getName());
             for (File child : entry.listFiles()) {
-                writeClassPath(pathElements, child, os);
+                writeClassPath(pathElements, child, archiveOutputStream);
             }
             pathElements.removeLast();
         }
@@ -132,13 +132,13 @@ public class FileUtilities {
      * @throws IOException
      */
     public static void copy(File entry, OutputStream out) throws IOException {
-        FileInputStream in = null;
+        FileInputStream fileInputStream = null;
         try {
-            in = new FileInputStream(entry);
-            IOUtils.copy(in, out);
+            fileInputStream = new FileInputStream(entry);
+            IOUtils.copy(fileInputStream, out);
         } finally {
-            if (in != null) {
-                in.close();
+            if (fileInputStream != null) {
+                fileInputStream.close();
             }
         }
     }

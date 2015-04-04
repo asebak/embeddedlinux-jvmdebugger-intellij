@@ -11,6 +11,11 @@ public class SSHBuilder {
     private int timeout;
     private int connectionTimeout;
 
+    /**
+     * Build an SSHJ SSH Client
+     *
+     * @return
+     */
     public SSHClient toClient() {
         SSHClient sshClient = new SSHClient();
         try {

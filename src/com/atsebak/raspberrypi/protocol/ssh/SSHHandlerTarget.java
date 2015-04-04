@@ -119,6 +119,13 @@ public class SSHHandlerTarget {
         }
     }
 
+    /**
+     * Authenticates and connects to remote target via ssh protocol
+     *
+     * @param client
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
     private void connect(SSHClient client) throws IOException, RuntimeConfigurationException {
         if (!client.isAuthenticated()) {
             client.connect(piRunnerParameters.getHostname());
