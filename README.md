@@ -1,11 +1,13 @@
 ##Raspberry PI Intellij [![Build Status](https://travis-ci.org/asebak/raspberrypi-intellij.svg?branch=master)](https://travis-ci.org/asebak/raspberrypi-intellij)
 ========================================
+![alt text][logo]
 
 Raspberry PI Intellij is a Plugin for IDEA that makes it easier to develop Java apps for the PI Platform.
 
   - Custom Run and Debug configurations
   - Automatic Deployments to your PI using SSH and SFTP.
   - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/
+
 
 
 ### Checking out and Building
@@ -26,5 +28,6 @@ $ sudo sh ./ci-build.sh
 
 If you want to contribute and add functionality, make sure to add unit tests if they are needed.
 
-
+[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample.jpg
+"Sample Build Output"
 
