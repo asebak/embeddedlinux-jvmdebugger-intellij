@@ -23,5 +23,6 @@
     <orderEntry type="library" name="sshj-0.12.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="junit-4.11" level="project" />
     <orderEntry type="library" name="cglib-nodep-2.2.2" level="project" />
+    <orderEntry type="library" name="commons-compress-1.8" level="project" />
   </component>
 </module>

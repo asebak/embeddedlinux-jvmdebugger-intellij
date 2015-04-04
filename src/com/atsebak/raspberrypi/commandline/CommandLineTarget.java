@@ -28,7 +28,6 @@ public class CommandLineTarget {
         addClasspath(cmdBuf);
         addMainType(cmdBuf);
         addArguments(cmdBuf);
-        cmdBuf.append(" ;");
         return cmdBuf.toString().replaceAll("\\s{2,}", " ").trim();
     }
 
@@ -51,8 +50,7 @@ public class CommandLineTarget {
      * @param cmdBuf
      */
     private void addClasspath(StringBuilder cmdBuf) {
-        //todo classpath needs to be resolved better
-        cmdBuf.append(" -cp . ");
+        cmdBuf.append(" -cp classes:lib/'*' ");
     }
 
     /**

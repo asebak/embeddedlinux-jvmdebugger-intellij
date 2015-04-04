@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
+import com.atsebak.raspberrypi.commandline.LinuxCommand;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Builder
 public class SSHHandlerTarget {
@@ -37,26 +39,50 @@ public class SSHHandlerTarget {
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
         final String remoteDir = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + OUTPUT_LOCATION;
-        genericUpload(remoteDir, compileOutput);
+        String deploymentPath = remoteDir + File.separator + consoleView.getProject().getName();
+        genericUpload(deploymentPath, compileOutput);
         consoleView.print(PIBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-        String appPath = remoteDir + File.separator + compileOutput.getName();
-        runJavaApp(appPath, cmd);
+        runJavaApp(deploymentPath, cmd);
+    }
+
+    /**
+     * Force create directories, if it exists it won't do anything
+     *
+     * @param path
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
+    private void forceCreateDirectories(String path) throws IOException, RuntimeConfigurationException {
+        SSHClient ssh = sshBuilder.toClient();
+        connect(ssh);
+        final Session session = ssh.startSession();
+        String cmd = LinuxCommand.builder()
+                .commands(Arrays.asList(
+                        String.format("mkdir -p %s", path),
+                        String.format("cd %s", path),
+                        "rm -rf *"
+                )).build().toString();
+
+        consoleView.print(PIBundle.getString("pi.deployment.command") + cmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        session.exec(cmd);
     }
 
     /**
      * Generic SSh Ftp uploader
      *
-     * @param uploadTo     the remote location
+     * @param deploymentPath     the remote location storing the compressed file
      * @param fileToUpload files to upload
      * @throws IOException
      * @throws RuntimeConfigurationException
      */
-    public void genericUpload(@NotNull final String uploadTo, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
+    public void genericUpload(@NotNull final String deploymentPath, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
+        forceCreateDirectories(deploymentPath);
         SSHClient ssh = sshBuilder.toClient();
         connect(ssh);
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
-            sftp.put(new FileSystemFile(fileToUpload), uploadTo);
+            sftp.getFileTransfer().setTransferListener(new SFTPListener(deploymentPath, consoleView));
+            sftp.put(new FileSystemFile(fileToUpload), deploymentPath);
         } finally {
             ssh.disconnect();
         }
@@ -64,26 +90,42 @@ public class SSHHandlerTarget {
 
     /**
      *  Runs that java app with the specified command and then takes the console output from target to host machine
-     * @param targetPathOnRemote
+     * @param path
      * @param cmd
      * @throws IOException
      */
-    private void runJavaApp(String targetPathOnRemote, String cmd) throws IOException, RuntimeConfigurationException {
+    private void runJavaApp(String path, String cmd) throws IOException, RuntimeConfigurationException {
         consoleView.print(NEW_LINE + PIBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         final SSHClient sshClient = sshBuilder.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
-        final String cmdExecute = "sudo killall java; cd " + targetPathOnRemote + "; " + cmd;
+
+
+        String jarCmd = LinuxCommand.builder()
+                .commands(Arrays.asList(
+                        "sudo killall java",
+                        String.format("cd %s", path),
+                        String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
+                        "rm *.tar",
+                        cmd
+                )).build().toString();
         session.setAutoExpand(true);
         try {
-            consoleView.print(PIBundle.getString("pi.deployment.command") + cmdExecute + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-            Session.Command exec = session.exec(cmdExecute);
+            consoleView.print(PIBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            Session.Command exec = session.exec(jarCmd);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
         }
     }
 
+    /**
+     * Authenticates and connects to remote target via ssh protocol
+     *
+     * @param client
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
     private void connect(SSHClient client) throws IOException, RuntimeConfigurationException {
         if (!client.isAuthenticated()) {
             client.connect(piRunnerParameters.getHostname());

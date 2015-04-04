@@ -16,9 +16,14 @@ public class SSHConnectionValidator {
     String username;
     String password;
 
-    public boolean canConnectToHostname() {
+    /**
+     * Pings to see if it can contact hostname
+     *
+     * @return
+     */
+    public boolean canConnectToHostname(int timeout) {
         try {
-            return InetAddress.getByName(ip).isReachable(200);
+            return InetAddress.getByName(ip).isReachable(timeout);
         } catch (IOException e) {
             return false;
         }
