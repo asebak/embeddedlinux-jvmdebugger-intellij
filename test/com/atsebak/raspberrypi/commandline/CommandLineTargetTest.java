@@ -37,7 +37,7 @@ public class CommandLineTargetTest {
                 .parameters(javaParameters)
                 .raspberryPIRunConfiguration(piRunConfiguration)
                 .build().toString();
-        assert (runCommand.contains(String.format("sudo java -cp . %s ;", parameters.getMainclass())));
+        assert (runCommand.contains(String.format("sudo java -cp classes:lib/'*' %s", parameters.getMainclass())));
     }
 
     @Test
