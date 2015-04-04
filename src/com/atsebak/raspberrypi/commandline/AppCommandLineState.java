@@ -27,8 +27,10 @@ import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
@@ -143,8 +145,9 @@ public class AppCommandLineState extends JavaCommandLineState {
         PIConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
         final Project project = environment.getProject();
-        ProjectRootManager manager = ProjectRootManager.getInstance(project);
+        final ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
+
         // All modules to use the same things
         Module[] modules = ModuleManager.getInstance(project).getModules();
         if (modules != null && modules.length > 0) {
@@ -174,7 +177,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                     @Override
                     public void run() {
                         try {
-                            List<File> files = invokeClassPathResolver(classPath.getPathList());
+                            List<File> files = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
                             File classpathArchive = FileUtilities.createClasspathArchive(files, project);
                             invokeDeployment(classpathArchive.getPath(), build);
                         } catch (Exception e) {
@@ -203,11 +206,14 @@ public class AppCommandLineState extends JavaCommandLineState {
         return javaParams;
     }
 
-    private List<File> invokeClassPathResolver(List<String> librariesNeeded) {
+    private List<File> invokeClassPathResolver(List<String> librariesNeeded, final Sdk sdk) {
         List<File> classPaths = new ArrayList<File>();
+        VirtualFile homeDirectory = sdk.getHomeDirectory();
         for (String library : librariesNeeded) {
-            //todo somehow filter the libraries we don't need so the deployment can be faster
-            classPaths.add(new File(library));
+            //filter sdk libraries from classpath because it's too big
+            if (!library.contains(homeDirectory.getPath())) {
+                classPaths.add(new File(library));
+            }
         }
         return classPaths;
     }
