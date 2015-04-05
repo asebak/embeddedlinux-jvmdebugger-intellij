@@ -27,7 +27,7 @@ public class SSHHandlerTarget {
     private static final String OUTPUT_LOCATION = "IdeaProjects";
     private RaspberryPIRunnerParameters piRunnerParameters;
     private PIConsoleView consoleView;
-    private SSHBuilder sshBuilder;
+    private SSH ssh;
 
     /** Uploads Java application output folders
      * @param compileOutput Output directory folder where to store the java application
@@ -53,7 +53,7 @@ public class SSHHandlerTarget {
      * @throws RuntimeConfigurationException
      */
     private void forceCreateDirectories(String path) throws IOException, RuntimeConfigurationException {
-        SSHClient ssh = sshBuilder.toClient();
+        SSHClient ssh = this.ssh.toClient();
         connect(ssh);
         final Session session = ssh.startSession();
         String cmd = LinuxCommand.builder()
@@ -77,7 +77,7 @@ public class SSHHandlerTarget {
      */
     public void genericUpload(@NotNull final String deploymentPath, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
         forceCreateDirectories(deploymentPath);
-        SSHClient ssh = sshBuilder.toClient();
+        SSHClient ssh = this.ssh.toClient();
         connect(ssh);
         try {
             final SFTPClient sftp = ssh.newSFTPClient();
@@ -96,7 +96,7 @@ public class SSHHandlerTarget {
      */
     private void runJavaApp(String path, String cmd) throws IOException, RuntimeConfigurationException {
         consoleView.print(NEW_LINE + PIBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-        final SSHClient sshClient = sshBuilder.toClient();
+        final SSHClient sshClient = ssh.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
 

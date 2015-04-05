@@ -1,6 +1,6 @@
 package com.atsebak.raspberrypi.ui;
 
-import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSH;
 import com.atsebak.raspberrypi.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -58,7 +58,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
                             .ip(hostName.getText())
                             .password(password.getText())
                             .username(username.getText())
-                            .build().checkSSHConnection(SSHBuilder.builder()
+                            .build().checkSSHConnection(SSH.builder()
                             .connectionTimeout(1000)
                             .timeout(1000)
                             .build().toClient(), project);

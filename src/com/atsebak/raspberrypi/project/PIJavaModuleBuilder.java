@@ -4,6 +4,7 @@ import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.ui.PIJavaModuleStep;
 import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.atsebak.raspberrypi.utils.ProjectUtils;
+import com.atsebak.raspberrypi.utils.Template;
 import com.atsebak.raspberrypi.utils.UrlDownloader;
 import com.google.common.io.Files;
 import com.intellij.icons.AllIcons;
@@ -28,20 +29,15 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestUtil;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Setter
@@ -53,6 +49,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
     private static final String PI4J_FILENAME = "pi4j-1.1-SNAPSHOT.zip";
     private static final String PI4J_INSTALLPATH = "/opt/pi4j/lib";
     private String packageName;
+    private File[] jarsToAdd;
 
     /**
      * Used to define the hierachy of the project definition
@@ -75,37 +72,44 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
             rootModel.inheritSdk();
         }
 
+        createProjectFiles(rootModel, project);
+
+    }
+
+    /**
+     * Runs a new thread to create the required files
+     *
+     * @param rootModel
+     * @param project
+     */
+    private void createProjectFiles(final ModifiableRootModel rootModel, final Project project) {
         ProjectUtils.runWhenInitialized(project, new DumbAwareRunnable() {
             public void run() {
-                String[] directorysToMake = packageName.split(Pattern.quote("."));
-                String basePath = project.getBasePath() + "/src";
-                for (String directory : directorysToMake) {
-                    try {
-                        VfsUtil.createDirectories(basePath + File.separator + directory);
-                        basePath += File.separator + directory;
-                    } catch (IOException e) {
-
-                    }
-                }
-                Configuration configuration = new Configuration();
-                configuration.setClassForTemplateLoading(this.getClass(), "/");
+                String srcPath = project.getBasePath() + "/src";
+                String libPath = project.getBasePath() + "/lib";
                 try {
-                    Template template = configuration.getTemplate("main.ftl");
-                    Map<String, Object> data = new HashMap<String, Object>();
-                    data.put("packagename", packageName);
-                    Writer file = new FileWriter(new File(basePath + File.separator + "Main.java"));
-                    template.process(data, file);
-                    file.flush();
-                    file.close();
-
-                } catch (Exception e) {
+                    //todo fix
+//                    VfsUtil.createDirectories(libPath);
+                    addJarFiles(libPath, rootModel.getModule());
+                    String[] directorysToMake = packageName.split(Pattern.quote("."));
+                    for (String directory : directorysToMake) {
+                        VfsUtil.createDirectories(srcPath + File.separator + directory);
+                        srcPath += File.separator + directory;
+                    }
+                } catch (IOException e) {
 
                 }
-
+                Template.builder().name("main.ftl")
+                        .classContext(this.getClass())
+                        .outputFile(srcPath + File.separator + "Main.java")
+                        .data(new HashMap<String, Object>() {{
+                            put("packagename", packageName);
+                        }})
+                        .build()
+                        .toFile();
                 ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
             }
         });
-
     }
 
     /**
@@ -203,7 +207,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
 
         //user installed library already
         if (pi4j.exists()) {
-            addJarFiles(module, pi4j.listFiles());
+            jarsToAdd = pi4j.listFiles();
         } else {
             try {
                 //download library
@@ -217,7 +221,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
                 if (!pi4jUnziped.exists()) {
                     FileUtilities.unzip(pi4jZip.getPath(), output);
                 }
-                addJarFiles(module, pi4jUnziped.listFiles());
+                jarsToAdd = pi4jUnziped.listFiles();
             } catch (IOException e) {
             }
         }
@@ -232,12 +236,23 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         return PI_PROJECT_TYPE;
     }
 
-    private void addJarFiles(Module module, File[] files) {
-        for (final File fileEntry : files) {
+    private void addJarFiles(String outputPath, Module module) {
+        if (jarsToAdd == null) {
+            return;
+        }
+        //todo fix
+//        for (final File fileEntry : jarsToAdd) {
+//            if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
+//                String jarLocation = outputPath + File.separator;
+//                FileUtils.copyFile(fileEntry, new File(jarLocation + fileEntry.getName()));
+//            }
+//        }
+        for (final File fileEntry : jarsToAdd) {
             if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
                 PsiTestUtil.addLibrary(module, "pi4j", fileEntry.getParentFile().getPath(), fileEntry.getName());
             }
         }
+        PsiTestUtil.addLibrary(module, outputPath);
     }
 
     /**
