@@ -49,6 +49,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
     private static final String PI4J_FILENAME = "pi4j-1.1-SNAPSHOT.zip";
     private static final String PI4J_INSTALLPATH = "/opt/pi4j/lib";
     private String packageName;
+    private File[] jarsToAdd;
 
     /**
      * Used to define the hierachy of the project definition
@@ -71,21 +72,36 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
             rootModel.inheritSdk();
         }
 
+        createProjectFiles(rootModel, project);
+
+    }
+
+    /**
+     * Runs a new thread to create the required files
+     *
+     * @param rootModel
+     * @param project
+     */
+    private void createProjectFiles(final ModifiableRootModel rootModel, final Project project) {
         ProjectUtils.runWhenInitialized(project, new DumbAwareRunnable() {
             public void run() {
-                String[] directorysToMake = packageName.split(Pattern.quote("."));
-                String basePath = project.getBasePath() + "/src";
-                for (String directory : directorysToMake) {
-                    try {
-                        VfsUtil.createDirectories(basePath + File.separator + directory);
-                        basePath += File.separator + directory;
-                    } catch (IOException e) {
-
+                String srcPath = project.getBasePath() + "/src";
+                String libPath = project.getBasePath() + "/lib";
+                try {
+                    //todo fix
+//                    VfsUtil.createDirectories(libPath);
+                    addJarFiles(libPath, rootModel.getModule());
+                    String[] directorysToMake = packageName.split(Pattern.quote("."));
+                    for (String directory : directorysToMake) {
+                        VfsUtil.createDirectories(srcPath + File.separator + directory);
+                        srcPath += File.separator + directory;
                     }
+                } catch (IOException e) {
+
                 }
                 Template.builder().name("main.ftl")
                         .classContext(this.getClass())
-                        .outputFile(basePath + File.separator + "Main.java")
+                        .outputFile(srcPath + File.separator + "Main.java")
                         .data(new HashMap<String, Object>() {{
                             put("packagename", packageName);
                         }})
@@ -94,7 +110,6 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
                 ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
             }
         });
-
     }
 
     /**
@@ -192,7 +207,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
 
         //user installed library already
         if (pi4j.exists()) {
-            addJarFiles(module, pi4j.listFiles());
+            jarsToAdd = pi4j.listFiles();
         } else {
             try {
                 //download library
@@ -206,7 +221,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
                 if (!pi4jUnziped.exists()) {
                     FileUtilities.unzip(pi4jZip.getPath(), output);
                 }
-                addJarFiles(module, pi4jUnziped.listFiles());
+                jarsToAdd = pi4jUnziped.listFiles();
             } catch (IOException e) {
             }
         }
@@ -221,12 +236,23 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         return PI_PROJECT_TYPE;
     }
 
-    private void addJarFiles(Module module, File[] files) {
-        for (final File fileEntry : files) {
+    private void addJarFiles(String outputPath, Module module) {
+        if (jarsToAdd == null) {
+            return;
+        }
+        //todo fix
+//        for (final File fileEntry : jarsToAdd) {
+//            if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
+//                String jarLocation = outputPath + File.separator;
+//                FileUtils.copyFile(fileEntry, new File(jarLocation + fileEntry.getName()));
+//            }
+//        }
+        for (final File fileEntry : jarsToAdd) {
             if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
                 PsiTestUtil.addLibrary(module, "pi4j", fileEntry.getParentFile().getPath(), fileEntry.getName());
             }
         }
+        PsiTestUtil.addLibrary(module, outputPath);
     }
 
     /**

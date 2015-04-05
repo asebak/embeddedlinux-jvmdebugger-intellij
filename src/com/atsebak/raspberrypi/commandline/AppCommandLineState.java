@@ -231,8 +231,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
                         .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
-                        .sshBuilder(SSH
-                                .builder()
+                        .ssh(SSH.builder()
                                 .connectionTimeout(3000)
                                 .timeout(3000)
                                 .build()).build()).build();

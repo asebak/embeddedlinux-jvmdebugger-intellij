@@ -33,7 +33,7 @@ public class SSHHandlerTargetTest {
     RaspberryPIRunnerParameters piRunnerParameters = Mockito.mock(RaspberryPIRunnerParameters.class);
     PIConsoleView consoleView = Mockito.mock(PIConsoleView.class);
     final SSHHandlerTarget target = SSHHandlerTarget.builder()
-            .sshBuilder(ssh)
+            .ssh(ssh)
             .consoleView(consoleView)
             .piRunnerParameters(piRunnerParameters)
             .build();
