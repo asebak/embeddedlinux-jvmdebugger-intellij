@@ -4,7 +4,7 @@ import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.console.PIOutputForwarder;
 import com.atsebak.raspberrypi.deploy.DeploymentTarget;
 import com.atsebak.raspberrypi.localization.PIBundle;
-import com.atsebak.raspberrypi.protocol.ssh.SSHBuilder;
+import com.atsebak.raspberrypi.protocol.ssh.SSH;
 import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
@@ -231,7 +231,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
                         .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
-                        .sshBuilder(SSHBuilder
+                        .sshBuilder(SSH
                                 .builder()
                                 .connectionTimeout(3000)
                                 .timeout(3000)

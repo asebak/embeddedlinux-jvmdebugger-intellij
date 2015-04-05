@@ -7,7 +7,7 @@ import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import java.io.IOException;
 
 @Builder
-public class SSHBuilder {
+public class SSH {
     private int timeout;
     private int connectionTimeout;
 

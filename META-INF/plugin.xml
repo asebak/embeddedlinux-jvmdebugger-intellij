@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Raspberry Pi</name>
-    <version>0.1</version>
+    <version>0.11</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,8 +9,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
+  Fixed several small issues.
     ]]>
   </change-notes>
+
+    <depends>com.intellij.modules.java</depends>
 
   <idea-version since-build="131"/>
 

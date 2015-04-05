@@ -6,11 +6,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 
-public class SSHBuilderTest {
+public class SSHTest {
 
     @Test
     public void testToClient() throws Exception {
-        SSHClient sshClient = SSHBuilder.builder()
+        SSHClient sshClient = SSH.builder()
                 .connectionTimeout(100)
                 .timeout(200)
                 .build()

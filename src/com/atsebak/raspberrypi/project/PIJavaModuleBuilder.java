@@ -4,6 +4,7 @@ import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.ui.PIJavaModuleStep;
 import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.atsebak.raspberrypi.utils.ProjectUtils;
+import com.atsebak.raspberrypi.utils.Template;
 import com.atsebak.raspberrypi.utils.UrlDownloader;
 import com.google.common.io.Files;
 import com.intellij.icons.AllIcons;
@@ -28,20 +29,15 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestUtil;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Setter
@@ -87,21 +83,14 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
 
                     }
                 }
-                Configuration configuration = new Configuration();
-                configuration.setClassForTemplateLoading(this.getClass(), "/");
-                try {
-                    Template template = configuration.getTemplate("main.ftl");
-                    Map<String, Object> data = new HashMap<String, Object>();
-                    data.put("packagename", packageName);
-                    Writer file = new FileWriter(new File(basePath + File.separator + "Main.java"));
-                    template.process(data, file);
-                    file.flush();
-                    file.close();
-
-                } catch (Exception e) {
-
-                }
-
+                Template.builder().name("main.ftl")
+                        .classContext(this.getClass())
+                        .outputFile(basePath + File.separator + "Main.java")
+                        .data(new HashMap<String, Object>() {{
+                            put("packagename", packageName);
+                        }})
+                        .build()
+                        .toFile();
                 ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
             }
         });

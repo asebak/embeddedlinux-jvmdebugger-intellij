@@ -28,12 +28,12 @@ import static org.mockito.Mockito.times;
 @RunWith(PowerMockRunner.class)
 public class SSHHandlerTargetTest {
 
-    SSHBuilder sshBuilder = Mockito.mock(SSHBuilder.class);
+    SSH ssh = Mockito.mock(SSH.class);
     SSHClient sshClient = Mockito.mock(SSHClient.class);
     RaspberryPIRunnerParameters piRunnerParameters = Mockito.mock(RaspberryPIRunnerParameters.class);
     PIConsoleView consoleView = Mockito.mock(PIConsoleView.class);
     final SSHHandlerTarget target = SSHHandlerTarget.builder()
-            .sshBuilder(sshBuilder)
+            .sshBuilder(ssh)
             .consoleView(consoleView)
             .piRunnerParameters(piRunnerParameters)
             .build();
@@ -45,7 +45,7 @@ public class SSHHandlerTargetTest {
     SFTPFileTransfer sftpFileTransfer = Mockito.mock(SFTPFileTransfer.class);
     @Before
     public void setup() throws IOException {
-        Mockito.when(sshBuilder.toClient()).thenReturn(sshClient);
+        Mockito.when(ssh.toClient()).thenReturn(sshClient);
         Mockito.when(consoleView.getProject()).thenReturn(project);
         Mockito.when(sshClient.newSFTPClient()).thenReturn(sftpClient);
         Mockito.when(sshClient.startSession()).thenReturn(session);
