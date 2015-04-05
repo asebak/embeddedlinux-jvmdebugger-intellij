@@ -1,6 +1,9 @@
 ##Raspberry PI Intellij [![Build Status](https://travis-ci.org/asebak/raspberrypi-intellij.svg?branch=master)](https://travis-ci.org/asebak/raspberrypi-intellij)
 ========================================
 ![alt text][logo]
+```
+plugins.jetbrains.com/plugin/7738
+```
 
 Raspberry PI Intellij is a Plugin for IDEA that makes it easier to develop Java apps for the PI Platform.
 
