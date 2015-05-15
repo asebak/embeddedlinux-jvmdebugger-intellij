@@ -181,6 +181,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                             File classpathArchive = FileUtilities.createClasspathArchive(files, project);
                             invokeDeployment(classpathArchive.getPath(), build);
                         } catch (Exception e) {
+                            e.printStackTrace();
                             PIConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
                                     ConsoleViewContentType.ERROR_OUTPUT);
                         }
