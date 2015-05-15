@@ -2,15 +2,14 @@ package com.atsebak.raspberrypi.utils;
 
 
 import com.intellij.openapi.project.Project;
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.compress.archivers.ArchiveOutputStream;
-import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.*;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -74,10 +73,11 @@ public class FileUtilities {
         }
 
         FileOutputStream fileOutputStream = null;
-        ArchiveOutputStream archiveOutputStream = null;
+        TarArchiveOutputStream archiveOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(archiveFile);
-            archiveOutputStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.TAR, fileOutputStream);
+            archiveOutputStream = new TarArchiveOutputStream(new GZIPOutputStream(fileOutputStream));
+            archiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             LinkedList<String> pathElements = new LinkedList<String>();
             for (File f : classpathEntries) {
                 if (f.isFile()) { //is a jar file
@@ -92,8 +92,6 @@ public class FileUtilities {
                 pathElements.removeLast();
             }
             return archiveFile;
-        } catch (ArchiveException e) {
-            throw new IOException();
         } finally {
             if (archiveOutputStream != null) {
                 archiveOutputStream.close();
@@ -110,8 +108,9 @@ public class FileUtilities {
      * @param archiveOutputStream
      * @throws IOException
      */
-    private static void writeClassPath(LinkedList<String> pathElements, File entry, ArchiveOutputStream archiveOutputStream) throws IOException {
+    private static void writeClassPath(LinkedList<String> pathElements, File entry, TarArchiveOutputStream archiveOutputStream) throws IOException {
         if (entry.isFile()) {
+            archiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
             archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + File.separator + entry.getName()));
             copy(entry, archiveOutputStream);
             archiveOutputStream.closeArchiveEntry();
