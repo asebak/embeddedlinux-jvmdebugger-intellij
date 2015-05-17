@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Raspberry Pi</name>
-    <version>0.15</version>
+    <version>0.18</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,13 +9,14 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      Change Required Build version
       Fixed Length of content that can be deployed on remote device.
     ]]>
   </change-notes>
 
     <depends>com.intellij.modules.java</depends>
 
-  <idea-version since-build="131"/>
+    <idea-version since-build="141.178"/>
 
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
