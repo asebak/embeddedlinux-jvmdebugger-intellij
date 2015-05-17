@@ -1,5 +1,5 @@
 #!/bin/bash
-ideaVersion="14.1"
+ideaVersion="14.1.3"
 if [ ! -d ./idea-IC ]; then
 # Get our IDEA dependency
 if [ -f ~/Tools/ideaIC-${ideaVersion}.tar.gz ];
