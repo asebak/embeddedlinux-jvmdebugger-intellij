@@ -93,15 +93,15 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
                     addJarFiles(libPath, rootModel.getModule());
                     String[] directorysToMake = packageName.split(Pattern.quote("."));
                     for (String directory : directorysToMake) {
-                        VfsUtil.createDirectories(srcPath + File.separator + directory);
-                        srcPath += File.separator + directory;
+                        VfsUtil.createDirectories(srcPath + FileUtilities.separator + directory);
+                        srcPath += FileUtilities.separator + directory;
                     }
                 } catch (IOException e) {
 
                 }
                 Template.builder().name("main.ftl")
                         .classContext(this.getClass())
-                        .outputFile(srcPath + File.separator + "Main.java")
+                        .outputFile(srcPath + FileUtilities.separator + "Main.java")
                         .data(new HashMap<String, Object>() {{
                             put("packagename", packageName);
                         }})
@@ -211,12 +211,12 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         } else {
             try {
                 //download library
-                File pi4jZip = new File(System.getProperty("java.io.tmpdir") + File.separator + PI4J_FILENAME);
+                File pi4jZip = new File(System.getProperty("java.io.tmpdir") + FileUtilities.separator + PI4J_FILENAME);
                 if (!pi4jZip.exists()) {
-                    UrlDownloader.saveUrl(System.getProperty("java.io.tmpdir") + File.separator + PI4J_FILENAME, PI4J_DOWNLOAD + PI4J_FILENAME);
+                    UrlDownloader.saveUrl(System.getProperty("java.io.tmpdir") + FileUtilities.separator + PI4J_FILENAME, PI4J_DOWNLOAD + PI4J_FILENAME);
                 }
                 //unzip to temp
-                String output = System.getProperty("java.io.tmpdir") + File.separator + "pi4j";
+                String output = System.getProperty("java.io.tmpdir") + FileUtilities.separator + "pi4j";
                 File pi4jUnziped = new File(output);
                 if (!pi4jUnziped.exists()) {
                     FileUtilities.unzip(pi4jZip.getPath(), output);
@@ -243,7 +243,7 @@ public class PIJavaModuleBuilder extends JavaModuleBuilder {
         //todo fix
 //        for (final File fileEntry : jarsToAdd) {
 //            if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
-//                String jarLocation = outputPath + File.separator;
+//                String jarLocation = outputPath + FileUtilities.separator;
 //                FileUtils.copyFile(fileEntry, new File(jarLocation + fileEntry.getName()));
 //            }
 //        }
