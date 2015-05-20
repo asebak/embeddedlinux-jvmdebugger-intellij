@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Raspberry Pi</name>
-    <version>0.18</version>
+    <version>0.20</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      Fixed Deployment for Windows O/S
       Change Required Build version
       Fixed Length of content that can be deployed on remote device.
     ]]>
