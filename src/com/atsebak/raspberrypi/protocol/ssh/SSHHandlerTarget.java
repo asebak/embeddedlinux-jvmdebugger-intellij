@@ -4,6 +4,7 @@ import com.atsebak.raspberrypi.commandline.LinuxCommand;
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.localization.PIBundle;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
@@ -38,8 +39,9 @@ public class SSHHandlerTarget {
      */
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        final String remoteDir = File.separator + "home" + File.separator + piRunnerParameters.getUsername() + File.separator + OUTPUT_LOCATION;
-        String deploymentPath = remoteDir + File.separator + consoleView.getProject().getName();
+        final String remoteDir = FileUtilities.separator + "home" + FileUtilities.separator
+                + piRunnerParameters.getUsername() + FileUtilities.separator + OUTPUT_LOCATION;
+        String deploymentPath = remoteDir + FileUtilities.separator + consoleView.getProject().getName();
         genericUpload(deploymentPath, compileOutput);
         consoleView.print(PIBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         runJavaApp(deploymentPath, cmd);

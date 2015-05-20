@@ -15,6 +15,8 @@ import java.util.zip.ZipInputStream;
 
 public class FileUtilities {
 
+    public static String separator = "/";
+
     /**
      * Unzips a file all into one directory
      *
@@ -38,7 +40,7 @@ public class FileUtilities {
                     continue;
                 }
                 fileName = new File(fileName).getName();
-                File newFile = new File(outputFolder + File.separator + fileName);
+                File newFile = new File(outputFolder + FileUtilities.separator + fileName);
                 new File(newFile.getParent()).mkdirs();
 
                 FileOutputStream fos = new FileOutputStream(newFile);
@@ -111,7 +113,7 @@ public class FileUtilities {
     private static void writeClassPath(LinkedList<String> pathElements, File entry, TarArchiveOutputStream archiveOutputStream) throws IOException {
         if (entry.isFile()) {
             archiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + File.separator + entry.getName()));
+            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + FileUtilities.separator + entry.getName()));
             copy(entry, archiveOutputStream);
             archiveOutputStream.closeArchiveEntry();
         } else {
@@ -152,7 +154,7 @@ public class FileUtilities {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < pathElements.size(); i++) {
             if (i != 0) {
-                buf.append(File.separator);
+                buf.append(FileUtilities.separator);
             }
             buf.append(pathElements.get(i));
         }

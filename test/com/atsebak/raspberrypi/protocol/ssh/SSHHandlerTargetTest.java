@@ -2,6 +2,7 @@ package com.atsebak.raspberrypi.protocol.ssh;
 
 import com.atsebak.raspberrypi.console.PIConsoleView;
 import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.raspberrypi.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
@@ -101,7 +102,7 @@ public class SSHHandlerTargetTest {
         Mockito.when(project.getName()).thenReturn("untitled");
         target.uploadAndRunJavaApp(sampleFile, "java -jar");
         Mockito.verify(sftpClient).put(any(FileSystemFile.class),
-                eq(File.separator + "home" + File.separator + "ahmad" + File.separator + "IdeaProjects" + File.separator + "untitled"));
+                eq(FileUtilities.separator + "home" + FileUtilities.separator + "ahmad" + FileUtilities.separator + "IdeaProjects" + FileUtilities.separator + "untitled"));
         Mockito.verify(sshClient).disconnect();
         Mockito.verify(sshClient, times(2)).startSession();
 
@@ -113,7 +114,7 @@ public class SSHHandlerTargetTest {
 
     @Test
     public void verifyJavaCommands() throws IOException, RuntimeConfigurationException, ClassNotFoundException {
-        final String path = File.separator + "home" + File.separator + "ahmad" + File.separator + "IdeaProjects" + File.separator + "untitled";
+        final String path = FileUtilities.separator + "home" + FileUtilities.separator + "ahmad" + FileUtilities.separator + "IdeaProjects" + FileUtilities.separator + "untitled";
         final String commandToBeExecuted = "mkdir -p " + path + "; " + "cd " + path + "; rm -rf *;";
         Mockito.when(sshClient.isAuthenticated()).thenReturn(true);
         Mockito.when(project.getName()).thenReturn("untitled");
