@@ -60,12 +60,7 @@ public class CommandLineTarget {
     private void addVMArguments(StringBuilder cmdBuf) {
         if (isDebugging) {
             //debugging with the port this is added on the remote device command line
-
-            // For JDK 1.4 or earlier
-            //cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
-
-            // For JDK 1.5 or later
-            cmdBuf.append("-client -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=" +
+            cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
                     raspberryPIRunConfiguration.getRunnerParameters().getPort());
         }
     }
