@@ -204,13 +204,12 @@ public class AppCommandLineState extends JavaCommandLineState {
                     //this should wait until the deployment states that it's listening to the port
                     while (!outputForwarder.toString().contains(initializeMsg)) {
                     }
-                    AccessToken token = null;
-                    try {
-                        token = ApplicationManager.getApplication().acquireReadActionLock();
-                        closeOldSessionAndDebug(project, configuration.getRunnerParameters());
-                    } finally {
-                        token.finish();
-                    }
+                    app.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeOldSessionAndDebug(project, configuration.getRunnerParameters());
+                        }
+                    });
                 }
             }
         });
