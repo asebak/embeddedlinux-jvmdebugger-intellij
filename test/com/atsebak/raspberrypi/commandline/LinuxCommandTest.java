@@ -14,4 +14,10 @@ public class LinuxCommandTest {
         String s = LinuxCommand.builder().commands(Arrays.asList("rm -r sample.file", "cd home")).build().toString();
         assertEquals("rm -r sample.file; cd home;", s);
     }
+
+    @Test
+    public void formatSpacingTest() {
+        String s = LinuxCommand.builder().commands(Arrays.asList("   rm -r sample.file", "   cd home")).build().toString();
+        assertEquals("rm -r sample.file; cd home;", s);
+    }
 }
