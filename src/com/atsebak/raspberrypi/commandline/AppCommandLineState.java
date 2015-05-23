@@ -21,11 +21,14 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -191,18 +194,25 @@ public class AppCommandLineState extends JavaCommandLineState {
         });
 
         //invoke later because it reads from other threads(debugging executer)
-        app.invokeLater(new Runnable() {
+        // TODO: need to synchronize reads
+        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), "Deploying", true) {
             @Override
-            public void run() {
+            public void run(@NotNull ProgressIndicator progressIndicator) {
                 if (isDebugMode) {
+                    progressIndicator.setIndeterminate(true);
                     final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
                     //this should wait until the deployment states that it's listening to the port
                     while (!outputForwarder.toString().contains(initializeMsg)) {
                     }
-                    closeOldSessionAndDebug(project, configuration.getRunnerParameters());
+                    app.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeOldSessionAndDebug(project, configuration.getRunnerParameters());
+                        }
+                    });
                 }
             }
-        }, ModalityState.NON_MODAL);
+        });
 
         return javaParams;
     }
