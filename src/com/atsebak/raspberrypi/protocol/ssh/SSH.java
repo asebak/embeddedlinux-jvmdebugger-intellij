@@ -20,9 +20,9 @@ public class SSH {
         SSHClient sshClient = new SSHClient();
         try {
             sshClient.addHostKeyVerifier(new PromiscuousVerifier());
-            sshClient.loadKnownHosts();
             sshClient.setConnectTimeout(connectionTimeout);
             sshClient.setTimeout(timeout);
+            sshClient.loadKnownHosts();
         } catch (IOException e) {
 
         }
