@@ -21,7 +21,6 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.application.AccessToken;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -194,8 +193,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         });
 
         //invoke later because it reads from other threads(debugging executer)
-        // TODO: need to synchronize reads
-        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), "Deploying", true) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), PIBundle.message("pi.deploy"), true) {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 if (isDebugMode) {
