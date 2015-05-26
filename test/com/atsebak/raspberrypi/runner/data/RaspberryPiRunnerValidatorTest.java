@@ -1,5 +1,7 @@
 package com.atsebak.raspberrypi.runner.data;
 
+import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPiRunnerValidator;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
 import org.junit.Test;
 

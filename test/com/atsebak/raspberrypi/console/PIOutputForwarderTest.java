@@ -1,5 +1,7 @@
 package com.atsebak.raspberrypi.console;
 
+import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
+import com.atsebak.embeddedlinuxjvm.console.PIOutputForwarder;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import org.junit.Before;
 import org.junit.Test;

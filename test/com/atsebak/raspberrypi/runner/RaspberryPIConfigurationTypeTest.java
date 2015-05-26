@@ -1,6 +1,6 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType;
+import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIConfigurationType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;

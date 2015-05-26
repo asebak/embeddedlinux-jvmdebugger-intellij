@@ -1,15 +1,15 @@
 <idea-plugin version="2">
-  <id>com.atsebak.raspberrypi</id>
-    <name>Raspberry Pi</name>
-    <version>0.23</version>
+  <id>com.atsebak.embeddedlinuxjvm</id>
+    <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
+    <version>0.25</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
-    <p>Raspberry PI Intellij Plugin</p>
+    <p>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</p>
     ]]></description>
 
   <change-notes><![CDATA[
-        Fixed debug freezing up when deploying on remote device.
+        Re-brand plugin as a generic embedded linux jvm debugger
     ]]>
   </change-notes>
 
@@ -18,17 +18,13 @@
     <idea-version since-build="141.178"/>
 
   <extensions defaultExtensionNs="com.intellij">
-      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIRunner"/>
-      <programRunner implementation="com.atsebak.raspberrypi.runner.RaspberryPIDebugger"/>
+      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.RaspberryPIRunner"/>
+      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.RaspberryPIDebugger"/>
 
-      <configurationType implementation="com.atsebak.raspberrypi.runner.conf.RaspberryPIConfigurationType"/>
-      <toolWindow id="PI Console"
-                  icon="/console.png"
-                  anchor="bottom"
-                  secondary="true"
-                  factoryClass="com.atsebak.raspberrypi.console.PIConsoleToolWindowFactory"/>
-      <projectService serviceImplementation="com.atsebak.raspberrypi.console.PIConsoleView"/>
-      <moduleBuilder builderClass="com.atsebak.raspberrypi.project.PIJavaModuleBuilder"/>
+      <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIConfigurationType"/>
+      <toolWindow id="PI Console" icon="/console.png" anchor="bottom" secondary="true" factoryClass="com.atsebak.embeddedlinuxjvm.console.PIConsoleToolWindowFactory"/>
+      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.PIConsoleView"/>
+      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.PIJavaModuleBuilder"/>
   </extensions>
 
   <application-components>

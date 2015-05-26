@@ -1,7 +1,8 @@
 package com.atsebak.raspberrypi.ui;
 
 
-import com.atsebak.raspberrypi.project.PIJavaModuleBuilder;
+import com.atsebak.embeddedlinuxjvm.project.PIJavaModuleBuilder;
+import com.atsebak.embeddedlinuxjvm.ui.PIJavaModuleStep;
 import com.intellij.openapi.options.ConfigurationException;
 import org.junit.Before;
 import org.junit.Test;

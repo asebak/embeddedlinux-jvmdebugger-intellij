@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.commandline;
 
+import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import org.junit.Test;
 
 import java.util.Arrays;

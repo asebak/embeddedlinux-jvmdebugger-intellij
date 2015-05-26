@@ -1,5 +1,6 @@
 package com.atsebak.raspberrypi.runner.data;
 
+import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

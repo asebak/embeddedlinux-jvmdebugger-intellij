@@ -1,8 +1,10 @@
 package com.atsebak.raspberrypi.protocol.ssh;
 
-import com.atsebak.raspberrypi.console.PIConsoleView;
-import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
-import com.atsebak.raspberrypi.utils.FileUtilities;
+import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
+import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;

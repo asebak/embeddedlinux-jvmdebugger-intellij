@@ -1,6 +1,7 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.RaspberryPIRunner;
+import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import org.junit.Test;
 import org.junit.runner.RunWith;

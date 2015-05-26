@@ -1,7 +1,8 @@
 package com.atsebak.raspberrypi.commandline;
 
-import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
-import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.commandline.CommandLineTarget;
+import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import org.junit.Before;
