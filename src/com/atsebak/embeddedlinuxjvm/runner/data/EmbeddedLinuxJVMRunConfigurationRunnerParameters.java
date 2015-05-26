@@ -4,7 +4,7 @@ package com.atsebak.embeddedlinuxjvm.runner.data;
 import lombok.Data;
 
 @Data
-public class RaspberryPIRunnerParameters implements Cloneable {
+public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneable {
     public String mainclass;
     private String hostname;
     private boolean runAsRoot;
@@ -19,9 +19,9 @@ public class RaspberryPIRunnerParameters implements Cloneable {
      * @return
      */
     @Override
-    protected RaspberryPIRunnerParameters clone() {
+    public EmbeddedLinuxJVMRunConfigurationRunnerParameters clone() {
         try {
-            return (RaspberryPIRunnerParameters) super.clone();
+            return (EmbeddedLinuxJVMRunConfigurationRunnerParameters) super.clone();
         } catch (CloneNotSupportedException e) {
             return null;
         }

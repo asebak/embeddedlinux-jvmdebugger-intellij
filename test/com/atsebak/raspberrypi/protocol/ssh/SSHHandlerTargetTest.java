@@ -3,7 +3,7 @@ package com.atsebak.raspberrypi.protocol.ssh;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.notification.Notifications;
@@ -33,7 +33,7 @@ public class SSHHandlerTargetTest {
 
     SSH ssh = Mockito.mock(SSH.class);
     SSHClient sshClient = Mockito.mock(SSHClient.class);
-    RaspberryPIRunnerParameters piRunnerParameters = Mockito.mock(RaspberryPIRunnerParameters.class);
+    EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters = Mockito.mock(EmbeddedLinuxJVMRunConfigurationRunnerParameters.class);
     EmbeddedLinuxJVMConsoleView consoleView = Mockito.mock(EmbeddedLinuxJVMConsoleView.class);
     final SSHHandlerTarget target = SSHHandlerTarget.builder()
             .ssh(ssh)

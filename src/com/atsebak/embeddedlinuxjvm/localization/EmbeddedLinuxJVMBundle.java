@@ -27,16 +27,16 @@ import java.util.ResourceBundle;
 /**
  * The bundle for PI messages
  */
-public class PIBundle {
+public class EmbeddedLinuxJVMBundle {
 
     @NonNls
-    private static final String BUNDLE = "com.atsebak.embeddedlinuxjvm.localization.PIBundle";
+    private static final String BUNDLE = "com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle";
     private static Reference<ResourceBundle> ourBundle;
 
     /**
      * Private Constructor
      */
-    private PIBundle() {
+    private EmbeddedLinuxJVMBundle() {
     }
 
     /**

@@ -3,7 +3,7 @@ package com.atsebak.embeddedlinuxjvm.ui;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.ClassBrowser;
@@ -87,7 +87,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
         getMainClassField().setText(configuration.getRunnerParameters().getMainclass() != null ?
                 configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
 
-        RaspberryPIRunnerParameters parameters = configuration.getRunnerParameters();
+        EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = configuration.getRunnerParameters();
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
         debugPort.setText(parameters.getPort());
@@ -115,7 +115,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
      * Specific settings for this runner
      * @param parameters
      */
-    private void setPiSettings(RaspberryPIRunnerParameters parameters) {
+    private void setPiSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         parameters.setHostname(hostName.getText());
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());

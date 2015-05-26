@@ -1,10 +1,10 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
@@ -26,7 +26,7 @@ import java.util.Arrays;
 public class SSHHandlerTarget {
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
-    private RaspberryPIRunnerParameters piRunnerParameters;
+    private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private SSH ssh;
 
@@ -43,7 +43,7 @@ public class SSHHandlerTarget {
                 + piRunnerParameters.getUsername() + FileUtilities.separator + OUTPUT_LOCATION;
         String deploymentPath = remoteDir + FileUtilities.separator + consoleView.getProject().getName();
         genericUpload(deploymentPath, compileOutput);
-        consoleView.print(PIBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         runJavaApp(deploymentPath, cmd);
     }
 
@@ -65,7 +65,7 @@ public class SSHHandlerTarget {
                         "rm -rf *"
                 )).build().toString();
 
-        consoleView.print(PIBundle.getString("pi.deployment.command") + cmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + cmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         session.exec(cmd);
     }
 
@@ -97,7 +97,7 @@ public class SSHHandlerTarget {
      * @throws IOException
      */
     private void runJavaApp(String path, String cmd) throws IOException, RuntimeConfigurationException {
-        consoleView.print(NEW_LINE + PIBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(NEW_LINE + EmbeddedLinuxJVMBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         final SSHClient sshClient = ssh.toClient();
         connect(sshClient);
         final Session session = sshClient.startSession();
@@ -113,7 +113,7 @@ public class SSHHandlerTarget {
                 )).build().toString();
         session.setAutoExpand(true);
         try {
-            consoleView.print(PIBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
             Session.Command exec = session.exec(jarCmd);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
@@ -136,10 +136,10 @@ public class SSHHandlerTarget {
         if (!client.isAuthenticated() && !client.isConnected()) {
             final Notification notification = new Notification(
                     com.atsebak.embeddedlinuxjvm.utils.Notifications.GROUPDISPLAY_ID,
-                    PIBundle.getString("pi.ssh.connection.error"), PIBundle.getString("pi.ssh.remote.error"),
+                    EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"), EmbeddedLinuxJVMBundle.getString("pi.ssh.remote.error"),
                     NotificationType.ERROR);
             Notifications.Bus.notify(notification);
-            throw new RuntimeConfigurationException(PIBundle.getString("pi.ssh.remote.error"));
+            throw new RuntimeConfigurationException(EmbeddedLinuxJVMBundle.getString("pi.ssh.remote.error"));
         }
     }
 }

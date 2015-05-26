@@ -1,7 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import net.schmizz.sshj.common.StreamCopier;
 import net.schmizz.sshj.xfer.TransferListener;
@@ -39,7 +39,7 @@ public class SFTPListener implements TransferListener {
      * @return
      */
     public StreamCopier.Listener file(String name, final long size) {
-        consoleView.print(PIBundle.getString("pi.upload"), ConsoleViewContentType.SYSTEM_OUTPUT);
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload"), ConsoleViewContentType.SYSTEM_OUTPUT);
         return new StreamCopier.Listener() {
             public void reportProgress(long transferred) throws IOException {
 //                long percent = (transferred * 100) / size;

@@ -1,7 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.runner.data;
 
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -10,22 +10,22 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 
 
-public class RaspberryPiRunnerValidator {
+public class EmbeddedLinuxJVMRunnerValidator {
     /**
      * Validates the PI Settings are Entered Correctly
      *
      * @param rp
      * @throws RuntimeConfigurationException
      */
-    public static void checkPiSettings(RaspberryPIRunnerParameters rp) throws RuntimeConfigurationWarning {
+    public static void checkPiSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters rp) throws RuntimeConfigurationWarning {
         if (StringUtil.isEmptyOrSpaces(rp.getHostname())) {
-            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.hostname"));
+            throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.hostname"));
         }
         if (StringUtil.isEmptyOrSpaces(rp.getPort())) {
-            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.port"));
+            throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.port"));
         }
         if (StringUtil.isEmptyOrSpaces(rp.getUsername())) {
-            throw new RuntimeConfigurationWarning(PIBundle.getString("pi.invalid.username"));
+            throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.username"));
         }
     }
 

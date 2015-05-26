@@ -2,9 +2,9 @@ package com.atsebak.embeddedlinuxjvm.commandline;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
@@ -111,7 +111,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
         final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
-        ProcessTerminatedListener.attach(handler, configuration.getProject(), PIBundle.message("pi.console.exited"));
+        ProcessTerminatedListener.attach(handler, configuration.getProject(), EmbeddedLinuxJVMBundle.message("pi.console.exited"));
         handler.addProcessListener(new ProcessAdapter() {
             @Override
             public void startNotified(ProcessEvent event) {
@@ -165,7 +165,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         final PathsList classPath = javaParams.getClassPath();
 
         final CommandLineTarget build = CommandLineTarget.builder()
-                .raspberryPIRunConfiguration(configuration)
+                .embeddedLinuxJVMRunConfiguration(configuration)
                 .isDebugging(isDebugMode)
                 .parameters(javaParams).build();
 
@@ -184,7 +184,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                             invokeDeployment(classpathArchive.getPath(), build);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
+                            EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
                                     ConsoleViewContentType.ERROR_OUTPUT);
                         }
                     }
@@ -193,7 +193,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         });
 
         //invoke later because it reads from other threads(debugging executer)
-        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), PIBundle.message("pi.deploy"), true) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 if (isDebugMode) {
@@ -233,8 +233,8 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param commandLineTarget
      */
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
-        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(PIBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
-        RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
+        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(EmbeddedLinuxJVMBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
+        EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters = configuration.getRunnerParameters();
 
         DeploymentTarget target = DeploymentTarget.builder()
                 .sshHandlerTarget(SSHHandlerTarget.builder()
@@ -278,7 +278,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param project
      * @param parameters
      */
-    private void closeOldSession(final Project project, RaspberryPIRunnerParameters parameters) {
+    private void closeOldSession(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         final String configurationName = getRunConfigurationName(parameters.getPort());
         final Collection<RunContentDescriptor> descriptors =
                 ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
@@ -315,7 +315,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param project
      * @param parameters
      */
-    private void closeOldSessionAndDebug(final Project project, RaspberryPIRunnerParameters parameters) {
+    private void closeOldSessionAndDebug(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         closeOldSession(project, parameters);
         runSession(project, parameters);
     }
@@ -326,7 +326,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param project
      * @param parameters
      */
-    private void runSession(final Project project, RaspberryPIRunnerParameters parameters) {
+    private void runSession(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         final RunnerAndConfigurationSettings settings = createRunConfiguration(project, parameters.getPort(), parameters.getHostname());
         ProgramRunnerUtil.executeConfiguration(project, settings, DefaultDebugExecutor.getDebugExecutorInstance());
     }

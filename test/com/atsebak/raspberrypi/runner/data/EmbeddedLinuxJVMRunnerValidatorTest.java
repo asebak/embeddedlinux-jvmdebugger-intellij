@@ -1,14 +1,14 @@
 package com.atsebak.raspberrypi.runner.data;
 
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPiRunnerValidator;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunnerValidator;
 import com.intellij.execution.configurations.RuntimeConfigurationWarning;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
-public class RaspberryPiRunnerValidatorTest {
-    RaspberryPIRunnerParameters piRunnerParameters = new RaspberryPIRunnerParameters();
+public class EmbeddedLinuxJVMRunnerValidatorTest {
+    EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters = new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
 
     @Test
     public void testCheckPiSettings() {
@@ -18,7 +18,7 @@ public class RaspberryPiRunnerValidatorTest {
         piRunnerParameters.setUsername("testuser");
         piRunnerParameters.setPassword("testpasssword");
         try {
-            RaspberryPiRunnerValidator.checkPiSettings(piRunnerParameters);
+            EmbeddedLinuxJVMRunnerValidator.checkPiSettings(piRunnerParameters);
         } catch (Exception e) {
             fail("Should not have thrown any RuntimeConfigurationWarning");
         }
@@ -26,6 +26,6 @@ public class RaspberryPiRunnerValidatorTest {
 
     @Test(expected = RuntimeConfigurationWarning.class)
     public void nullRunnerSettings() throws RuntimeConfigurationWarning {
-        RaspberryPiRunnerValidator.checkPiSettings(piRunnerParameters);
+        EmbeddedLinuxJVMRunnerValidator.checkPiSettings(piRunnerParameters);
     }
 }

@@ -22,7 +22,7 @@
       <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger"/>
 
       <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
-      <toolWindow id="EmbeddedLinuxJVM Console" icon="/console.png" anchor="bottom" secondary="true" factoryClass="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory"/>
+      <toolWindow id="Embedded Linux JVM Console" icon="/console.png" anchor="bottom" secondary="false" factoryClass="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
       <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
   </extensions>

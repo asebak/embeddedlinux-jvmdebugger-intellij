@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.utils;
 
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.RunManager;
@@ -76,7 +76,7 @@ public class ProjectUtils {
                         createRunConfiguration(module.getName(), EmbeddedLinuxJVMConfigurationType.getInstance().getFactory());
                 final EmbeddedLinuxJVMRunConfiguration configuration = (EmbeddedLinuxJVMRunConfiguration) settings.getConfiguration();
 
-                configuration.setName(PIBundle.getString("pi.runner.name"));
+                configuration.setName(EmbeddedLinuxJVMBundle.getString("pi.runner.name"));
                 configuration.getRunnerParameters().setRunAsRoot(true);
                 configuration.getRunnerParameters().setMainclass(mainClass);
 
@@ -85,7 +85,7 @@ public class ProjectUtils {
 
                 final Notification notification = new Notification(
                         Notifications.GROUPDISPLAY_ID,
-                        PIBundle.getString("pi.connection.required"), PIBundle.getString("pi.connection.notsetup"),
+                        EmbeddedLinuxJVMBundle.getString("pi.connection.required"), EmbeddedLinuxJVMBundle.getString("pi.connection.notsetup"),
                         NotificationType.INFORMATION);
                 com.intellij.notification.Notifications.Bus.notify(notification);
             }

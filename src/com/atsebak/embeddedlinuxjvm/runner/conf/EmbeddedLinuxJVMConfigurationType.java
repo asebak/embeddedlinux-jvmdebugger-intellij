@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.runner.conf;
 
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ConfigurationTypeUtil;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class EmbeddedLinuxJVMConfigurationType implements ConfigurationType {
-    private static final String NAME = "Raspberry PI";
-    private static final String DESCRIPTION = PIBundle.getString("pi.app.description");
+    private static final String NAME = "Embedded Linux JVM";
+    private static final String DESCRIPTION = EmbeddedLinuxJVMBundle.getString("pi.app.description");
     private ConfigurationFactory configurationFactory;
 
     /**

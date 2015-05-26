@@ -1,8 +1,8 @@
 package com.atsebak.embeddedlinuxjvm.runner.conf;
 
 import com.atsebak.embeddedlinuxjvm.commandline.AppCommandLineState;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
-import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPiRunnerValidator;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunnerValidator;
 import com.atsebak.embeddedlinuxjvm.ui.RaspberryPIRunConfigurationEditor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
@@ -18,7 +18,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
 public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase implements RunProfileWithCompileBeforeLaunchOption {
-    private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
+    private EmbeddedLinuxJVMRunConfigurationRunnerParameters embeddedLinuxJVMRunConfigurationRunnerParameters = new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
 
     /**
      * Run Configurations To Run App
@@ -44,8 +44,8 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
      * Creates new running paramters instance
      * @return
      */
-    protected RaspberryPIRunnerParameters createRunnerParametersInstance() {
-        return new RaspberryPIRunnerParameters();
+    protected EmbeddedLinuxJVMRunConfigurationRunnerParameters createRunnerParametersInstance() {
+        return new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
     }
 
 
@@ -57,8 +57,8 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
     @Override
     public void readExternal(Element element) throws InvalidDataException {
         super.readExternal(element);
-        raspberryPIRunnerParameters = createRunnerParametersInstance();
-        XmlSerializer.deserializeInto(raspberryPIRunnerParameters, element);
+        embeddedLinuxJVMRunConfigurationRunnerParameters = createRunnerParametersInstance();
+        XmlSerializer.deserializeInto(embeddedLinuxJVMRunConfigurationRunnerParameters, element);
     }
 
     /**
@@ -69,8 +69,8 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
     @Override
     public void writeExternal(Element element) throws WriteExternalException {
         super.writeExternal(element);
-        if (raspberryPIRunnerParameters != null) {
-            XmlSerializer.serializeInto(raspberryPIRunnerParameters, element);
+        if (embeddedLinuxJVMRunConfigurationRunnerParameters != null) {
+            XmlSerializer.serializeInto(embeddedLinuxJVMRunConfigurationRunnerParameters, element);
         }
     }
 
@@ -93,16 +93,16 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
      */
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
-        RaspberryPiRunnerValidator.checkJavaSettings(this);
-        RaspberryPiRunnerValidator.checkPiSettings(getRunnerParameters());
+        EmbeddedLinuxJVMRunnerValidator.checkJavaSettings(this);
+        EmbeddedLinuxJVMRunnerValidator.checkPiSettings(getRunnerParameters());
     }
 
     /**
      * Gets runner paramters instance
      * @return
      */
-    public RaspberryPIRunnerParameters getRunnerParameters() {
-        return raspberryPIRunnerParameters;
+    public EmbeddedLinuxJVMRunConfigurationRunnerParameters getRunnerParameters() {
+        return embeddedLinuxJVMRunConfigurationRunnerParameters;
     }
 
     /**

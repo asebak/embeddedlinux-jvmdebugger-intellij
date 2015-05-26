@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import lombok.Builder;
@@ -40,10 +40,10 @@ public class SSHConnectionValidator {
         try {
             client.connect(ip);
             client.authPassword(username, password);
-            Messages.showInfoMessage(project, PIBundle.getString("ssh.connection.success"), PIBundle.getString("pi.connection.success.title"));
+            Messages.showInfoMessage(project, EmbeddedLinuxJVMBundle.getString("ssh.connection.success"), EmbeddedLinuxJVMBundle.getString("pi.connection.success.title"));
         } catch (Exception e) {
-            Messages.showErrorDialog(project, PIBundle.getString("pi.ssh.remote.error"),
-                    PIBundle.getString("pi.ssh.connection.error"));
+            Messages.showErrorDialog(project, EmbeddedLinuxJVMBundle.getString("pi.ssh.remote.error"),
+                    EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"));
         }
     }
 

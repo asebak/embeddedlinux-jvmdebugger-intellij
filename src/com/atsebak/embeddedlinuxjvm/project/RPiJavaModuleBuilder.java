@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.project;
 
-import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.ProjectUtils;
 import com.atsebak.embeddedlinuxjvm.utils.Template;
@@ -191,7 +191,7 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
      */
     @Override
     public String getDescription() {
-        return PIBundle.getString("pi.project.description");
+        return EmbeddedLinuxJVMBundle.getString("pi.project.description");
     }
 
     /**

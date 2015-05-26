@@ -1,4 +1,4 @@
-<project name="Raspberry PI Intellij Plugin" default="test" basedir=".">
+<project name="Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)" default="test" basedir=".">
     <property name="build.compiler" value="modern"/>
     <property name="lib.location" location="${basedir}/lib"/>
     <property name="src" location="${basedir}/src"/>
