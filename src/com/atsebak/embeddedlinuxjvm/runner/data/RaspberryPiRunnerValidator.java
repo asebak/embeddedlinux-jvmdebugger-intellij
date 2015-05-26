@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.runner.data;
 
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
@@ -35,7 +35,7 @@ public class RaspberryPiRunnerValidator {
      * @param configuration
      * @throws RuntimeConfigurationException
      */
-    public static void checkJavaSettings(RaspberryPIRunConfiguration configuration) throws RuntimeConfigurationException {
+    public static void checkJavaSettings(EmbeddedLinuxJVMRunConfiguration configuration) throws RuntimeConfigurationException {
         JavaRunConfigurationModule javaRunConfigurationModule = new JavaRunConfigurationModule(configuration.getProject(), false);
         PsiClass psiClass = javaRunConfigurationModule.findClass(configuration.getRunnerParameters().getMainclass());
         if (psiClass == null) {

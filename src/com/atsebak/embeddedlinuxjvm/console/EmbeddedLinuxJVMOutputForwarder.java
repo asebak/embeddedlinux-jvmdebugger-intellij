@@ -15,7 +15,7 @@ import static com.intellij.execution.ui.ConsoleViewContentType.ERROR_OUTPUT;
 import static com.intellij.execution.ui.ConsoleViewContentType.NORMAL_OUTPUT;
 
 
-public class PIOutputForwarder {
+public class EmbeddedLinuxJVMOutputForwarder {
     private static final int SIZE = 2048;
 
     @NotNull
@@ -23,7 +23,7 @@ public class PIOutputForwarder {
     @NotNull
     private final ByteArrayOutputStream myOutput;
     @NotNull
-    private final PIConsoleView myConsoleView;
+    private final EmbeddedLinuxJVMConsoleView myConsoleView;
 
     private ConsoleViewContentType myPreviousContentType;
 
@@ -32,7 +32,7 @@ public class PIOutputForwarder {
      *
      * @param consoleView
      */
-    public PIOutputForwarder(@NotNull PIConsoleView consoleView) {
+    public EmbeddedLinuxJVMOutputForwarder(@NotNull EmbeddedLinuxJVMConsoleView consoleView) {
         myConsoleView = consoleView;
         myStdErr = new ByteArrayOutputStream(SIZE);
         myOutput = new ByteArrayOutputStream(SIZE * 2);
@@ -125,7 +125,7 @@ public class PIOutputForwarder {
     @AllArgsConstructor
     public class ConsoleAwareOutputStream extends OutputStream {
         @NotNull
-        private final PIOutputForwarder myOutput;
+        private final EmbeddedLinuxJVMOutputForwarder myOutput;
         @NotNull
         private final ConsoleViewContentType myContentType;
         @Nullable

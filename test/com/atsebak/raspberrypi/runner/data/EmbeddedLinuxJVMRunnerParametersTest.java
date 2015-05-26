@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 
-public class RaspberryPIRunnerParametersTest {
+public class EmbeddedLinuxJVMRunnerParametersTest {
 
     @Test
     public void testCloneMechanism() {

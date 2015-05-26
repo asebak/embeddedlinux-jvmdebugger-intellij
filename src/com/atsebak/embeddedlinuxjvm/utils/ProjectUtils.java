@@ -1,8 +1,8 @@
 package com.atsebak.embeddedlinuxjvm.utils;
 
 import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIConfigurationType;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.notification.Notification;
@@ -73,8 +73,8 @@ public class ProjectUtils {
             public void run() {
                 final RunManager runManager = RunManager.getInstance(project);
                 final RunnerAndConfigurationSettings settings = runManager.
-                        createRunConfiguration(module.getName(), RaspberryPIConfigurationType.getInstance().getFactory());
-                final RaspberryPIRunConfiguration configuration = (RaspberryPIRunConfiguration) settings.getConfiguration();
+                        createRunConfiguration(module.getName(), EmbeddedLinuxJVMConfigurationType.getInstance().getFactory());
+                final EmbeddedLinuxJVMRunConfiguration configuration = (EmbeddedLinuxJVMRunConfiguration) settings.getConfiguration();
 
                 configuration.setName(PIBundle.getString("pi.runner.name"));
                 configuration.getRunnerParameters().setRunAsRoot(true);

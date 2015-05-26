@@ -18,13 +18,13 @@
     <idea-version since-build="141.178"/>
 
   <extensions defaultExtensionNs="com.intellij">
-      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.RaspberryPIRunner"/>
-      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.RaspberryPIDebugger"/>
+      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner"/>
+      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger"/>
 
-      <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIConfigurationType"/>
-      <toolWindow id="PI Console" icon="/console.png" anchor="bottom" secondary="true" factoryClass="com.atsebak.embeddedlinuxjvm.console.PIConsoleToolWindowFactory"/>
-      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.PIConsoleView"/>
-      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.PIJavaModuleBuilder"/>
+      <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
+      <toolWindow id="EmbeddedLinuxJVM Console" icon="/console.png" anchor="bottom" secondary="true" factoryClass="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory"/>
+      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
+      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
   </extensions>
 
   <application-components>

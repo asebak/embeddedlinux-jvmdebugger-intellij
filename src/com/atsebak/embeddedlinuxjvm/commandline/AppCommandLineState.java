@@ -1,13 +1,13 @@
 package com.atsebak.embeddedlinuxjvm.commandline;
 
-import com.atsebak.embeddedlinuxjvm.console.PIOutputForwarder;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
 import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
@@ -52,10 +52,10 @@ public class AppCommandLineState extends JavaCommandLineState {
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
     @NonNls
     private static final String DEBUG_TCP_MESSAGE = "Listening for transport dt_socket at address: %s";
-    private final RaspberryPIRunConfiguration configuration;
+    private final EmbeddedLinuxJVMRunConfiguration configuration;
     private final ExecutionEnvironment environment;
     private final RunnerSettings runnerSettings;
-    private final PIOutputForwarder outputForwarder;
+    private final EmbeddedLinuxJVMOutputForwarder outputForwarder;
     private boolean isDebugMode;
 
     /**
@@ -64,13 +64,13 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param environment
      * @param configuration
      */
-    public AppCommandLineState(@NotNull ExecutionEnvironment environment, @NotNull RaspberryPIRunConfiguration configuration) {
+    public AppCommandLineState(@NotNull ExecutionEnvironment environment, @NotNull EmbeddedLinuxJVMRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
         this.environment = environment;
         this.runnerSettings = environment.getRunnerSettings();
         isDebugMode = runnerSettings instanceof DebuggingRunnerData;
-        outputForwarder = new PIOutputForwarder(PIConsoleView.getInstance(environment.getProject()));
+        outputForwarder = new EmbeddedLinuxJVMOutputForwarder(EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()));
         outputForwarder.attachTo(null);
     }
 
@@ -144,7 +144,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      */
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
-        PIConsoleView.getInstance(environment.getProject()).clear();
+        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).clear();
         JavaParameters javaParams = new JavaParameters();
         final Project project = environment.getProject();
         final ProjectRootManager manager = ProjectRootManager.getInstance(project);
@@ -184,7 +184,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                             invokeDeployment(classpathArchive.getPath(), build);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            PIConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
+                            EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(PIBundle.message("pi.connection.failed", e.getLocalizedMessage()),
                                     ConsoleViewContentType.ERROR_OUTPUT);
                         }
                     }
@@ -233,13 +233,13 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param commandLineTarget
      */
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
-        PIConsoleView.getInstance(environment.getProject()).print(PIBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
+        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(PIBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
         RaspberryPIRunnerParameters runnerParameters = configuration.getRunnerParameters();
 
         DeploymentTarget target = DeploymentTarget.builder()
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
-                        .consoleView(PIConsoleView.getInstance(getEnvironment().getProject()))
+                        .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()))
                         .ssh(SSH.builder()
                                 .connectionTimeout(3000)
                                 .timeout(3000)

@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.commandline;
 
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.configurations.JavaParameters;
 import lombok.Builder;
 
@@ -9,7 +9,7 @@ import java.util.Map;
 @Builder
 public class CommandLineTarget {
     private final JavaParameters parameters;
-    private final RaspberryPIRunConfiguration raspberryPIRunConfiguration;
+    private final EmbeddedLinuxJVMRunConfiguration embeddedLinuxJVMRunConfiguration;
     private final boolean isDebugging;
 
     /**
@@ -61,7 +61,7 @@ public class CommandLineTarget {
         if (isDebugging) {
             //debugging with the port this is added on the remote device command line
             cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
-                    raspberryPIRunConfiguration.getRunnerParameters().getPort());
+                    embeddedLinuxJVMRunConfiguration.getRunnerParameters().getPort());
         }
     }
 
@@ -96,7 +96,7 @@ public class CommandLineTarget {
      * @param cmdBuf
      */
     private void addRunAsRootOption(StringBuilder cmdBuf) {
-        if (raspberryPIRunConfiguration.getRunnerParameters().isRunAsRoot()) {
+        if (embeddedLinuxJVMRunConfiguration.getRunnerParameters().isRunAsRoot()) {
             cmdBuf.append(" sudo ");
         }
     }

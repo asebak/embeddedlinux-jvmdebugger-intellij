@@ -1,13 +1,13 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIConfigurationType;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
-public class RaspberryPIConfigurationTypeTest {
-    private RaspberryPIConfigurationType configurationType = new RaspberryPIConfigurationType();
+public class EmbeddedLinuxJVMConfigurationTypeTest {
+    private EmbeddedLinuxJVMConfigurationType configurationType = new EmbeddedLinuxJVMConfigurationType();
 
     @Test
     public void testSettings() throws Exception {

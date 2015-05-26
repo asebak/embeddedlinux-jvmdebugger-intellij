@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class RaspberryPIConfigurationType implements ConfigurationType {
+public class EmbeddedLinuxJVMConfigurationType implements ConfigurationType {
     private static final String NAME = "Raspberry PI";
     private static final String DESCRIPTION = PIBundle.getString("pi.app.description");
     private ConfigurationFactory configurationFactory;
@@ -19,17 +19,17 @@ public class RaspberryPIConfigurationType implements ConfigurationType {
     /**
      * Builds the configuration from the factory
      */
-    public RaspberryPIConfigurationType() {
+    public EmbeddedLinuxJVMConfigurationType() {
         configurationFactory = new ConfigurationFactory(this) {
             @Override
             public RunConfiguration createTemplateConfiguration(Project project) {
-                return new RaspberryPIRunConfiguration(project, this, NAME);
+                return new EmbeddedLinuxJVMRunConfiguration(project, this, NAME);
             }
         };
     }
 
-    public static RaspberryPIConfigurationType getInstance() {
-        return ConfigurationTypeUtil.findConfigurationType(RaspberryPIConfigurationType.class);
+    public static EmbeddedLinuxJVMConfigurationType getInstance() {
+        return ConfigurationTypeUtil.findConfigurationType(EmbeddedLinuxJVMConfigurationType.class);
     }
 
     /**

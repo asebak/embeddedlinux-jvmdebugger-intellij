@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 
 @Setter
 @NoArgsConstructor
-public class PIJavaModuleBuilder extends JavaModuleBuilder {
+public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     public static final ProjectType PI_PROJECT_TYPE = new ProjectType("PI_JAVA");
     private static final String PROJECT_NAME = "Raspberry PI";
     private static final String PI4J_DOWNLOAD = "http://get.pi4j.com/download/";

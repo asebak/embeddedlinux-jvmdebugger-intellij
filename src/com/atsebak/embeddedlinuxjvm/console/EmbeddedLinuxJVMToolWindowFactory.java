@@ -7,7 +7,7 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import org.jetbrains.annotations.NotNull;
 
 
-public class PIConsoleToolWindowFactory implements ToolWindowFactory, DumbAware {
+public class EmbeddedLinuxJVMToolWindowFactory implements ToolWindowFactory, DumbAware {
     public static final String ID = "PI Console";
 
     /**
@@ -18,6 +18,6 @@ public class PIConsoleToolWindowFactory implements ToolWindowFactory, DumbAware 
      */
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-        PIConsoleView.getInstance(project).createToolWindowContent(toolWindow);
+        EmbeddedLinuxJVMConsoleView.getInstance(project).createToolWindowContent(toolWindow);
     }
 }

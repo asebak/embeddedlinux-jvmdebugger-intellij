@@ -17,7 +17,7 @@ import com.intellij.util.xmlb.XmlSerializer;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-public class RaspberryPIRunConfiguration extends LocatableConfigurationBase implements RunProfileWithCompileBeforeLaunchOption {
+public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase implements RunProfileWithCompileBeforeLaunchOption {
     private RaspberryPIRunnerParameters raspberryPIRunnerParameters = new RaspberryPIRunnerParameters();
 
     /**
@@ -26,7 +26,7 @@ public class RaspberryPIRunConfiguration extends LocatableConfigurationBase impl
      * @param project
      * @param factory
      */
-    protected RaspberryPIRunConfiguration(final Project project, final ConfigurationFactory factory, String name) {
+    protected EmbeddedLinuxJVMRunConfiguration(final Project project, final ConfigurationFactory factory, String name) {
         super(project, factory, name);
     }
 

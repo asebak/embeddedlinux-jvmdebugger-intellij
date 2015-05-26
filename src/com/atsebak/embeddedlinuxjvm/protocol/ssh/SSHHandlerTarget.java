@@ -3,7 +3,7 @@ package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -27,7 +27,7 @@ public class SSHHandlerTarget {
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
     private RaspberryPIRunnerParameters piRunnerParameters;
-    private PIConsoleView consoleView;
+    private EmbeddedLinuxJVMConsoleView consoleView;
     private SSH ssh;
 
     /** Uploads Java application output folders

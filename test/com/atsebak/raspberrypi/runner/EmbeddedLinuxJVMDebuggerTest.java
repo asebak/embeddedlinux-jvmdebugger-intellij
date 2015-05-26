@@ -1,7 +1,7 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.embeddedlinuxjvm.runner.RaspberryPIDebugger;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +12,10 @@ import org.powermock.reflect.Whitebox;
 import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
-public class RaspberryPIDebuggerTest {
+public class EmbeddedLinuxJVMDebuggerTest {
     @Test
     public void testGetRunnerId() {
-        RaspberryPIDebugger debugger = Whitebox.newInstance(RaspberryPIDebugger.class);
+        EmbeddedLinuxJVMDebugger debugger = Whitebox.newInstance(EmbeddedLinuxJVMDebugger.class);
         String runnerId = debugger.getRunnerId();
         assertEquals("RaspberryPIDebugger", runnerId);
     }
@@ -23,9 +23,9 @@ public class RaspberryPIDebuggerTest {
 
     @Test
     public void testCanRun() {
-        RunProfile profile = Mockito.mock(RaspberryPIRunConfiguration.class);
+        RunProfile profile = Mockito.mock(EmbeddedLinuxJVMRunConfiguration.class);
 
-        RaspberryPIDebugger debugger = Whitebox.newInstance(RaspberryPIDebugger.class);
+        EmbeddedLinuxJVMDebugger debugger = Whitebox.newInstance(EmbeddedLinuxJVMDebugger.class);
         boolean canRun = debugger.canRun("Debug", profile);
         assertTrue(canRun);
 

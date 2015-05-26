@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.ui;
 
-import com.atsebak.embeddedlinuxjvm.project.PIJavaModuleBuilder;
+import com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.openapi.Disposable;
@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
-    private PIJavaModuleBuilder piJavaModuleBuilder;
+    private RPiJavaModuleBuilder RPiJavaModuleBuilder;
     private JPanel main;
     private JTextField packageField;
 
-    public PIJavaModuleStep(@NotNull PIJavaModuleBuilder piJavaModuleBuilder) {
-        this.piJavaModuleBuilder = piJavaModuleBuilder;
+    public PIJavaModuleStep(@NotNull RPiJavaModuleBuilder RPiJavaModuleBuilder) {
+        this.RPiJavaModuleBuilder = RPiJavaModuleBuilder;
     }
 
     private static boolean isValidFullyQualifiedJavaIdentifier(String value) {
@@ -83,7 +83,7 @@ public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
      */
     @Override
     public void updateDataModel() {
-        piJavaModuleBuilder.setPackageName(packageField.getText());
+        RPiJavaModuleBuilder.setPackageName(packageField.getText());
     }
 
     /**

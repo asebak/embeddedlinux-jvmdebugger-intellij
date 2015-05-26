@@ -1,6 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.PIBundle;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import net.schmizz.sshj.common.StreamCopier;
@@ -9,7 +9,7 @@ import net.schmizz.sshj.xfer.TransferListener;
 import java.io.IOException;
 
 public class SFTPListener implements TransferListener {
-    private final PIConsoleView consoleView;
+    private final EmbeddedLinuxJVMConsoleView consoleView;
     private final String relPath;
 
     /**
@@ -18,7 +18,7 @@ public class SFTPListener implements TransferListener {
      * @param relPath
      * @param consoleView
      */
-    public SFTPListener(String relPath, PIConsoleView consoleView) {
+    public SFTPListener(String relPath, EmbeddedLinuxJVMConsoleView consoleView) {
         this.relPath = relPath;
         this.consoleView = consoleView;
     }

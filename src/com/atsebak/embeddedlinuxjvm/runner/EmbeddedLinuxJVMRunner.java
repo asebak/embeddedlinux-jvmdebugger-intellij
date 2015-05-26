@@ -1,8 +1,8 @@
 package com.atsebak.embeddedlinuxjvm.runner;
 
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleToolWindowFactory;
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunProfile;
 import com.intellij.execution.configurations.RunProfileState;
@@ -16,13 +16,13 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 
-public class RaspberryPIRunner extends DefaultProgramRunner {
+public class EmbeddedLinuxJVMRunner extends DefaultProgramRunner {
     private static final String RUNNER_ID = "RaspberryPIRunner";
 
     /**
      * Constructor
      */
-    public RaspberryPIRunner() {
+    public EmbeddedLinuxJVMRunner() {
         super();
     }
 
@@ -38,7 +38,7 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
     @Override
     protected RunContentDescriptor doExecute(@NotNull RunProfileState profileState, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
-        if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
+        if (runProfileRaw instanceof EmbeddedLinuxJVMRunConfiguration) {
             FileDocumentManager.getInstance().saveAllDocuments();
             setupConsole(environment.getProject());
             return super.doExecute(profileState, environment);
@@ -65,7 +65,7 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
      */
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return (DefaultRunExecutor.EXECUTOR_ID.equals(executorId)) && profile instanceof RaspberryPIRunConfiguration;
+        return (DefaultRunExecutor.EXECUTOR_ID.equals(executorId)) && profile instanceof EmbeddedLinuxJVMRunConfiguration;
     }
 
     /**
@@ -74,10 +74,10 @@ public class RaspberryPIRunner extends DefaultProgramRunner {
      * @param p
      */
     private void setupConsole(Project p) {
-        ToolWindow window = ToolWindowManager.getInstance(p).getToolWindow(PIConsoleToolWindowFactory.ID);
+        ToolWindow window = ToolWindowManager.getInstance(p).getToolWindow(EmbeddedLinuxJVMToolWindowFactory.ID);
         if (window != null) {
             window.activate(null, true);
-            PIConsoleView.getInstance(p).clear();
+            EmbeddedLinuxJVMConsoleView.getInstance(p).clear();
         }
     }
 

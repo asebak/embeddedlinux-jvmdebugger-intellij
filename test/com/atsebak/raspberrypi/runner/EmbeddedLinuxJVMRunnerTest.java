@@ -1,7 +1,7 @@
 package com.atsebak.raspberrypi.runner;
 
-import com.atsebak.embeddedlinuxjvm.runner.RaspberryPIRunner;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.configurations.RunProfile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,19 +12,19 @@ import org.powermock.reflect.Whitebox;
 import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
-public class RaspberryPIRunnerTest {
+public class EmbeddedLinuxJVMRunnerTest {
     @Test
     public void testGetRunnerId() {
-        RaspberryPIRunner debugger = Whitebox.newInstance(RaspberryPIRunner.class);
+        EmbeddedLinuxJVMRunner debugger = Whitebox.newInstance(EmbeddedLinuxJVMRunner.class);
         String runnerId = debugger.getRunnerId();
         assertEquals("RaspberryPIRunner", runnerId);
     }
 
     @Test
     public void testCanRun() {
-        RunProfile profile = Mockito.mock(RaspberryPIRunConfiguration.class);
+        RunProfile profile = Mockito.mock(EmbeddedLinuxJVMRunConfiguration.class);
 
-        RaspberryPIRunner runner = Whitebox.newInstance(RaspberryPIRunner.class);
+        EmbeddedLinuxJVMRunner runner = Whitebox.newInstance(EmbeddedLinuxJVMRunner.class);
         boolean canRun = runner.canRun("Run", profile);
         assertTrue(canRun);
 

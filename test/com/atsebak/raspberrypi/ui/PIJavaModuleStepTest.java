@@ -1,7 +1,7 @@
 package com.atsebak.raspberrypi.ui;
 
 
-import com.atsebak.embeddedlinuxjvm.project.PIJavaModuleBuilder;
+import com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder;
 import com.atsebak.embeddedlinuxjvm.ui.PIJavaModuleStep;
 import com.intellij.openapi.options.ConfigurationException;
 import org.junit.Before;
@@ -12,12 +12,12 @@ import static org.junit.Assert.assertEquals;
 
 public class PIJavaModuleStepTest {
 
-    PIJavaModuleBuilder piJavaModuleBuilder = Mockito.mock(PIJavaModuleBuilder.class);
+    RPiJavaModuleBuilder RPiJavaModuleBuilder = Mockito.mock(RPiJavaModuleBuilder.class);
     private PIJavaModuleStep piJavaModuleStep;
 
     @Before
     public void setUp() {
-        piJavaModuleStep = new PIJavaModuleStep(piJavaModuleBuilder);
+        piJavaModuleStep = new PIJavaModuleStep(RPiJavaModuleBuilder);
     }
 
     @Test

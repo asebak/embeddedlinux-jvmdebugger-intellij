@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 
-public class PIConsoleView implements Disposable {
+public class EmbeddedLinuxJVMConsoleView implements Disposable {
     private static final Class<?>[] IGNORED_CONSOLE_ACTION_TYPES =
             {PreviousOccurenceToolbarAction.class, NextOccurenceToolbarAction.class, ConsoleViewImpl.ClearAllAction.class, PrintAction.class};
 
@@ -35,7 +35,7 @@ public class PIConsoleView implements Disposable {
 
     private JPanel myConsolePanel = new JPanel();
 
-    public PIConsoleView(@NotNull Project project) {
+    public EmbeddedLinuxJVMConsoleView(@NotNull Project project) {
         this.project = project;
         consoleView = new ConsoleViewImpl(project, false);
         Disposer.register(this, consoleView);
@@ -47,8 +47,8 @@ public class PIConsoleView implements Disposable {
      * @param project
      * @return
      */
-    public static PIConsoleView getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, PIConsoleView.class);
+    public static EmbeddedLinuxJVMConsoleView getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, EmbeddedLinuxJVMConsoleView.class);
     }
 
     /**
@@ -83,7 +83,7 @@ public class PIConsoleView implements Disposable {
         DefaultActionGroup group = new DefaultActionGroup();
         layoutUi.getOptions().setLeftToolbar(group, ActionPlaces.UNKNOWN);
 
-        Content console = layoutUi.createContent(PIConsoleToolWindowFactory.ID, consoleView.getComponent(), "", null, null);
+        Content console = layoutUi.createContent(EmbeddedLinuxJVMToolWindowFactory.ID, consoleView.getComponent(), "", null, null);
         AnAction[] consoleActions = consoleView.createConsoleActions();
         for (AnAction action : consoleActions) {
             if (!shouldIgnoreAction(action)) {

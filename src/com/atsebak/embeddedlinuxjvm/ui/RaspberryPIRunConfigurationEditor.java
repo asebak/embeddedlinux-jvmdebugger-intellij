@@ -2,7 +2,7 @@ package com.atsebak.embeddedlinuxjvm.ui;
 
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHConnectionValidator;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.configurations.ConfigurationUtil;
@@ -27,7 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryPIRunConfiguration> implements PanelWithAnchor {
+public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
     private final Project myProject;
     private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
@@ -82,7 +82,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
      * @param configuration
      */
     @Override
-    protected void resetEditorFrom(RaspberryPIRunConfiguration configuration) {
+    protected void resetEditorFrom(EmbeddedLinuxJVMRunConfiguration configuration) {
 
         getMainClassField().setText(configuration.getRunnerParameters().getMainclass() != null ?
                 configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
@@ -101,7 +101,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<RaspberryP
      * @throws ConfigurationException
      */
     @Override
-    protected void applyEditorTo(RaspberryPIRunConfiguration configuration) throws ConfigurationException {
+    protected void applyEditorTo(EmbeddedLinuxJVMRunConfiguration configuration) throws ConfigurationException {
         final String className = getMainClassField().getText();
         final PsiClass aClass = myModuleSelector.findClass(className);
 

@@ -1,7 +1,7 @@
 package com.atsebak.raspberrypi.commandline;
 
 import com.atsebak.embeddedlinuxjvm.commandline.CommandLineTarget;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.RaspberryPIRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class CommandLineTargetTest {
     JavaParameters javaParameters = Mockito.mock(JavaParameters.class);
-    RaspberryPIRunConfiguration piRunConfiguration = Mockito.mock(RaspberryPIRunConfiguration.class);
+    EmbeddedLinuxJVMRunConfiguration piRunConfiguration = Mockito.mock(EmbeddedLinuxJVMRunConfiguration.class);
     RaspberryPIRunnerParameters parameters = new RaspberryPIRunnerParameters();
     ParametersList parametersList = Mockito.mock(ParametersList.class);
 

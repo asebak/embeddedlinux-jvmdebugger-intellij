@@ -1,8 +1,8 @@
 package com.atsebak.embeddedlinuxjvm.runner;
 
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleToolWindowFactory;
-import com.atsebak.embeddedlinuxjvm.console.PIConsoleView;
-import com.atsebak.embeddedlinuxjvm.runner.conf.RaspberryPIRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory;
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.debugger.impl.GenericDebuggerRunner;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunProfile;
@@ -16,7 +16,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import org.jetbrains.annotations.NotNull;
 
-public class RaspberryPIDebugger extends GenericDebuggerRunner {
+public class EmbeddedLinuxJVMDebugger extends GenericDebuggerRunner {
 
 
     private static final String RUNNER_ID = "RaspberryPIDebugger";
@@ -24,7 +24,7 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
     /**
      * Constructor
      */
-    public RaspberryPIDebugger() {
+    public EmbeddedLinuxJVMDebugger() {
         super();
     }
 
@@ -47,7 +47,7 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
      */
     @Override
     public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
-        return (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof RaspberryPIRunConfiguration);
+        return (DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof EmbeddedLinuxJVMRunConfiguration);
     }
 
     /**
@@ -63,7 +63,7 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
     @Override
     protected RunContentDescriptor doExecute(@NotNull Project project, @NotNull RunProfileState state, RunContentDescriptor contentToReuse, @NotNull ExecutionEnvironment environment) throws ExecutionException {
         final RunProfile runProfileRaw = environment.getRunProfile();
-        if (runProfileRaw instanceof RaspberryPIRunConfiguration) {
+        if (runProfileRaw instanceof EmbeddedLinuxJVMRunConfiguration) {
             FileDocumentManager.getInstance().saveAllDocuments();
             setupConsole(environment.getProject());
             super.doExecute(project, state, contentToReuse, environment);
@@ -77,10 +77,10 @@ public class RaspberryPIDebugger extends GenericDebuggerRunner {
      * @param p
      */
     private void setupConsole(Project p) {
-        ToolWindow window = ToolWindowManager.getInstance(p).getToolWindow(PIConsoleToolWindowFactory.ID);
+        ToolWindow window = ToolWindowManager.getInstance(p).getToolWindow(EmbeddedLinuxJVMToolWindowFactory.ID);
         if (window != null) {
             window.activate(null, true);
-            PIConsoleView.getInstance(p).clear();
+            EmbeddedLinuxJVMConsoleView.getInstance(p).clear();
         }
     }
 }
