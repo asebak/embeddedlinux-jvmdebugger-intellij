@@ -1,8 +1,6 @@
-package com.atsebak.raspberrypi.protocol.ssh;
+package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;

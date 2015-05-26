@@ -1,6 +1,5 @@
-package com.atsebak.raspberrypi.protocol.ssh;
+package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import net.schmizz.sshj.SSHClient;
 import org.junit.Test;
 

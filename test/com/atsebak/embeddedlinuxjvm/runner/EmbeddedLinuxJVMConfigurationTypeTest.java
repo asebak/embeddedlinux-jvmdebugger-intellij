@@ -1,4 +1,4 @@
-package com.atsebak.raspberrypi.runner;
+package com.atsebak.embeddedlinuxjvm.runner;
 
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType;
 import org.junit.Test;
