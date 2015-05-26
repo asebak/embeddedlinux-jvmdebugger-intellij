@@ -13,7 +13,7 @@ public class EmbeddedLinuxJVMConfigurationTypeTest {
     public void testSettings() throws Exception {
         String displayName = configurationType.getDisplayName();
         String description = configurationType.getConfigurationTypeDescription();
-        assert (displayName == "Raspberry PI");
+        assert (displayName == "Embedded Linux JVM");
         assert (description != null && description != "");
     }
 
