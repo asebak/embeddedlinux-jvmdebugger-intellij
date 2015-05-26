@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/raspberrypi-intellij.iml" filepath="$PROJECT_DIR$/raspberrypi-intellij.iml" />
+      <module fileurl="file://$PROJECT_DIR$/embeddedlinux-jvmdebugger.iml" filepath="$PROJECT_DIR$/embeddedlinux-jvmdebugger.iml" />
     </modules>
   </component>
 </project>

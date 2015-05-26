@@ -1,16 +1,15 @@
-##Raspberry PI Intellij [![Build Status](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij.svg?branch=master)](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij)
+##Embedded Linux JVM Debugger [![Build Status](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij.svg?branch=master)](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij)
 ```
 https://plugins.jetbrains.com/plugin/7738
 ```
 
 ![alt text][logo]
 
-Raspberry PI Intellij is a Plugin for IDEA that makes it easier to develop Java apps for the PI Platform.
+Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop Java apps for embedded systems running on Embedded Linux.
 
   - Custom Run and Debug configurations
-  - Automatic Deployments to your PI using SSH and SFTP.
-  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/
-
+  - Automatic Deployments to your target device using SSH and SFTP.
+  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi)
 
 
 ### Checking out and Building

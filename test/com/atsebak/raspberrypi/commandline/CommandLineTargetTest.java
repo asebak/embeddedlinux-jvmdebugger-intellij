@@ -1,7 +1,8 @@
 package com.atsebak.raspberrypi.commandline;
 
-import com.atsebak.raspberrypi.runner.conf.RaspberryPIRunConfiguration;
-import com.atsebak.raspberrypi.runner.data.RaspberryPIRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.commandline.CommandLineTarget;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.ParametersList;
 import org.junit.Before;
@@ -14,8 +15,8 @@ import static org.mockito.Mockito.when;
 
 public class CommandLineTargetTest {
     JavaParameters javaParameters = Mockito.mock(JavaParameters.class);
-    RaspberryPIRunConfiguration piRunConfiguration = Mockito.mock(RaspberryPIRunConfiguration.class);
-    RaspberryPIRunnerParameters parameters = new RaspberryPIRunnerParameters();
+    EmbeddedLinuxJVMRunConfiguration piRunConfiguration = Mockito.mock(EmbeddedLinuxJVMRunConfiguration.class);
+    EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
     ParametersList parametersList = Mockito.mock(ParametersList.class);
 
     @Before
@@ -35,7 +36,7 @@ public class CommandLineTargetTest {
         String runCommand = CommandLineTarget.builder()
                 .isDebugging(false)
                 .parameters(javaParameters)
-                .raspberryPIRunConfiguration(piRunConfiguration)
+                .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
                 .build().toString();
         assert (runCommand.contains(String.format("sudo java -cp classes:lib/'*' %s", parameters.getMainclass())));
     }
@@ -45,7 +46,7 @@ public class CommandLineTargetTest {
         String debugCommand = CommandLineTarget.builder()
                 .isDebugging(true)
                 .parameters(javaParameters)
-                .raspberryPIRunConfiguration(piRunConfiguration)
+                .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
                 .build().toString();
         assert (debugCommand.contains("sudo java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + parameters.getPort()));
     }

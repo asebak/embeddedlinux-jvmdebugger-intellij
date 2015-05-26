@@ -1,6 +1,7 @@
 package com.atsebak.raspberrypi.deploy;
 
-import com.atsebak.raspberrypi.protocol.ssh.SSHHandlerTarget;
+import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import org.junit.Test;
 import org.mockito.Mockito;
 
