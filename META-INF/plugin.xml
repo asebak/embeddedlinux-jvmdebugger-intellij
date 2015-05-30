@@ -5,7 +5,7 @@
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
-    <p>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</p>
+    <p>Embedded Linux Java Debugger for Embedded Systems</p>
     ]]></description>
 
   <change-notes><![CDATA[
