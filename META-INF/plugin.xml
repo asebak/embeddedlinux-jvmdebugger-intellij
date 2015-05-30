@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.embeddedlinuxjvm</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
-    <version>0.25</version>
+    <version>0.30</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -15,14 +15,13 @@
 
     <depends>com.intellij.modules.java</depends>
 
-    <idea-version since-build="141.178"/>
+    <idea-version since-build="131"/>
 
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner"/>
       <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger"/>
 
       <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
-      <toolWindow id="Embedded Linux JVM Console" icon="/console.png" anchor="bottom" secondary="true" factoryClass="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMToolWindowFactory"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
       <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
   </extensions>

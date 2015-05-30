@@ -9,6 +9,7 @@ import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
+import com.atsebak.embeddedlinuxjvm.utils.RemoteCommandLineBuilder;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -19,8 +20,11 @@ import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -38,8 +42,13 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
+import lombok.SneakyThrows;
+import net.schmizz.sshj.connection.ConnectionException;
+import net.schmizz.sshj.connection.channel.direct.Session;
+import net.schmizz.sshj.transport.TransportException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,20 +95,25 @@ public class AppCommandLineState extends JavaCommandLineState {
     }
 
     /**
-     * Called when either debug or run mode executed, overrides console with a new handler
+     * Creates the console view
      * @param executor
-     * @param runner
      * @return
      * @throws ExecutionException
      */
-    @NotNull
+    @Nullable
     @Override
-    public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
-        OSProcessHandler handler = this.startProcess();
-        final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
-        textConsoleBuilder.setViewer(true);
-        textConsoleBuilder.getConsole().attachToProcess(handler);
-        return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
+    protected ConsoleView createConsole(@NotNull Executor executor) throws ExecutionException {
+        return EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getConsoleView(true);
+    }
+
+    /**
+     * Creates the command line view
+     * @return
+     * @throws ExecutionException
+     */
+    @Override
+    protected GeneralCommandLine createCommandLine() throws ExecutionException {
+        return RemoteCommandLineBuilder.createFromJavaParameters(getJavaParameters(), CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext()), true);
     }
 
     /**
@@ -113,31 +127,37 @@ public class AppCommandLineState extends JavaCommandLineState {
         final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
         ProcessTerminatedListener.attach(handler, configuration.getProject(), EmbeddedLinuxJVMBundle.message("pi.console.exited"));
         handler.addProcessListener(new ProcessAdapter() {
-            @Override
-            public void startNotified(ProcessEvent event) {
-                super.startNotified(event);
-            }
-
-            @Override
-            public void onTextAvailable(ProcessEvent event, Key outputType) {
-                super.onTextAvailable(event, outputType);
-            }
-
-            @Override
-            public void processTerminated(ProcessEvent event) {
-                super.processTerminated(event);
+            private void closeSSHConnection() {
+                try {
+                    if(isDebugMode) {
+                        //todo fix tcp connection closing issue
+                    }
+                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getCommand();
+                    if(command != null) {
+                        command.close();
+                    }
+                } catch (ConnectionException e) {
+                } catch (TransportException e) {
+                }
             }
 
             @Override
             public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
+                ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
+                    @Override
+                    public void run(@NotNull ProgressIndicator progressIndicator) {
+                        closeSSHConnection();
+                    }
+                });
                 super.processWillTerminate(event, willBeDestroyed);
             }
+
         });
         return handler;
     }
 
     /**
-     * Creates the necessary Java paramaters for the application.
+     * Creates the necessary Java parameters for the application.
      *
      * @return
      * @throws ExecutionException
@@ -192,7 +212,7 @@ public class AppCommandLineState extends JavaCommandLineState {
             }
         });
 
-        //invoke later because it reads from other threads(debugging executer)
+        //invoke later because it reads from other threads(debugging executor)
         ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
@@ -241,8 +261,8 @@ public class AppCommandLineState extends JavaCommandLineState {
                         .piRunnerParameters(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()))
                         .ssh(SSH.builder()
-                                .connectionTimeout(3000)
-                                .timeout(3000)
+                                .connectionTimeout(30000)
+                                .timeout(30000)
                                 .build()).build()).build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }

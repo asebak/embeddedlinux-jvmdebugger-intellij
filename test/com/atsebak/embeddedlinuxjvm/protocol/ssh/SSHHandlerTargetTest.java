@@ -1,12 +1,11 @@
-package com.atsebak.raspberrypi.protocol.ssh;
+package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -27,6 +26,7 @@ import java.io.IOException;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class SSHHandlerTargetTest {
@@ -55,7 +55,6 @@ public class SSHHandlerTargetTest {
         Mockito.when(session.exec(anyString())).thenReturn(command);
         Mockito.when(sftpClient.getFileTransfer()).thenReturn(sftpFileTransfer);
         Mockito.doNothing().when(sftpFileTransfer).setTransferListener(Matchers.<TransferListener>anyObject());
-
     }
 
     @Test

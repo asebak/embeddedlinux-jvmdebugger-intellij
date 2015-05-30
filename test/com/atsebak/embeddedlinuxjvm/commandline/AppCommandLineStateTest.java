@@ -1,6 +1,5 @@
-package com.atsebak.raspberrypi.commandline;
+package com.atsebak.embeddedlinuxjvm.commandline;
 
-import com.atsebak.embeddedlinuxjvm.commandline.AppCommandLineState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;

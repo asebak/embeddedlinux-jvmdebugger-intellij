@@ -1,6 +1,5 @@
-package com.atsebak.raspberrypi.commandline;
+package com.atsebak.embeddedlinuxjvm.commandline;
 
-import com.atsebak.embeddedlinuxjvm.commandline.CommandLineTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.configurations.JavaParameters;
