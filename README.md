@@ -30,6 +30,6 @@ $ sudo sh ./ci-build.sh
 
 If you want to contribute and add functionality, make sure to add unit tests if they are needed.
 
-[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample.jpg
+[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample.png
 "Sample Build Output"
 
