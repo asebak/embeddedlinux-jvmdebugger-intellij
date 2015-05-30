@@ -1,7 +1,5 @@
 package com.atsebak.embeddedlinuxjvm.utils;
 
-
-import com.atsebak.embeddedlinuxjvm.hal.HostMachineHAL;
 import com.atsebak.embeddedlinuxjvm.hal.LinuxHAL;
 import com.atsebak.embeddedlinuxjvm.hal.WindowsHAL;
 import com.intellij.execution.CantRunException;
