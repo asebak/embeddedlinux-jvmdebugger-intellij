@@ -105,7 +105,7 @@ public class SSHHandlerTarget {
 
         String jarCmd = LinuxCommand.builder()
                 .commands(Arrays.asList(
-                        "sudo killall java",
+                        "sudo killall java", //todo fix, kills all java processes but we only need the current one with the same port killed process
                         String.format("cd %s", path),
                         String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
                         "rm *.tar",
@@ -115,6 +115,7 @@ public class SSHHandlerTarget {
         try {
             consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
             Session.Command exec = session.exec(jarCmd);
+            EmbeddedLinuxJVMConsoleView.getInstance(consoleView.getProject()).setCommand(exec);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {

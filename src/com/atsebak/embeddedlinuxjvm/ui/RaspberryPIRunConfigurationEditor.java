@@ -56,11 +56,11 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
                     SSHConnectionValidator
                             .builder()
                             .ip(hostName.getText())
-                            .password(password.getText())
+                            .password(password.getPassword().toString())
                             .username(username.getText())
                             .build().checkSSHConnection(SSH.builder()
-                            .connectionTimeout(1000)
-                            .timeout(1000)
+                            .connectionTimeout(10000)
+                            .timeout(10000)
                             .build().toClient(), project);
                 } catch (IOException e1) {
 

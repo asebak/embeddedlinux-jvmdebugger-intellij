@@ -8,11 +8,6 @@ import java.util.List;
 
 
 public class RemoteCommandLine extends GeneralCommandLine {
-    @Override
-    public String getCommandLineString() {
-        return super.getCommandLineString();
-    }
-
     @NotNull
     @Override
     protected Process startProcess(List<String> commands) throws IOException {

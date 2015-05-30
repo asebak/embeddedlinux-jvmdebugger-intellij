@@ -19,7 +19,9 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import net.schmizz.sshj.connection.channel.direct.Session;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,10 +32,27 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
 
     @NotNull
     private final Project project;
-    @NotNull
-    private final ConsoleViewImpl consoleView;
 
+    @Nullable
+    private Session.Command command;
+
+    @NotNull
+    private ConsoleViewImpl consoleView;
+
+    @NotNull
     private JPanel myConsolePanel = new JPanel();
+
+    /**
+     * Gets the Console View
+     * @return
+     */
+    @NotNull
+    public ConsoleViewImpl getConsoleView(boolean isNew) {
+        if(isNew) {
+            consoleView = new ConsoleViewImpl(project, false);
+        }
+        return consoleView;
+    }
 
     public EmbeddedLinuxJVMConsoleView(@NotNull Project project) {
         this.project = project;
@@ -123,7 +142,27 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
         consoleView.print(text, contentType);
     }
 
+    /**
+     * Dispose register
+     */
     @Override
     public void dispose() {
+    }
+
+    /**
+     * Get Command
+     * @return
+     */
+    @Nullable
+    public Session.Command getCommand() {
+        return command;
+    }
+
+    /**
+     * Set command
+     * @param command
+     */
+    public void setCommand(@Nullable Session.Command command) {
+        this.command = command;
     }
 }

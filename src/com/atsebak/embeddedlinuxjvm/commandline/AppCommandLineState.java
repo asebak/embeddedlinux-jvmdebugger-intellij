@@ -42,6 +42,9 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
+import lombok.SneakyThrows;
+import net.schmizz.sshj.connection.ConnectionException;
+import net.schmizz.sshj.transport.TransportException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -91,23 +94,6 @@ public class AppCommandLineState extends JavaCommandLineState {
     }
 
     /**
-     * Called when either debug or run mode executed, overrides console with a new handler
-     * @param executor
-     * @param runner
-     * @return
-     * @throws ExecutionException
-     */
-//    @NotNull
-//    @Override
-//    public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
-//        OSProcessHandler handler = this.startProcess();
-//        final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
-//        textConsoleBuilder.setViewer(true);
-//        textConsoleBuilder.getConsole().attachToProcess(handler);
-//        return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
-//    }
-
-    /**
      * Creates the console view
      * @param executor
      * @return
@@ -116,8 +102,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Nullable
     @Override
     protected ConsoleView createConsole(@NotNull Executor executor) throws ExecutionException {
-        final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
-        return textConsoleBuilder.getConsole();
+        return EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getConsoleView(true);
     }
 
     /**
@@ -141,31 +126,34 @@ public class AppCommandLineState extends JavaCommandLineState {
         final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
         ProcessTerminatedListener.attach(handler, configuration.getProject(), EmbeddedLinuxJVMBundle.message("pi.console.exited"));
         handler.addProcessListener(new ProcessAdapter() {
-            @Override
-            public void startNotified(ProcessEvent event) {
-                super.startNotified(event);
-            }
-
-            @Override
-            public void onTextAvailable(ProcessEvent event, Key outputType) {
-                super.onTextAvailable(event, outputType);
-            }
-
-            @Override
-            public void processTerminated(ProcessEvent event) {
-                super.processTerminated(event);
+            private void closeSSHConnection() {
+                try {
+                    if(isDebugMode) {
+                        //todo fix tcp connection closing issue
+                    }
+                    EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getCommand().close();
+                } catch (ConnectionException e) {
+                } catch (TransportException e) {
+                }
             }
 
             @Override
             public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
+                ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
+                    @Override
+                    public void run(@NotNull ProgressIndicator progressIndicator) {
+                        closeSSHConnection();
+                    }
+                });
                 super.processWillTerminate(event, willBeDestroyed);
             }
+
         });
         return handler;
     }
 
     /**
-     * Creates the necessary Java paramaters for the application.
+     * Creates the necessary Java parameters for the application.
      *
      * @return
      * @throws ExecutionException
@@ -220,7 +208,7 @@ public class AppCommandLineState extends JavaCommandLineState {
             }
         });
 
-        //invoke later because it reads from other threads(debugging executer)
+        //invoke later because it reads from other threads(debugging executor)
         ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
@@ -269,8 +257,8 @@ public class AppCommandLineState extends JavaCommandLineState {
                         .piRunnerParameters(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()))
                         .ssh(SSH.builder()
-                                .connectionTimeout(3000)
-                                .timeout(3000)
+                                .connectionTimeout(30000)
+                                .timeout(30000)
                                 .build()).build()).build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }

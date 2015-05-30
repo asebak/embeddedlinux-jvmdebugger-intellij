@@ -49,7 +49,7 @@ public class RemoteCommandLineBuilder {
                         if (javaParameters.getMainClass() == null && javaParameters.getJarPath() == null) {
                             throw new CantRunException(ExecutionBundle.message("main.class.is.not.specified.error.message"));
                         }
-                        return RemoteJdk.setupJVMCommandLine(exePath, javaParameters, forceDynamicClasspath);
+                        return RemoteJdk.setupJVMCommandLine(exePath);
                     }
                     catch (CantRunException e) {
                         throw new RuntimeException(e);
