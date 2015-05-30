@@ -115,7 +115,7 @@ public class SSHHandlerTarget {
         try {
             consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + jarCmd + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
             Session.Command exec = session.exec(jarCmd);
-            EmbeddedLinuxJVMConsoleView.getInstance(consoleView.getProject()).setCommand(exec);
+            consoleView.setCommand(exec);
             new StreamCopier(exec.getInputStream(), System.out).spawn("stdout");
             new StreamCopier(exec.getErrorStream(), System.err).spawn("stderr");
         } finally {
