@@ -1,17 +1,19 @@
 package com.atsebak.embeddedlinuxjvm.utils;
 
 
+import com.atsebak.embeddedlinuxjvm.hal.HostMachineHAL;
+import org.jetbrains.annotations.NotNull;
 
 public class RemoteJdk {
 
     /**
-     * Sets up a remote command line
-     * @param exePath
+     * Sets command line
+     * @param hostMachineHAL
      * @return
      */
-    public static RemoteCommandLine setupJVMCommandLine(final String exePath) {
+    public static RemoteCommandLine setupJVMCommandLine(@NotNull HostMachineHAL hostMachineHAL) {
         final RemoteCommandLine commandLine = new RemoteCommandLine();
-        commandLine.setExePath(exePath);
+        commandLine.setExePath(hostMachineHAL.getCommandLineName());
         return commandLine;
     }
 

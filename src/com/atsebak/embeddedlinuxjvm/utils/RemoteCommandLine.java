@@ -10,8 +10,8 @@ import java.util.List;
 public class RemoteCommandLine extends GeneralCommandLine {
     @NotNull
     @Override
-    protected Process startProcess(List<String> commands) throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder("bash");
+    protected Process startProcess(@NotNull List<String> commands) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(commands);
         processBuilder.redirectErrorStream(true);
         return processBuilder.start();
     }
