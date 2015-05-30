@@ -9,6 +9,7 @@ import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
+import com.atsebak.embeddedlinuxjvm.utils.RemoteCommandLineBuilder;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -19,8 +20,11 @@ import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -40,6 +44,7 @@ import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,14 +97,37 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @return
      * @throws ExecutionException
      */
-    @NotNull
+//    @NotNull
+//    @Override
+//    public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
+//        OSProcessHandler handler = this.startProcess();
+//        final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
+//        textConsoleBuilder.setViewer(true);
+//        textConsoleBuilder.getConsole().attachToProcess(handler);
+//        return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
+//    }
+
+    /**
+     * Creates the console view
+     * @param executor
+     * @return
+     * @throws ExecutionException
+     */
+    @Nullable
     @Override
-    public ExecutionResult execute(@NotNull Executor executor, @NotNull ProgramRunner runner) throws ExecutionException {
-        OSProcessHandler handler = this.startProcess();
+    protected ConsoleView createConsole(@NotNull Executor executor) throws ExecutionException {
         final TextConsoleBuilder textConsoleBuilder = TextConsoleBuilderFactory.getInstance().createBuilder(getEnvironment().getProject());
-        textConsoleBuilder.setViewer(true);
-        textConsoleBuilder.getConsole().attachToProcess(handler);
-        return new DefaultExecutionResult(textConsoleBuilder.getConsole(), handler);
+        return textConsoleBuilder.getConsole();
+    }
+
+    /**
+     * Creates the command line view
+     * @return
+     * @throws ExecutionException
+     */
+    @Override
+    protected GeneralCommandLine createCommandLine() throws ExecutionException {
+        return RemoteCommandLineBuilder.createFromJavaParameters(getJavaParameters(), CommonDataKeys.PROJECT.getData(DataManager.getInstance().getDataContext()), true);
     }
 
     /**
