@@ -15,7 +15,7 @@
 
     <depends>com.intellij.modules.java</depends>
 
-    <idea-version since-build="141.178"/>
+    <idea-version since-build="131"/>
 
   <extensions defaultExtensionNs="com.intellij">
       <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner"/>

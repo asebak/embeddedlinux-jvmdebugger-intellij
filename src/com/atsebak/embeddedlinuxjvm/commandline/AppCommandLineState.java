@@ -44,6 +44,7 @@ import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
 import lombok.SneakyThrows;
 import net.schmizz.sshj.connection.ConnectionException;
+import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.TransportException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -131,7 +132,10 @@ public class AppCommandLineState extends JavaCommandLineState {
                     if(isDebugMode) {
                         //todo fix tcp connection closing issue
                     }
-                    EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getCommand().close();
+                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getCommand();
+                    if(command != null) {
+                        command.close();
+                    }
                 } catch (ConnectionException e) {
                 } catch (TransportException e) {
                 }
