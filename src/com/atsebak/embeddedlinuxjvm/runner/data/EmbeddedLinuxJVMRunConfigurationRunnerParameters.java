@@ -12,6 +12,8 @@ public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneab
     private String username;
     private String password;
     private String classesDirectory;
+    private String vmParameters;
+    private String programArguments;
 
     /**
      * Clones members
