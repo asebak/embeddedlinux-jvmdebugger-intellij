@@ -31,6 +31,11 @@ public class CommandLineTarget {
         return cmdBuf.toString().replaceAll("\\s{2,}", " ").trim();
     }
 
+    /**
+     * Adds project arguments to JVM
+     *
+     * @param cmdBuf
+     */
     private void addArguments(StringBuilder cmdBuf) {
         for (String arg : parameters.getProgramParametersList().getParameters()) {
             cmdBuf.append(' ').append(arg.trim());
