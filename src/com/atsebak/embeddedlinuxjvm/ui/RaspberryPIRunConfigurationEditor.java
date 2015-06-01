@@ -18,6 +18,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
+import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +41,8 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
     private JTextField username;
     private JPasswordField password;
     private JButton validateConnection;
+    private RawCommandLineEditor vmParameters;
+    private RawCommandLineEditor programArguments;
     private JComponent myAnchor;
 
     /**
@@ -52,11 +55,12 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
         validateConnection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                validateConnection.setEnabled(false);
                 try {
                     SSHConnectionValidator
                             .builder()
                             .ip(hostName.getText())
-                            .password(password.getPassword().toString())
+                            .password(new String(password.getPassword()))
                             .username(username.getText())
                             .build().checkSSHConnection(SSH.builder()
                             .connectionTimeout(10000)
@@ -65,6 +69,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
                 } catch (IOException e1) {
 
                 }
+                validateConnection.setEnabled(true);
             }
         });
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
@@ -88,11 +93,15 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
                 configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
 
         EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = configuration.getRunnerParameters();
+        vmParameters.setDialogCaption("VM Options");
+        vmParameters.setText(parameters.getVmParameters());
+        programArguments.setDialogCaption("Program Augments");
+        programArguments.setText(parameters.getProgramArguments());
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
-        password.setText(parameters.getPassword());
+        password.setText(new String(parameters.getPassword()));
     }
 
     /**
@@ -120,7 +129,9 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
         parameters.setUsername(username.getText());
-        parameters.setPassword(password.getText());
+        parameters.setPassword(new String(password.getPassword()));
+        parameters.setVmParameters(vmParameters.getText());
+        parameters.setProgramArguments(programArguments.getText());
     }
 
     /**

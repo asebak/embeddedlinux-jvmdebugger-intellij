@@ -27,6 +27,8 @@ public class CommandLineTargetTest {
         when(piRunConfiguration.getRunnerParameters()).thenReturn(parameters);
         when(javaParameters.getProgramParametersList()).thenReturn(parametersList);
         when(javaParameters.getProgramParametersList().getParameters()).thenReturn(new ArrayList<String>());
+        when(javaParameters.getVMParametersList()).thenReturn(parametersList);
+        when(javaParameters.getVMParametersList().getParameters()).thenReturn(new ArrayList<String>());
         when(javaParameters.getMainClass()).thenReturn(parameters.getMainclass());
     }
 
