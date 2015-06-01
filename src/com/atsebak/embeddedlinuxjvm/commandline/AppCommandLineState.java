@@ -1,25 +1,22 @@
 package com.atsebak.embeddedlinuxjvm.commandline;
 
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
-import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
-import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
+import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.RemoteCommandLineBuilder;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.*;
 import com.intellij.execution.remote.RemoteConfiguration;
 import com.intellij.execution.remote.RemoteConfigurationType;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.execution.ui.RunContentDescriptor;
@@ -35,14 +32,12 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
-import lombok.SneakyThrows;
 import net.schmizz.sshj.connection.ConnectionException;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.TransportException;
@@ -61,11 +56,18 @@ public class AppCommandLineState extends JavaCommandLineState {
     private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
     @NonNls
     private static final String DEBUG_TCP_MESSAGE = "Listening for transport dt_socket at address: %s";
+    @NotNull
     private final EmbeddedLinuxJVMRunConfiguration configuration;
+    @NotNull
     private final ExecutionEnvironment environment;
+    @NotNull
     private final RunnerSettings runnerSettings;
+    @NotNull
     private final EmbeddedLinuxJVMOutputForwarder outputForwarder;
-    private boolean isDebugMode;
+    @NotNull
+    private final boolean isDebugMode;
+    @NotNull
+    private final Project project;
 
     /**
      * Command line state when runner is launch
@@ -78,9 +80,10 @@ public class AppCommandLineState extends JavaCommandLineState {
         this.configuration = configuration;
         this.environment = environment;
         this.runnerSettings = environment.getRunnerSettings();
-        isDebugMode = runnerSettings instanceof DebuggingRunnerData;
-        outputForwarder = new EmbeddedLinuxJVMOutputForwarder(EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()));
-        outputForwarder.attachTo(null);
+        this.project = environment.getProject();
+        this.isDebugMode = runnerSettings instanceof DebuggingRunnerData;
+        this.outputForwarder = new EmbeddedLinuxJVMOutputForwarder(EmbeddedLinuxJVMConsoleView.getInstance(project));
+        this.outputForwarder.attachTo(null);
     }
 
     /**
@@ -103,7 +106,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Nullable
     @Override
     protected ConsoleView createConsole(@NotNull Executor executor) throws ExecutionException {
-        return EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getConsoleView(true);
+        return EmbeddedLinuxJVMConsoleView.getInstance(project).getConsoleView(true);
     }
 
     /**
@@ -125,14 +128,14 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Override
     protected OSProcessHandler startProcess() throws ExecutionException {
         final OSProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
-        ProcessTerminatedListener.attach(handler, configuration.getProject(), EmbeddedLinuxJVMBundle.message("pi.console.exited"));
+        ProcessTerminatedListener.attach(handler, project, EmbeddedLinuxJVMBundle.message("pi.console.exited"));
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
                     if(isDebugMode) {
                         //todo fix tcp connection closing issue
                     }
-                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()).getCommand();
+                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(project).getCommand();
                     if(command != null) {
                         command.close();
                     }
@@ -143,7 +146,7 @@ public class AppCommandLineState extends JavaCommandLineState {
 
             @Override
             public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
-                ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
+                ProgressManager.getInstance().run(new Task.Backgroundable(project, EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
                     @Override
                     public void run(@NotNull ProgressIndicator progressIndicator) {
                         closeSSHConnection();
@@ -164,30 +167,31 @@ public class AppCommandLineState extends JavaCommandLineState {
      */
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
-        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).clear();
+        EmbeddedLinuxJVMConsoleView.getInstance(project).clear();
         JavaParameters javaParams = new JavaParameters();
-        final Project project = environment.getProject();
         final ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
 
         // All modules to use the same things
         Module[] modules = ModuleManager.getInstance(project).getModules();
-        if (modules != null && modules.length > 0) {
+        if (modules.length > 0) {
             for (Module module : modules) {
                 javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
             }
         }
+        // setting jvm config
+        javaParams.getProgramParametersList().add(configuration.getRunnerParameters().getProgramArguments());
+        javaParams.getVMParametersList().add(configuration.getRunnerParameters().getVmParameters());
         javaParams.setMainClass(configuration.getRunnerParameters().getMainclass());
-        String basePath = project.getBasePath();
-        javaParams.setWorkingDirectory(basePath);
-        String classes = configuration.getOutputFilePath();
-        javaParams.getProgramParametersList().addParametersString(classes);
-        final PathsList classPath = javaParams.getClassPath();
+        javaParams.setWorkingDirectory(project.getBasePath());
+        javaParams.getProgramParametersList().addParametersString(configuration.getOutputFilePath());
 
-        final CommandLineTarget build = CommandLineTarget.builder()
+        final CommandLineTarget commandLineTarget = CommandLineTarget.builder()
                 .embeddedLinuxJVMRunConfiguration(configuration)
                 .isDebugging(isDebugMode)
                 .parameters(javaParams).build();
+
+        final PathsList classPath = javaParams.getClassPath();
 
         final Application app = ApplicationManager.getApplication();
 
@@ -201,10 +205,9 @@ public class AppCommandLineState extends JavaCommandLineState {
                         try {
                             List<File> files = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
                             File classpathArchive = FileUtilities.createClasspathArchive(files, project);
-                            invokeDeployment(classpathArchive.getPath(), build);
+                            invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
-                            e.printStackTrace();
-                            EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
+                            EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
                                     ConsoleViewContentType.ERROR_OUTPUT);
                         }
                     }
@@ -213,7 +216,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         });
 
         //invoke later because it reads from other threads(debugging executor)
-        ProgressManager.getInstance().run(new Task.Backgroundable(environment.getProject(), EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 if (isDebugMode) {
@@ -253,13 +256,13 @@ public class AppCommandLineState extends JavaCommandLineState {
      * @param commandLineTarget
      */
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
-        EmbeddedLinuxJVMConsoleView.getInstance(environment.getProject()).print(EmbeddedLinuxJVMBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
+        EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
         EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters = configuration.getRunnerParameters();
 
         DeploymentTarget target = DeploymentTarget.builder()
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
-                        .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(getEnvironment().getProject()))
+                        .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                         .ssh(SSH.builder()
                                 .connectionTimeout(30000)
                                 .timeout(30000)

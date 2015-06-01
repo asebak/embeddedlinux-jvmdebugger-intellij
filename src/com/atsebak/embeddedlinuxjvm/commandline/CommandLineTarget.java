@@ -32,7 +32,9 @@ public class CommandLineTarget {
     }
 
     private void addArguments(StringBuilder cmdBuf) {
-        //todo add java arguments
+        for (String arg : parameters.getProgramParametersList().getParameters()) {
+            cmdBuf.append(' ').append(arg.trim());
+        }
     }
 
     /**
@@ -62,6 +64,9 @@ public class CommandLineTarget {
             //debugging with the port this is added on the remote device command line
             cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
                     embeddedLinuxJVMRunConfiguration.getRunnerParameters().getPort());
+        }
+        for (String arg : parameters.getVMParametersList().getParameters()) {
+            cmdBuf.append(' ').append(arg.trim());
         }
     }
 
