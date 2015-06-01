@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
-    <version>0.30</version>
+    <version>0.33</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,7 +9,36 @@
     ]]></description>
 
   <change-notes><![CDATA[
-        Re-brand plugin as a generic embedded linux jvm debugger
+        <b>Version 0.33</b>
+        <ul>
+            <li>
+                Fixed password validation for SSH Connection.
+            </li>
+            <li>
+                Added ability to add Program and VM arguments.
+            </li>
+        </ul>
+        <b>Version 0.30</b>
+        <ul>
+            <li>
+                Fixed the console view.
+            </li>
+            <li>
+                Fixed the stop runner.
+            </li>
+        </ul>
+        <b>Version 0.23</b>
+        <ul>
+            <li>
+                Fixed debugging freezing up the UI.
+            </li>
+        </ul>
+        <b>Version 0.20</b>
+        <ul>
+            <li>
+                Fixed Windows O/S Dependency issue.
+            </li>
+        </ul>
     ]]>
   </change-notes>
 
