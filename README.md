@@ -11,6 +11,15 @@ Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop
   - Automatic Deployments to your target device using SSH and SFTP.
   - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi)
 
+### How To Use
+
+- Add a new Run Configuration : 
+
+![alt text][config]
+
+- Enter in required configurations (username, password, hostname) note: Enable sudo if you require GPIO access. Debug port can be anything that's not reserved.
+
+- Run it on your Hardware running Embedded Linux
 
 ### Checking out and Building
 
@@ -30,6 +39,8 @@ $ sudo sh ./ci-build.sh
 
 If you want to contribute and add functionality, make sure to add unit tests if they are needed.
 
-[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample.png
+[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample1.png
 "Sample Build Output"
 
+[config]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/sample2.png
+"Sample Run Configuration"

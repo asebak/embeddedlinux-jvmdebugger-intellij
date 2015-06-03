@@ -2,6 +2,7 @@ package com.atsebak.embeddedlinuxjvm.runner.data;
 
 
 import lombok.Data;
+import org.jetbrains.annotations.Nullable;
 
 @Data
 public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneable {
@@ -10,6 +11,7 @@ public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneab
     private boolean runAsRoot;
     private String port;
     private String username;
+    @Nullable
     private String password;
     private String classesDirectory;
     private String vmParameters;
