@@ -3,6 +3,7 @@ package com.atsebak.embeddedlinuxjvm.commandline;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.configurations.JavaParameters;
 import lombok.Builder;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
@@ -38,7 +39,9 @@ public class CommandLineTarget {
      */
     private void addArguments(StringBuilder cmdBuf) {
         for (String arg : parameters.getProgramParametersList().getParameters()) {
-            cmdBuf.append(' ').append(arg.trim());
+            if (!arg.contains("transport=dt_socket") && StringUtils.isNotBlank(arg)) {
+                cmdBuf.append(' ').append(arg.trim());
+            }
         }
     }
 
@@ -71,7 +74,9 @@ public class CommandLineTarget {
                     embeddedLinuxJVMRunConfiguration.getRunnerParameters().getPort());
         }
         for (String arg : parameters.getVMParametersList().getParameters()) {
-            cmdBuf.append(' ').append(arg.trim());
+            if (!arg.contains("transport=dt_socket") && StringUtils.isNotBlank(arg)) {
+                cmdBuf.append(' ').append(arg.trim());
+            }
         }
     }
 
