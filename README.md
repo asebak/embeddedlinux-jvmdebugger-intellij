@@ -1,7 +1,6 @@
 Embedded Linux JVM Debugger
 =============================
 [![Build Status](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij.svg?branch=master)](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij)
-[![Coverage Status](https://coveralls.io/repos/asebak/embeddedlinux-jvmdebugger-intellij/badge.svg)](https://coveralls.io/r/asebak/embeddedlinux-jvmdebugger-intellij)
 
 ```
 https://plugins.jetbrains.com/plugin/7738
