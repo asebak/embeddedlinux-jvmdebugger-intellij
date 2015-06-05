@@ -1,5 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.ui;
 
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
@@ -10,6 +11,8 @@ import com.intellij.execution.ui.ClassBrowser;
 import com.intellij.execution.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.psi.JavaCodeFragment;
@@ -24,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
-public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunConfiguration> implements PanelWithAnchor {
+public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
     private final Project myProject;
     private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
@@ -43,6 +46,7 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
     private JButton validateConnection;
     private RawCommandLineEditor vmParameters;
     private RawCommandLineEditor programArguments;
+    private JLabel sshStatus;
     private JComponent myAnchor;
 
     /**
@@ -50,26 +54,40 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
      *
      * @param project
      */
-    public RaspberryPIRunConfigurationEditor(final Project project) {
+    public RunConfigurationEditor(final Project project) {
         myProject = project;
         validateConnection.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                validateConnection.setEnabled(false);
-                try {
-                    SSHConnectionValidator
-                            .builder()
-                            .ip(hostName.getText())
-                            .password(new String(password.getPassword()))
-                            .username(username.getText())
-                            .build().checkSSHConnection(SSH.builder()
-                            .connectionTimeout(10000)
-                            .timeout(10000)
-                            .build().toClient(), project);
-                } catch (IOException e1) {
+                ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
+                    public void run() {
+                        final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
+                        if (progressIndicator != null) {
+                            progressIndicator.setText(EmbeddedLinuxJVMBundle.getString("ssh.tryingtoconnect"));
+                            progressIndicator.setIndeterminate(true);
+                        }
+                        validateConnection.setEnabled(false);
+                        boolean success = SSHConnectionValidator
+                                .builder()
+                                .ip(hostName.getText())
+                                .password(new String(password.getPassword()))
+                                .username(username.getText())
+                                .build().checkSSHConnection(SSH.builder()
+                                        .connectionTimeout(10000)
+                                        .timeout(10000)
+                                        .build().toClient(), project);
+                        validateConnection.setEnabled(true);
+                        sshStatus.setVisible(true);
+                        if (success) {
+                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
+                            sshStatus.setForeground(Color.GREEN);
+                        } else {
+                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
+                            sshStatus.setForeground(Color.RED);
+                        }
+                    }
+                }, EmbeddedLinuxJVMBundle.getString("pi.validatingconnection"), true, myProject);
 
-                }
-                validateConnection.setEnabled(true);
             }
         });
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
@@ -93,15 +111,16 @@ public class RaspberryPIRunConfigurationEditor extends SettingsEditor<EmbeddedLi
                 configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
 
         EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = configuration.getRunnerParameters();
-        vmParameters.setDialogCaption("VM Options");
+        vmParameters.setDialogCaption(EmbeddedLinuxJVMBundle.getString("app.vmoptions"));
         vmParameters.setText(parameters.getVmParameters());
-        programArguments.setDialogCaption("Program Augments");
+        programArguments.setDialogCaption(EmbeddedLinuxJVMBundle.getString("app.programargs"));
         programArguments.setText(parameters.getProgramArguments());
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
         password.setText(new String(parameters.getPassword()));
+        sshStatus.setVisible(false);
     }
 
     /**
