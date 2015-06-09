@@ -66,7 +66,6 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                             progressIndicator.setText(EmbeddedLinuxJVMBundle.getString("ssh.tryingtoconnect"));
                             progressIndicator.setIndeterminate(true);
                         }
-                        validateConnection.setEnabled(false);
                         boolean success = SSHConnectionValidator
                                 .builder()
                                 .ip(hostName.getText())
@@ -76,7 +75,6 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                                         .connectionTimeout(10000)
                                         .timeout(10000)
                                         .build().toClient(), project);
-                        validateConnection.setEnabled(true);
                         sshStatus.setVisible(true);
                         if (success) {
                             sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
