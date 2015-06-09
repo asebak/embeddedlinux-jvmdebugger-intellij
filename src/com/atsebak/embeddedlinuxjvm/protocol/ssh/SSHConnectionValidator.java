@@ -1,8 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
-import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import lombok.Builder;
 import net.schmizz.sshj.SSHClient;
 import org.jetbrains.annotations.NotNull;
@@ -29,21 +27,20 @@ public class SSHConnectionValidator {
         }
     }
 
+
     /**
-     * See if user can connect to remote target
-     *
+     * Can connect to remote target
      * @param client
      * @param project
-     * @throws IOException
+     * @return status
      */
-    public void checkSSHConnection(SSHClient client, @NotNull Project project) throws IOException {
+    public boolean checkSSHConnection(SSHClient client, @NotNull Project project) {
         try {
             client.connect(ip);
             client.authPassword(username, password);
-            Messages.showInfoMessage(project, EmbeddedLinuxJVMBundle.getString("ssh.connection.success"), EmbeddedLinuxJVMBundle.getString("pi.connection.success.title"));
+            return true;
         } catch (Exception e) {
-            Messages.showErrorDialog(project, EmbeddedLinuxJVMBundle.getString("pi.ssh.remote.error"),
-                    EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"));
+            return false;
         }
     }
 

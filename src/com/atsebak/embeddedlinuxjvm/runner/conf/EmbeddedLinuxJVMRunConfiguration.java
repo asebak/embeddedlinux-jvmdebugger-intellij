@@ -3,7 +3,7 @@ package com.atsebak.embeddedlinuxjvm.runner.conf;
 import com.atsebak.embeddedlinuxjvm.commandline.AppCommandLineState;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunnerValidator;
-import com.atsebak.embeddedlinuxjvm.ui.RaspberryPIRunConfigurationEditor;
+import com.atsebak.embeddedlinuxjvm.ui.RunConfigurationEditor;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
@@ -37,7 +37,7 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
     @NotNull
     @Override
     public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-        return new RaspberryPIRunConfigurationEditor(getProject());
+        return new RunConfigurationEditor(getProject());
     }
 
     /**

@@ -40,10 +40,16 @@ public class SFTPListener implements TransferListener {
      */
     public StreamCopier.Listener file(String name, final long size) {
         consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload"), ConsoleViewContentType.SYSTEM_OUTPUT);
+//        StatusBar statusBar = WindowManager.getInstance().getStatusBar(consoleView.getProject());
+//        final StatusBarProgress statusBarProgress = new StatusBarProgress();
+//        statusBarProgress.start();
         return new StreamCopier.Listener() {
+            @Override
             public void reportProgress(long transferred) throws IOException {
-//                long percent = (transferred * 100) / size;
-//                consoleView.print(String.format("%s% \n\r", percent), ConsoleViewContentType.SYSTEM_OUTPUT);
+//                statusBarProgress.setText("test");
+//                float percent = (float) (transferred * 100) / size;
+//                statusBarProgress.setFraction(percent);
+//                consoleView.print(String.format("%s%%", percent), ConsoleViewContentType.SYSTEM_OUTPUT);
             }
         };
     }
