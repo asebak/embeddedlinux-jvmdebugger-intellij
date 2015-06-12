@@ -13,6 +13,8 @@ Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop
   - Custom Run and Debug configurations
   - Automatic Deployments to your target device using SSH and SFTP.
   - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi)
+  - Supports the Yocto Kernel 
+
 
 ### How To Use
 
