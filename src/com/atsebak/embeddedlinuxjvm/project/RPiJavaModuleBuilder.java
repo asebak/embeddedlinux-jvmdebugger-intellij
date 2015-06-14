@@ -31,6 +31,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestUtil;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -45,10 +47,8 @@ import java.util.regex.Pattern;
 public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     public static final ProjectType PI_PROJECT_TYPE = new ProjectType("PI_JAVA");
     private static final String PROJECT_NAME = "Raspberry PI";
-    private static final String PI4J_DOWNLOAD = "http://get.pi4j.com/download/";
-    private static final String PI4J_FILENAME = "pi4j-1.1-SNAPSHOT.zip";
-    private static final String PI4J_INSTALLPATH = "/opt/pi4j/lib";
     private String packageName;
+    @Nullable
     private File[] jarsToAdd;
 
     /**
@@ -82,30 +82,26 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
      * @param rootModel
      * @param project
      */
-    private void createProjectFiles(final ModifiableRootModel rootModel, final Project project) {
+    private void createProjectFiles(@NotNull final ModifiableRootModel rootModel,@NotNull final Project project) {
         ProjectUtils.runWhenInitialized(project, new DumbAwareRunnable() {
             public void run() {
-                String srcPath = project.getBasePath() + "/src";
-                String libPath = project.getBasePath() + "/lib";
-                try {
-                    //todo fix
-//                    VfsUtil.createDirectories(libPath);
-                    addJarFiles(libPath, rootModel.getModule());
-                    String[] directorysToMake = packageName.split(Pattern.quote("."));
-                    for (String directory : directorysToMake) {
+                String srcPath = project.getBasePath() + File.separator + "src";
+                addJarFiles(rootModel.getModule());
+                String[] directoriesToMake = packageName.split(Pattern.quote("."));
+                for (String directory : directoriesToMake) {
+                    try {
                         VfsUtil.createDirectories(srcPath + FileUtilities.separator + directory);
-                        srcPath += FileUtilities.separator + directory;
-                    }
-                } catch (IOException e) {
+                    } catch (IOException e) {
 
+                    }
+                    srcPath += FileUtilities.separator + directory;
                 }
                 Template.builder().name("main.ftl")
                         .classContext(this.getClass())
                         .outputFile(srcPath + FileUtilities.separator + "Main.java")
                         .data(new HashMap<String, Object>() {{
                             put("packagename", packageName);
-                        }})
-                        .build()
+                        }}).build()
                         .toFile();
                 ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
             }
@@ -200,31 +196,15 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
      * @param module
      * @throws ConfigurationException
      */
+    @SneakyThrows(IOException.class)
     @Override
     protected void setupModule(Module module) throws ConfigurationException {
         super.setupModule(module);
-        File pi4j = new File(PI4J_INSTALLPATH);
-
-        //user installed library already
-        if (pi4j.exists()) {
-            jarsToAdd = pi4j.listFiles();
-        } else {
-            try {
-                //download library
-                File pi4jZip = new File(System.getProperty("java.io.tmpdir") + FileUtilities.separator + PI4J_FILENAME);
-                if (!pi4jZip.exists()) {
-                    UrlDownloader.saveUrl(System.getProperty("java.io.tmpdir") + FileUtilities.separator + PI4J_FILENAME, PI4J_DOWNLOAD + PI4J_FILENAME);
-                }
-                //unzip to temp
-                String output = System.getProperty("java.io.tmpdir") + FileUtilities.separator + "pi4j";
-                File pi4jUnziped = new File(output);
-                if (!pi4jUnziped.exists()) {
-                    FileUtilities.unzip(pi4jZip.getPath(), output);
-                }
-                jarsToAdd = pi4jUnziped.listFiles();
-            } catch (IOException e) {
-            }
-        }
+        final String libPath = module.getProject().getBasePath() + File.separator + "lib";
+        VfsUtil.createDirectories(libPath);
+        File outputFiles = new File(libPath);
+        FileUtilities.unzip(getClass().getResourceAsStream("/pi4j.zip"), outputFiles.getAbsolutePath());
+        jarsToAdd = outputFiles.listFiles();
     }
 
     /**
@@ -236,23 +216,16 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
         return PI_PROJECT_TYPE;
     }
 
-    private void addJarFiles(String outputPath, Module module) {
+    private void addJarFiles(Module module) {
         if (jarsToAdd == null) {
             return;
         }
-        //todo fix
-//        for (final File fileEntry : jarsToAdd) {
-//            if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
-//                String jarLocation = outputPath + FileUtilities.separator;
-//                FileUtils.copyFile(fileEntry, new File(jarLocation + fileEntry.getName()));
-//            }
-//        }
+
         for (final File fileEntry : jarsToAdd) {
             if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
-                PsiTestUtil.addLibrary(module, "pi4j", fileEntry.getParentFile().getPath(), fileEntry.getName());
+                PsiTestUtil.addLibrary(module, fileEntry.getName(), fileEntry.getParentFile().getPath(), fileEntry.getName());
             }
         }
-        PsiTestUtil.addLibrary(module, outputPath);
     }
 
     /**

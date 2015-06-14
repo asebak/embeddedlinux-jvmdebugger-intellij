@@ -1,15 +1,21 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
-    <version>0.40</version>
+    <version>0.41</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
-    <p>Java Debugger for Embedded Systems that run on Embedded Linux</p>
+    <p>Java Debugger for Embedded Systems that run on Embedded Linux or on the <a href="https://www.yoctoproject.org/">Yocto Project Kernel</a></p>
     ]]></description>
 
   <change-notes><![CDATA[
-          <b>Version 0.40</b>
+        <b>Version 0.41</b>
+        <ul>
+            <li>
+                Fixed Raspberry PI Project Templates Generation
+            </li>
+        </ul>
+        <b>Version 0.40</b>
         <ul>
             <li>
                 Fixed the way java process gets terminated on remote target.
@@ -69,15 +75,5 @@
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
       <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
   </extensions>
-
-  <application-components>
-  </application-components>
-
-  <project-components>
-  </project-components>
-
-  <actions>
-  </actions>
-
 
 </idea-plugin>
