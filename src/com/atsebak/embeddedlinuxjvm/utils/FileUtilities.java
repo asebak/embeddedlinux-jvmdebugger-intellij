@@ -20,17 +20,17 @@ public class FileUtilities {
     /**
      * Unzips a file all into one directory
      *
-     * @param zipFile
+     * @param inputStream
      * @param outputFolder
      */
-    public static void unzip(String zipFile, String outputFolder) {
+    public static void unzip(InputStream inputStream, String outputFolder) {
         byte[] buffer = new byte[1024];
         try {
             File folder = new File(outputFolder);
             if (!folder.exists()) {
                 folder.mkdir();
             }
-            ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+            ZipInputStream zis = new ZipInputStream(inputStream);
             ZipEntry ze = zis.getNextEntry();
 
             while (ze != null) {
