@@ -117,7 +117,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
-        password.setText(new String(parameters.getPassword()));
+        password.setText(parameters.getPassword());
         sshStatus.setVisible(false);
     }
 
