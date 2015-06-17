@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(PowerMockRunner.class)
 public class EmbeddedLinuxJVMConfigurationTypeTest {
     private EmbeddedLinuxJVMConfigurationType configurationType = new EmbeddedLinuxJVMConfigurationType();
@@ -13,8 +16,8 @@ public class EmbeddedLinuxJVMConfigurationTypeTest {
     public void testSettings() throws Exception {
         String displayName = configurationType.getDisplayName();
         String description = configurationType.getConfigurationTypeDescription();
-        assert (displayName == "Embedded Linux JVM");
-        assert (description != null && description != "");
+        assertEquals(displayName, "Embedded Linux JVM");
+        assertTrue(description != null && !description.equals(""));
     }
 
 }
