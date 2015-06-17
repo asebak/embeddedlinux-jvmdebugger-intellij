@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class CommandLineTargetTest {
@@ -39,7 +40,7 @@ public class CommandLineTargetTest {
                 .parameters(javaParameters)
                 .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
                 .build().toString();
-        assert (runCommand.contains(String.format("sudo java -cp classes:lib/'*' %s", parameters.getMainclass())));
+        assertTrue(runCommand.contains(String.format("sudo java -cp classes:lib/'*' %s", parameters.getMainclass())));
     }
 
     @Test
@@ -49,6 +50,6 @@ public class CommandLineTargetTest {
                 .parameters(javaParameters)
                 .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
                 .build().toString();
-        assert (debugCommand.contains("sudo java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + parameters.getPort()));
+        assertTrue(debugCommand.contains("sudo java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + parameters.getPort()));
     }
 }
