@@ -37,10 +37,10 @@ public class SSHHandlerTarget {
     private SSH ssh;
 
     public List<DeployedLibrary> listAlreadyUploadedJars() throws IOException, RuntimeConfigurationException {
-        final String remoteDir = FileUtilities.separator + "home" + FileUtilities.separator
-                + piRunnerParameters.getUsername() + FileUtilities.separator + OUTPUT_LOCATION;
-        String path = remoteDir + FileUtilities.separator + consoleView.getProject().getName();
-        String deploymentPathJars = path + FileUtilities.separator + FileUtilities.LIB;
+        final String remoteDir = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR
+                + piRunnerParameters.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
+        String path = remoteDir + FileUtilities.SEPARATOR + consoleView.getProject().getName();
+        String deploymentPathJars = path + FileUtilities.SEPARATOR + FileUtilities.LIB;
         SSHClient ssh = this.ssh.toClient();
         connect(ssh);
         Session session = ssh.startSession();
@@ -83,9 +83,9 @@ public class SSHHandlerTarget {
      */
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        final String remoteDir = FileUtilities.separator + "home" + FileUtilities.separator
-                + piRunnerParameters.getUsername() + FileUtilities.separator + OUTPUT_LOCATION;
-        String deploymentPath = remoteDir + FileUtilities.separator + consoleView.getProject().getName();
+        final String remoteDir = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR
+                + piRunnerParameters.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
+        String deploymentPath = remoteDir + FileUtilities.SEPARATOR + consoleView.getProject().getName();
         genericUpload(deploymentPath, compileOutput);
         consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         runJavaApp(deploymentPath, cmd);
@@ -108,7 +108,7 @@ public class SSHHandlerTarget {
                         String.format("cd %s", path),
                         String.format("mkdir -p %s", FileUtilities.CLASSES),
                         String.format("mkdir -p %s", FileUtilities.LIB),
-                        String.format("cd %s", path + FileUtilities.separator + FileUtilities.CLASSES),
+                        String.format("cd %s", path + FileUtilities.SEPARATOR + FileUtilities.CLASSES),
                         "rm -rf *"
                 ))
                 .build()

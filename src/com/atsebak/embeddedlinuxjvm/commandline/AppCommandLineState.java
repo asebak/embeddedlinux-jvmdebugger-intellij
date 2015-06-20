@@ -203,27 +203,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                     public void run() {
                         try {
                             List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
-                            List<DeployedLibrary> targetLibraries = invokeFindDeployedJars();
-                            Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
-                            //todo improve based on last modified date, size, and the name of the file
-                            for (DeployedLibrary deployedLibrary : targetLibraries) {
-                                for (File hostFile : hostLibraries) {
-                                    if (deployedLibrary.getJarName().equals(hostFile.getName())) {
-                                        filesToDeploy.add(hostFile.getName());
-                                        break;
-                                    }
-                                }
-                            }
-
-                            //add files that do not exist on target
-                            List<File> newLibraries = new ArrayList<File>();
-                            for (File hostFile : hostLibraries) {
-                                if (!filesToDeploy.contains(hostFile.getName())) {
-                                    newLibraries.add(hostFile);
-                                }
-                            }
-
-                            File classpathArchive = FileUtilities.createClasspathArchive(newLibraries, project);
+                            File classpathArchive = FileUtilities.createClasspathArchive(deltaOfDeployedJars(hostLibraries), project);
                             invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
@@ -301,6 +281,35 @@ public class AppCommandLineState extends JavaCommandLineState {
                         .timeout(30000)
                         .build()).build();
         return target.listAlreadyUploadedJars();
+    }
+
+    /**
+     * Gets the delta of jars between host and target machines
+     *
+     * @param hostLibraries
+     * @return targetLibraries
+     */
+    private List<File> deltaOfDeployedJars(List<File> hostLibraries) throws IOException, RuntimeConfigurationException {
+        List<DeployedLibrary> targetLibraries = invokeFindDeployedJars();
+        Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
+        //todo improve based on last modified date, size, and the name of the file and not just the filename
+        for (DeployedLibrary deployedLibrary : targetLibraries) {
+            for (File hostFile : hostLibraries) {
+                if (deployedLibrary.getJarName().equals(hostFile.getName())) {
+                    filesToDeploy.add(hostFile.getName());
+                    break;
+                }
+            }
+        }
+
+        //add files that do not exist on target
+        List<File> newLibraries = new ArrayList<File>();
+        for (File hostFile : hostLibraries) {
+            if (!filesToDeploy.contains(hostFile.getName())) {
+                newLibraries.add(hostFile);
+            }
+        }
+        return newLibraries;
     }
 
     /**

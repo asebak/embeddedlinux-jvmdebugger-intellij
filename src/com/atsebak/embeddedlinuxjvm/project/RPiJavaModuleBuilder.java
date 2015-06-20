@@ -1,11 +1,10 @@
 package com.atsebak.embeddedlinuxjvm.project;
 
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
+import com.atsebak.embeddedlinuxjvm.ui.PIJavaModuleStep;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.ProjectUtils;
 import com.atsebak.embeddedlinuxjvm.utils.Template;
-import com.atsebak.embeddedlinuxjvm.utils.UrlDownloader;
-import com.atsebak.embeddedlinuxjvm.ui.PIJavaModuleStep;
 import com.google.common.io.Files;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
@@ -90,15 +89,15 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
                 String[] directoriesToMake = packageName.split(Pattern.quote("."));
                 for (String directory : directoriesToMake) {
                     try {
-                        VfsUtil.createDirectories(srcPath + FileUtilities.separator + directory);
+                        VfsUtil.createDirectories(srcPath + FileUtilities.SEPARATOR + directory);
                     } catch (IOException e) {
 
                     }
-                    srcPath += FileUtilities.separator + directory;
+                    srcPath += FileUtilities.SEPARATOR + directory;
                 }
                 Template.builder().name("main.ftl")
                         .classContext(this.getClass())
-                        .outputFile(srcPath + FileUtilities.separator + "Main.java")
+                        .outputFile(srcPath + FileUtilities.SEPARATOR + "Main.java")
                         .data(new HashMap<String, Object>() {{
                             put("packagename", packageName);
                         }}).build()

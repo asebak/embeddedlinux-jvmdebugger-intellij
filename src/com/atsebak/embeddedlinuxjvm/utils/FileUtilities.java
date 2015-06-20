@@ -17,7 +17,7 @@ public class FileUtilities {
 
     public static final String LIB = "lib";
     public static final String CLASSES = "classes";
-    public static final String separator = "/";
+    public static final String SEPARATOR = "/";
 
     /**
      * Unzips a file all into one directory
@@ -42,7 +42,7 @@ public class FileUtilities {
                     continue;
                 }
                 fileName = new File(fileName).getName();
-                File newFile = new File(outputFolder + FileUtilities.separator + fileName);
+                File newFile = new File(outputFolder + FileUtilities.SEPARATOR + fileName);
                 new File(newFile.getParent()).mkdirs();
 
                 FileOutputStream fos = new FileOutputStream(newFile);
@@ -115,7 +115,7 @@ public class FileUtilities {
     private static void writeClassPath(LinkedList<String> pathElements, File entry, TarArchiveOutputStream archiveOutputStream) throws IOException {
         if (entry.isFile()) {
             archiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + FileUtilities.separator + entry.getName()));
+            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + FileUtilities.SEPARATOR + entry.getName()));
             copy(entry, archiveOutputStream);
             archiveOutputStream.closeArchiveEntry();
         } else {
@@ -156,20 +156,11 @@ public class FileUtilities {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < pathElements.size(); i++) {
             if (i != 0) {
-                buf.append(FileUtilities.separator);
+                buf.append(FileUtilities.SEPARATOR);
             }
             buf.append(pathElements.get(i));
         }
         return buf.toString();
     }
 
-    public static String toNumInUnits(long bytes) {
-        int u = 0;
-        for (; bytes > 1024 * 1024; bytes >>= 10) {
-            u++;
-        }
-        if (bytes > 1024)
-            u++;
-        return String.format("%.1f %cB", bytes / 1024f, " kMGTPE".charAt(u));
-    }
 }
