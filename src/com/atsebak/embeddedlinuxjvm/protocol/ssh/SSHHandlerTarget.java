@@ -2,6 +2,7 @@ package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
+import com.atsebak.embeddedlinuxjvm.deploy.DeployedLibrary;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
@@ -11,16 +12,21 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import lombok.Builder;
+import lombok.SneakyThrows;
 import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.common.StreamCopier;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.xfer.FileSystemFile;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Builder
 public class SSHHandlerTarget {
@@ -29,6 +35,44 @@ public class SSHHandlerTarget {
     private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private SSH ssh;
+
+    public List<DeployedLibrary> listAlreadyUploadedJars() throws IOException, RuntimeConfigurationException {
+        final String remoteDir = FileUtilities.separator + "home" + FileUtilities.separator
+                + piRunnerParameters.getUsername() + FileUtilities.separator + OUTPUT_LOCATION;
+        String path = remoteDir + FileUtilities.separator + consoleView.getProject().getName();
+        String deploymentPathJars = path + FileUtilities.separator + FileUtilities.LIB;
+        SSHClient ssh = this.ssh.toClient();
+        connect(ssh);
+        Session session = ssh.startSession();
+        String cmd = LinuxCommand.builder().commands(
+                Arrays.asList(
+                        String.format("cd %s", deploymentPathJars),
+                        "du -h --max-depth=0 * --time"
+                ))
+                .build()
+                .toString();
+        List<DeployedLibrary> libraries = new ArrayList<DeployedLibrary>();
+        try {
+            Session.Command exec = session.exec(cmd);
+            String files = IOUtils.readFully(exec.getInputStream()).toString();
+            if (StringUtils.isNotBlank(files)) {
+                String[] unparsedFiles = files.split("\\r?\\n");
+                for (int i = 0; i < unparsedFiles.length; i++) {
+                    String[] splitDescription = unparsedFiles[i].split("\t");
+                    libraries.add(DeployedLibrary.builder()
+                            .size(splitDescription[0])
+                            .lastModified(splitDescription[1])
+                            .jarName(splitDescription[2])
+                            .build());
+                }
+            }
+        } finally {
+            session.close();
+            ssh.disconnect();
+        }
+
+        return libraries;
+    }
 
     /** Uploads Java application output folders
      * @param compileOutput Output directory folder where to store the java application
@@ -62,6 +106,9 @@ public class SSHHandlerTarget {
                 Arrays.asList(
                         String.format("mkdir -p %s", path),
                         String.format("cd %s", path),
+                        String.format("mkdir -p %s", FileUtilities.CLASSES),
+                        String.format("mkdir -p %s", FileUtilities.LIB),
+                        String.format("cd %s", path + FileUtilities.separator + FileUtilities.CLASSES),
                         "rm -rf *"
                 ))
                 .build()
@@ -127,7 +174,8 @@ public class SSHHandlerTarget {
      * @throws IOException
      * @throws RuntimeConfigurationException
      */
-    private void connect(SSHClient client) throws IOException, RuntimeConfigurationException {
+    @SneakyThrows({IOException.class, RuntimeConfigurationException.class})
+    private void connect(SSHClient client) {
         if (!client.isAuthenticated()) {
             client.connect(piRunnerParameters.getHostname());
             client.authPassword(piRunnerParameters.getUsername(), piRunnerParameters.getPassword());

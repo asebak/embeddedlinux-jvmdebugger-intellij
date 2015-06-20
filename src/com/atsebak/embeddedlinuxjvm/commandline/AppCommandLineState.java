@@ -2,6 +2,7 @@ package com.atsebak.embeddedlinuxjvm.commandline;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
+import com.atsebak.embeddedlinuxjvm.deploy.DeployedLibrary;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
@@ -47,9 +48,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class AppCommandLineState extends JavaCommandLineState {
     @NonNls
@@ -203,8 +202,28 @@ public class AppCommandLineState extends JavaCommandLineState {
                     @Override
                     public void run() {
                         try {
-                            List<File> files = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
-                            File classpathArchive = FileUtilities.createClasspathArchive(files, project);
+                            List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
+                            List<DeployedLibrary> targetLibraries = invokeFindDeployedJars();
+                            Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
+                            //todo improve based on last modified date, size, and the name of the file
+                            for (DeployedLibrary deployedLibrary : targetLibraries) {
+                                for (File hostFile : hostLibraries) {
+                                    if (deployedLibrary.getJarName().equals(hostFile.getName())) {
+                                        filesToDeploy.add(hostFile.getName());
+                                        break;
+                                    }
+                                }
+                            }
+
+                            //add files that do not exist on target
+                            List<File> newLibraries = new ArrayList<File>();
+                            for (File hostFile : hostLibraries) {
+                                if (!filesToDeploy.contains(hostFile.getName())) {
+                                    newLibraries.add(hostFile);
+                                }
+                            }
+
+                            File classpathArchive = FileUtilities.createClasspathArchive(newLibraries, project);
                             invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
@@ -268,6 +287,20 @@ public class AppCommandLineState extends JavaCommandLineState {
                                 .timeout(30000)
                                 .build()).build()).build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
+    }
+
+    /**
+     * Gets deployed jars
+     */
+    private List<DeployedLibrary> invokeFindDeployedJars() throws IOException, RuntimeConfigurationException {
+        EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters = configuration.getRunnerParameters();
+        SSHHandlerTarget target = SSHHandlerTarget.builder().piRunnerParameters(runnerParameters)
+                .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
+                .ssh(SSH.builder()
+                        .connectionTimeout(30000)
+                        .timeout(30000)
+                        .build()).build();
+        return target.listAlreadyUploadedJars();
     }
 
     /**

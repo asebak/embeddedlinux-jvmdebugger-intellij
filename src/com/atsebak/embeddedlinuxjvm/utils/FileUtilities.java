@@ -15,7 +15,9 @@ import java.util.zip.ZipInputStream;
 
 public class FileUtilities {
 
-    public static String separator = "/";
+    public static final String LIB = "lib";
+    public static final String CLASSES = "classes";
+    public static final String separator = "/";
 
     /**
      * Unzips a file all into one directory
@@ -83,10 +85,10 @@ public class FileUtilities {
             LinkedList<String> pathElements = new LinkedList<String>();
             for (File f : classpathEntries) {
                 if (f.isFile()) { //is a jar file
-                    pathElements.addLast("lib");
+                    pathElements.addLast(LIB);
                     writeClassPath(pathElements, f, archiveOutputStream);
                 } else {
-                    pathElements.addLast("classes");  // is output of the project
+                    pathElements.addLast(CLASSES);  // is output of the project
                     for (File child : f.listFiles()) {
                         writeClassPath(pathElements, child, archiveOutputStream);
                     }
@@ -159,5 +161,15 @@ public class FileUtilities {
             buf.append(pathElements.get(i));
         }
         return buf.toString();
+    }
+
+    public static String toNumInUnits(long bytes) {
+        int u = 0;
+        for (; bytes > 1024 * 1024; bytes >>= 10) {
+            u++;
+        }
+        if (bytes > 1024)
+            u++;
+        return String.format("%.1f %cB", bytes / 1024f, " kMGTPE".charAt(u));
     }
 }

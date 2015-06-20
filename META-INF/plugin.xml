@@ -14,6 +14,9 @@
             <li>
                 Fixed Null pointer exception on startup after adding run configuration.
             </li>
+            <li>
+                Smarter deployment algorithm to not deploy libs that already exist on target device.
+            </li>
         </ul>
         <b>Version 0.41</b>
         <ul>
