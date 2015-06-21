@@ -36,6 +36,13 @@ public class SSHHandlerTarget {
     private EmbeddedLinuxJVMConsoleView consoleView;
     private SSH ssh;
 
+    /**
+     * Can get this information from the IDE
+     *
+     * @return
+     * @throws IOException
+     * @throws RuntimeConfigurationException
+     */
     public List<DeployedLibrary> listAlreadyUploadedJars() throws IOException, RuntimeConfigurationException {
         final String remoteDir = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR
                 + piRunnerParameters.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;

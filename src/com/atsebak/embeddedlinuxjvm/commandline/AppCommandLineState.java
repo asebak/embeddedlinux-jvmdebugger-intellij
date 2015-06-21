@@ -2,13 +2,13 @@ package com.atsebak.embeddedlinuxjvm.commandline;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
-import com.atsebak.embeddedlinuxjvm.deploy.DeployedLibrary;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
+import com.atsebak.embeddedlinuxjvm.services.ClasspathService;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.RemoteCommandLineBuilder;
 import com.intellij.execution.*;
@@ -25,6 +25,7 @@ import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -48,7 +49,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class AppCommandLineState extends JavaCommandLineState {
     @NonNls
@@ -202,8 +205,9 @@ public class AppCommandLineState extends JavaCommandLineState {
                     @Override
                     public void run() {
                         try {
+                            ClasspathService service = ServiceManager.getService(project, ClasspathService.class);
                             List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
-                            File classpathArchive = FileUtilities.createClasspathArchive(deltaOfDeployedJars(hostLibraries), project);
+                            File classpathArchive = FileUtilities.createClasspathArchive(service.deltaOfDeployedJars(hostLibraries), project);
                             invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
@@ -269,48 +273,6 @@ public class AppCommandLineState extends JavaCommandLineState {
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }
 
-    /**
-     * Gets deployed jars
-     */
-    private List<DeployedLibrary> invokeFindDeployedJars() throws IOException, RuntimeConfigurationException {
-        EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters = configuration.getRunnerParameters();
-        SSHHandlerTarget target = SSHHandlerTarget.builder().piRunnerParameters(runnerParameters)
-                .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                .ssh(SSH.builder()
-                        .connectionTimeout(30000)
-                        .timeout(30000)
-                        .build()).build();
-        return target.listAlreadyUploadedJars();
-    }
-
-    /**
-     * Gets the delta of jars between host and target machines
-     *
-     * @param hostLibraries
-     * @return targetLibraries
-     */
-    private List<File> deltaOfDeployedJars(List<File> hostLibraries) throws IOException, RuntimeConfigurationException {
-        List<DeployedLibrary> targetLibraries = invokeFindDeployedJars();
-        Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
-        //todo improve based on last modified date, size, and the name of the file and not just the filename
-        for (DeployedLibrary deployedLibrary : targetLibraries) {
-            for (File hostFile : hostLibraries) {
-                if (deployedLibrary.getJarName().equals(hostFile.getName())) {
-                    filesToDeploy.add(hostFile.getName());
-                    break;
-                }
-            }
-        }
-
-        //add files that do not exist on target
-        List<File> newLibraries = new ArrayList<File>();
-        for (File hostFile : hostLibraries) {
-            if (!filesToDeploy.contains(hostFile.getName())) {
-                newLibraries.add(hostFile);
-            }
-        }
-        return newLibraries;
-    }
 
     /**
      * Creates debugging settings for server

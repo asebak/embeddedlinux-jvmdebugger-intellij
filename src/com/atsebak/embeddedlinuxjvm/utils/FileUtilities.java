@@ -42,7 +42,7 @@ public class FileUtilities {
                     continue;
                 }
                 fileName = new File(fileName).getName();
-                File newFile = new File(outputFolder + FileUtilities.SEPARATOR + fileName);
+                File newFile = new File(outputFolder + SEPARATOR + fileName);
                 new File(newFile.getParent()).mkdirs();
 
                 FileOutputStream fos = new FileOutputStream(newFile);
@@ -115,7 +115,7 @@ public class FileUtilities {
     private static void writeClassPath(LinkedList<String> pathElements, File entry, TarArchiveOutputStream archiveOutputStream) throws IOException {
         if (entry.isFile()) {
             archiveOutputStream.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + FileUtilities.SEPARATOR + entry.getName()));
+            archiveOutputStream.putArchiveEntry(new TarArchiveEntry(entry, getPath(pathElements) + SEPARATOR + entry.getName()));
             copy(entry, archiveOutputStream);
             archiveOutputStream.closeArchiveEntry();
         } else {
@@ -156,7 +156,7 @@ public class FileUtilities {
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < pathElements.size(); i++) {
             if (i != 0) {
-                buf.append(FileUtilities.SEPARATOR);
+                buf.append(SEPARATOR);
             }
             buf.append(pathElements.get(i));
         }

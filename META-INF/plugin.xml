@@ -83,6 +83,9 @@
       <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
       <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
+
+      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.services.ClasspathService"
+                      serviceInterface="com.atsebak.embeddedlinuxjvm.services.ClasspathService"/>
   </extensions>
 
 </idea-plugin>
