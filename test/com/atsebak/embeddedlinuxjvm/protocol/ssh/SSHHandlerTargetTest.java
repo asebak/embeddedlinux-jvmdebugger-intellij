@@ -114,7 +114,7 @@ public class SSHHandlerTargetTest {
     @Test
     public void verifyJavaCommands() throws IOException, RuntimeConfigurationException, ClassNotFoundException {
         final String path = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR + "ahmad" + FileUtilities.SEPARATOR + "IdeaProjects" + FileUtilities.SEPARATOR + "untitled";
-        final String commandToBeExecuted = "mkdir -p " + path + "; " + "cd " + path + "; rm -rf *;";
+        final String commandToBeExecuted = "mkdir -p " + path + "; " + "cd " + path + "; mkdir -p classes; mkdir -p lib; " + "cd " + path + FileUtilities.SEPARATOR + FileUtilities.CLASSES + "; rm -rf *;";
         Mockito.when(sshClient.isAuthenticated()).thenReturn(true);
         Mockito.when(project.getName()).thenReturn("untitled");
         Mockito.when(sshClient.isConnected()).thenReturn(true);

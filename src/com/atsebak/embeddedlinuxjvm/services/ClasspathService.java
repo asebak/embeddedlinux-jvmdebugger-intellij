@@ -35,7 +35,7 @@ public class ClasspathService {
      * @param hostLibraries
      * @return targetLibraries
      */
-    public List<File> deltaOfDeployedJars(List<File> hostLibraries) throws IOException, RuntimeConfigurationException {
+    public List<File> deltaOfDeployedJars(List<File> hostLibraries) {
         List<File> newLibraries = new ArrayList<File>();
         for (File hostFile : hostLibraries) {
             if (!hostFile.getName().contains("jar")) {
