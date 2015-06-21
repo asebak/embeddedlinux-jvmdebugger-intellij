@@ -5,5 +5,5 @@ public class Notifications {
     /**
      * ID for notifications
      */
-    public static final String GROUPDISPLAY_ID = "Raspbery PI Notifications";
+    public static final String GROUPDISPLAY_ID = "EmbeddedLinux JVM Notifications";
 }

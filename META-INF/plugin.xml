@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
-    <version>0.42</version>
+    <version>0.45</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,10 +9,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-        <b>Version 0.42</b>
+        <b>Version 0.45</b>
         <ul>
             <li>
                 Fixed Null pointer exception on startup after adding run configuration.
+            </li>
+            <li>
+                Smarter deployment algorithm to not deploy libs that already exist on target device.
             </li>
         </ul>
         <b>Version 0.41</b>
@@ -80,6 +83,9 @@
       <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
       <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
+
+      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.services.ClasspathService"
+                      serviceInterface="com.atsebak.embeddedlinuxjvm.services.ClasspathService"/>
   </extensions>
 
 </idea-plugin>

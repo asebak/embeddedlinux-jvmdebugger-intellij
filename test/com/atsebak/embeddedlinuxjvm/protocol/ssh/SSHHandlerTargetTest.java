@@ -5,7 +5,6 @@ import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfiguration
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -26,7 +25,6 @@ import java.io.IOException;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 public class SSHHandlerTargetTest {
@@ -103,7 +101,7 @@ public class SSHHandlerTargetTest {
         Mockito.when(project.getName()).thenReturn("untitled");
         target.uploadAndRunJavaApp(sampleFile, "java -jar");
         Mockito.verify(sftpClient).put(any(FileSystemFile.class),
-                eq(FileUtilities.separator + "home" + FileUtilities.separator + "ahmad" + FileUtilities.separator + "IdeaProjects" + FileUtilities.separator + "untitled"));
+                eq(FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR + "ahmad" + FileUtilities.SEPARATOR + "IdeaProjects" + FileUtilities.SEPARATOR + "untitled"));
         Mockito.verify(sshClient).disconnect();
         Mockito.verify(sshClient, times(2)).startSession();
 
@@ -115,8 +113,8 @@ public class SSHHandlerTargetTest {
 
     @Test
     public void verifyJavaCommands() throws IOException, RuntimeConfigurationException, ClassNotFoundException {
-        final String path = FileUtilities.separator + "home" + FileUtilities.separator + "ahmad" + FileUtilities.separator + "IdeaProjects" + FileUtilities.separator + "untitled";
-        final String commandToBeExecuted = "mkdir -p " + path + "; " + "cd " + path + "; rm -rf *;";
+        final String path = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR + "ahmad" + FileUtilities.SEPARATOR + "IdeaProjects" + FileUtilities.SEPARATOR + "untitled";
+        final String commandToBeExecuted = "mkdir -p " + path + "; " + "cd " + path + "; mkdir -p classes; mkdir -p lib; " + "cd " + path + FileUtilities.SEPARATOR + FileUtilities.CLASSES + "; rm -rf *;";
         Mockito.when(sshClient.isAuthenticated()).thenReturn(true);
         Mockito.when(project.getName()).thenReturn("untitled");
         Mockito.when(sshClient.isConnected()).thenReturn(true);
