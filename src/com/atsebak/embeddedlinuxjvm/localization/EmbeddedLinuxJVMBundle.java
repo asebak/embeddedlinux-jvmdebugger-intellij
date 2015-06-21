@@ -27,7 +27,7 @@ import java.util.ResourceBundle;
 /**
  * The bundle for PI messages
  */
-public class EmbeddedLinuxJVMBundle {
+public final class EmbeddedLinuxJVMBundle {
 
     @NonNls
     private static final String BUNDLE = "com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle";

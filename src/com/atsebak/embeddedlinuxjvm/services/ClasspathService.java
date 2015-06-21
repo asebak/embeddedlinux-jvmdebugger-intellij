@@ -13,19 +13,21 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ClasspathService {
     @NotNull
     private final Project project;
-    private List<File> previousDeployFiles;
+    private List<File> previousLibraries;
 
     /**
-     * Clear up static file list of deployments
+     * IntelliJ Service Injected
      */
     public ClasspathService(@NotNull Project project) {
         this.project = project;
-        previousDeployFiles = new ArrayList<File>();
+        previousLibraries = new ArrayList<File>();
     }
 
     /**
@@ -36,16 +38,16 @@ public class ClasspathService {
      * @return targetLibraries
      */
     public List<File> deltaOfDeployedJars(List<File> hostLibraries) {
-        List<File> newLibraries = new ArrayList<File>();
+        List<File> targetLibraries = new ArrayList<File>();
         for (File hostFile : hostLibraries) {
             if (!hostFile.getName().contains("jar")) {
-                newLibraries.add(hostFile);
-            } else if (!previousDeployFiles.contains(hostFile)) {
-                newLibraries.add(hostFile);
+                targetLibraries.add(hostFile);
+            } else if (!previousLibraries.contains(hostFile)) {
+                targetLibraries.add(hostFile);
             }
         }
-        previousDeployFiles = hostLibraries;
-        return newLibraries;
+        previousLibraries = hostLibraries;
+        return targetLibraries;
     }
 
     /**
@@ -57,7 +59,7 @@ public class ClasspathService {
      * @deprecated use deltaOfDeployedJars instead
      */
     @Deprecated
-    public List<DeployedLibrary> invokeFindDeployedJars(EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters)
+    public List<File> invokeFindDeployedJars(List<File> hostLibraries, EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters)
             throws IOException, RuntimeConfigurationException {
         SSHHandlerTarget target = SSHHandlerTarget.builder().piRunnerParameters(runnerParameters)
                 .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
@@ -65,6 +67,27 @@ public class ClasspathService {
                         .connectionTimeout(30000)
                         .timeout(30000)
                         .build()).build();
-        return target.listAlreadyUploadedJars();
+
+        List<DeployedLibrary> targetLibraries = target.listAlreadyUploadedJars();
+
+        Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
+        //todo improve based on last modified date, size, and the name of the file and not just the filename
+        for (DeployedLibrary deployedLibrary : targetLibraries) {
+            for (File hostFile : hostLibraries) {
+                if (deployedLibrary.getJarName().equals(hostFile.getName())) {
+                    filesToDeploy.add(hostFile.getName());
+                    break;
+                }
+            }
+        }
+
+        //add files that do not exist on target
+        List<File> newLibraries = new ArrayList<File>();
+        for (File hostFile : hostLibraries) {
+            if (!filesToDeploy.contains(hostFile.getName())) {
+                newLibraries.add(hostFile);
+            }
+        }
+        return newLibraries;
     }
 }

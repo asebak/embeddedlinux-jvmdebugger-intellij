@@ -4,6 +4,7 @@ import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration
 import com.intellij.execution.configurations.JavaParameters;
 import lombok.Builder;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class CommandLineTarget {
      *
      * @param cmdBuf
      */
-    private void addArguments(StringBuilder cmdBuf) {
+    private void addArguments(@NotNull StringBuilder cmdBuf) {
         for (String arg : parameters.getProgramParametersList().getParameters()) {
             if (!arg.contains("transport=dt_socket") && StringUtils.isNotBlank(arg)) {
                 cmdBuf.append(' ').append(arg.trim());
@@ -50,7 +51,7 @@ public class CommandLineTarget {
      *
      * @param cmdBuf
      */
-    private void addMainType(StringBuilder cmdBuf) {
+    private void addMainType(@NotNull StringBuilder cmdBuf) {
         cmdBuf.append(" ").append(parameters.getMainClass()).append(" ");
     }
 
@@ -59,7 +60,7 @@ public class CommandLineTarget {
      *
      * @param cmdBuf
      */
-    private void addClasspath(StringBuilder cmdBuf) {
+    private void addClasspath(@NotNull StringBuilder cmdBuf) {
         cmdBuf.append(" -cp classes:lib/'*' ");
     }
 
@@ -67,7 +68,7 @@ public class CommandLineTarget {
      * Adds Virtual Machine Arguments
      * @param cmdBuf
      */
-    private void addVMArguments(StringBuilder cmdBuf) {
+    private void addVMArguments(@NotNull StringBuilder cmdBuf) {
         if (isDebugging) {
             //debugging with the port this is added on the remote device command line
             cmdBuf.append("-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" +
@@ -84,7 +85,7 @@ public class CommandLineTarget {
      * Adds debug options
      * @param cmdBuf
      */
-    private void addDebugOptions(StringBuilder cmdBuf) {
+    private void addDebugOptions(@NotNull StringBuilder cmdBuf) {
         if (!parameters.getProgramParametersList().getParameters().isEmpty()) {
             for (String arg : parameters.getProgramParametersList().getParameters()) {
                 cmdBuf.append(' ').append(arg.trim());
@@ -97,7 +98,7 @@ public class CommandLineTarget {
      *
      * @param cmdBuf
      */
-    private void addEnvironmentVariables(StringBuilder cmdBuf) {
+    private void addEnvironmentVariables(@NotNull StringBuilder cmdBuf) {
         cmdBuf.append(" ");
         for (Map.Entry<String, String> entry : parameters.getEnv().entrySet()) {
             String value = entry.getValue().replaceAll("\"", "\\\"");
@@ -110,7 +111,7 @@ public class CommandLineTarget {
      * Adds the sudo user to command
      * @param cmdBuf
      */
-    private void addRunAsRootOption(StringBuilder cmdBuf) {
+    private void addRunAsRootOption(@NotNull StringBuilder cmdBuf) {
         if (embeddedLinuxJVMRunConfiguration.getRunnerParameters().isRunAsRoot()) {
             cmdBuf.append(" sudo ");
         }
