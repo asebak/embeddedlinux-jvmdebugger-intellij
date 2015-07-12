@@ -1,4 +1,4 @@
-Embedded Linux JVM Debugger
+Embedded Linux & Yocto Project Kernel JVM Debugger
 =============================
 [![Build Status](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij.svg?branch=master)](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij)
 
@@ -8,12 +8,13 @@ https://plugins.jetbrains.com/plugin/7738
 
 ![alt text][logo]
 
-Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop Java apps for embedded systems running on Embedded Linux or on the Yocto Kernel.
+Embedded Linux JVM Debugger is a Plugin for IntelliJ that makes it easier to develop Embedded Java applications for embedded systems running on Embedded Linux or on the Yocto Kernel.  It easily integrates with platforms like raspberry pi, ARM microprocessor boards, intel x86 boards, etc.
 
-  - Custom Run and Debug configurations
-  - Automatic Deployments to your target device using SSH and SFTP.
-  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi)
-  - Supports the Yocto Kernel (You need the Meta Board Support Package Receipe For Java)
+  - Supports Java 6+ with VM arguments and program paramaters
+  - Custom Run and Debug configurations for your hardware board.
+  - Automatic rapid deployment to your target device using SSH and SFTP using a delta algorithm for your external jars.
+  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi).
+  - Supports Yocto Project (You need the Receipe For Java and the Board Support Package Implementation for your H/W board).
 
 
 ### How To Use
@@ -24,7 +25,7 @@ Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop
 
 - Enter in required configurations (username, password, hostname) note: Enable sudo if you require GPIO access. Debug port can be anything that's not reserved.
 
-- Run it on your Hardware running Embedded Linux
+- Run it on your Hardware running Embedded Linux.
 
 ### Checking out and Building
 
