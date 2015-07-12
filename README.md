@@ -8,7 +8,7 @@ https://plugins.jetbrains.com/plugin/7738
 
 ![alt text][logo]
 
-Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop Java apps for embedded systems running on Embedded Linux.
+Embedded Linux JVM Debugger is a Plugin for IDEA that makes it easier to develop Java apps for embedded systems running on Embedded Linux or on the Yocto Kernel.
 
   - Custom Run and Debug configurations
   - Automatic Deployments to your target device using SSH and SFTP.
