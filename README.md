@@ -45,11 +45,11 @@ $ sudo sh ./ci-build.sh
 
 If you want to contribute and add functionality, make sure to add unit tests if they are needed.
 
-[overviewlogo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/resources/documentation/embeddedlinuxjvm.png
+[overviewlogo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/embeddedlinuxjvm.png
 "Overview"
 
-[logo]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/resources/documentation/sample1.png
+[logo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/sample1.png
 "Sample Build Output"
 
-[config]: https://raw.githubusercontent.com/asebak/raspberrypi-intellij/master/resources/documentation/sample2.png
+[config]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/sample2.png
 "Sample Run Configuration"
