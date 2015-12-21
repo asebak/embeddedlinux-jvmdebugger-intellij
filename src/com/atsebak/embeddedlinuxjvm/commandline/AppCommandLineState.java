@@ -40,9 +40,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
-import net.schmizz.sshj.connection.ConnectionException;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.transport.TransportException;
+import com.jcraft.jsch.Session;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -134,15 +132,14 @@ public class AppCommandLineState extends JavaCommandLineState {
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
-                    if(isDebugMode) {
-                        //todo fix tcp connection closing issue
+                    if (isDebugMode) {
+                        //todo fix tcp connection closing issue random error message showing up
                     }
-                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(project).getCommand();
-                    if(command != null) {
-                        command.close();
+                    Session session = EmbeddedLinuxJVMConsoleView.getInstance(project).getSession();
+                    if (session != null) {
+                        session.disconnect();
                     }
-                } catch (ConnectionException e) {
-                } catch (TransportException e) {
+                } catch (Exception e) {
                 }
             }
 

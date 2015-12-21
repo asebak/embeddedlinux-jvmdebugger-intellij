@@ -19,7 +19,7 @@ import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import net.schmizz.sshj.connection.channel.direct.Session;
+import com.jcraft.jsch.Session;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,25 +34,13 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
     private final Project project;
 
     @Nullable
-    private Session.Command command;
+    private Session session;
 
     @NotNull
     private ConsoleViewImpl consoleView;
 
     @NotNull
     private JPanel myConsolePanel = new JPanel();
-
-    /**
-     * Gets the Console View
-     * @return
-     */
-    @NotNull
-    public ConsoleViewImpl getConsoleView(boolean isNew) {
-        if(isNew) {
-            consoleView = new ConsoleViewImpl(project, false);
-        }
-        return consoleView;
-    }
 
     public EmbeddedLinuxJVMConsoleView(@NotNull Project project) {
         this.project = project;
@@ -83,6 +71,18 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
             }
         }
         return false;
+    }
+
+    /**
+     * Gets the Console View
+     * @return
+     */
+    @NotNull
+    public ConsoleViewImpl getConsoleView(boolean isNew) {
+        if (isNew) {
+            consoleView = new ConsoleViewImpl(project, false);
+        }
+        return consoleView;
     }
 
     public Project getProject() {
@@ -149,20 +149,12 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
     public void dispose() {
     }
 
-    /**
-     * Get Command
-     * @return
-     */
-    @Nullable
-    public Session.Command getCommand() {
-        return command;
+    public Session getSession() {
+        return session;
     }
 
-    /**
-     * Set command
-     * @param command
-     */
-    public void setCommand(@Nullable Session.Command command) {
-        this.command = command;
+    public void setSession(Session session) {
+        this.session = session;
     }
+
 }
