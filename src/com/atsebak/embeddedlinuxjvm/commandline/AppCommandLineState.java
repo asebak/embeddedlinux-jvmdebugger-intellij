@@ -4,8 +4,8 @@ import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.services.ClasspathService;
@@ -266,10 +266,12 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                        .ssh(SSH.builder()
-                                .connectionTimeout(30000)
-                                .timeout(30000)
-                                .build()).build()).build();
+                        .ssh(EmbeddedSSHClient.builder()
+                                .hostname(runnerParameters.getHostname())
+                                .password(runnerParameters.getPassword())
+                                .username(runnerParameters.getUsername()).build())
+                        .build())
+                .build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }
 

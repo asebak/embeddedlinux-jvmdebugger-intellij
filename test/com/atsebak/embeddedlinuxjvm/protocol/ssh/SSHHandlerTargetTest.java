@@ -1,6 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.times;
 @RunWith(PowerMockRunner.class)
 public class SSHHandlerTargetTest {
 
-    SSH ssh = Mockito.mock(SSH.class);
+    EmbeddedSSHClient ssh = Mockito.mock(EmbeddedSSHClient.class);
     SSHClient sshClient = Mockito.mock(SSHClient.class);
     EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters = Mockito.mock(EmbeddedLinuxJVMRunConfigurationRunnerParameters.class);
     EmbeddedLinuxJVMConsoleView consoleView = Mockito.mock(EmbeddedLinuxJVMConsoleView.class);
@@ -46,7 +47,7 @@ public class SSHHandlerTargetTest {
     SFTPFileTransfer sftpFileTransfer = Mockito.mock(SFTPFileTransfer.class);
     @Before
     public void setup() throws IOException {
-        Mockito.when(ssh.toClient()).thenReturn(sshClient);
+//        Mockito.when(ssh.toClient()).thenReturn(sshClient); todo fix test probably
         Mockito.when(consoleView.getProject()).thenReturn(project);
         Mockito.when(sshClient.newSFTPClient()).thenReturn(sftpClient);
         Mockito.when(sshClient.startSession()).thenReturn(session);

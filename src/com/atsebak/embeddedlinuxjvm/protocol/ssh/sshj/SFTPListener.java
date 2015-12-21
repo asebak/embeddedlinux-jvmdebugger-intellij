@@ -1,4 +1,4 @@
-package com.atsebak.embeddedlinuxjvm.protocol.ssh;
+package com.atsebak.embeddedlinuxjvm.protocol.ssh.sshj;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;

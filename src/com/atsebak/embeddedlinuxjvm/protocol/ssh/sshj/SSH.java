@@ -1,4 +1,4 @@
-package com.atsebak.embeddedlinuxjvm.protocol.ssh;
+package com.atsebak.embeddedlinuxjvm.protocol.ssh.sshj;
 
 import lombok.Builder;
 import net.schmizz.sshj.SSHClient;
@@ -17,6 +17,7 @@ public class SSH {
      * @return
      */
     public SSHClient toClient() {
+
         SSHClient sshClient = new SSHClient();
         try {
             sshClient.addHostKeyVerifier(new PromiscuousVerifier());
