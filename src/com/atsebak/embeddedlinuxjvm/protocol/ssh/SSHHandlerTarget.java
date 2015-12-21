@@ -1,5 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
+import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
@@ -12,6 +13,7 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import lombok.Builder;
@@ -62,11 +64,12 @@ public class SSHHandlerTarget {
     public void genericUpload(@NotNull final String deploymentPath, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
         forceCreateDirectories(deploymentPath);
         Session session = connect(ssh.get());
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload") + "\r\n", ConsoleViewContentType.SYSTEM_OUTPUT);
         try {
-            consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload"), ConsoleViewContentType.SYSTEM_OUTPUT);
-            SFTPHandler sftpHandler = new SFTPHandler();
+            SFTPHandler sftpHandler = new SFTPHandler(consoleView.getProject());
             sftpHandler.upload(session, fileToUpload, deploymentPath);
         } catch (Exception e) {
+            setErrorOnUI(e.getMessage());
         }
     }
 
@@ -100,7 +103,7 @@ public class SSHHandlerTarget {
 
             channel.disconnect();
         } catch (JSchException e) {
-            //todo throw exception message on ui
+            setErrorOnUI(e.getMessage());
         }
 
     }
@@ -116,34 +119,29 @@ public class SSHHandlerTarget {
         consoleView.print(NEW_LINE + EmbeddedLinuxJVMBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         Session session = connect(ssh.get());
         try {
-            Channel channel = session.openChannel("shell");
-            channel.setOutputStream(System.out, true);
-            channel.setExtOutputStream(System.err, true); //todo need error stream here
-            PrintStream shellStream = new PrintStream(channel.getOutputStream());
-            channel.connect();
-            List<String> jarCommands = Arrays.asList(
+            ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
+            channelExec.setOutputStream(System.out, true);
+            channelExec.setErrStream(System.err, true);
+            //todo fix, only use sudo if they want to? but need to kill java process
+            LinuxCommand linuxCommands = LinuxCommand.builder().commands(Arrays.asList(
                     String.format("sudo kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", piRunnerParameters.getMainclass()),
                     String.format("cd %s", path),
                     String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
                     "rm *.tar",
-                    cmd);
-            for (String command : jarCommands) {
-                shellStream.println(command);
-                shellStream.flush();
-            }
+                    cmd)).build();
+            channelExec.setCommand(linuxCommands.toString());
+            channelExec.connect();
         } catch (JSchException e) {
-            //todo throw exception message on ui
+            setErrorOnUI(e.getMessage());
         }
 
-
+        consoleView.setSession(session);
     }
 
     /**
      * Authenticates and connects to remote target via ssh protocol
-     *
      * @param session
-     * @throws IOException
-     * @throws RuntimeConfigurationException
+     * @return
      */
     @SneakyThrows({RuntimeConfigurationException.class})
     private Session connect(Session session) {
@@ -151,16 +149,20 @@ public class SSHHandlerTarget {
             session = EmbeddedSSHClient.builder().username(piRunnerParameters.getUsername())
                     .password(piRunnerParameters.getPassword()).hostname(piRunnerParameters.getHostname()).build().get();
             if (!session.isConnected()) {
-                final Notification notification = new Notification(
-                        com.atsebak.embeddedlinuxjvm.utils.Notifications.GROUPDISPLAY_ID,
-                        EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"), EmbeddedLinuxJVMBundle.getString("ssh.remote.error"),
-                        NotificationType.ERROR);
-                Notifications.Bus.notify(notification);
+                setErrorOnUI(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
                 throw new RuntimeConfigurationException(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
             } else {
                 return session;
             }
         }
         return session;
+    }
+
+    private void setErrorOnUI(String message) {
+        final Notification notification = new Notification(
+                com.atsebak.embeddedlinuxjvm.utils.Notifications.GROUPDISPLAY_ID,
+                EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"), message,
+                NotificationType.INFORMATION);
+        Notifications.Bus.notify(notification);
     }
 }
