@@ -1,9 +1,8 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
-import com.intellij.openapi.project.Project;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
+import com.jcraft.jsch.Session;
 import lombok.Builder;
-import net.schmizz.sshj.SSHClient;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -30,18 +29,14 @@ public class SSHConnectionValidator {
 
     /**
      * Can connect to remote target
-     * @param client
-     * @param project
+     *
      * @return status
      */
-    public boolean checkSSHConnection(SSHClient client, @NotNull Project project) {
-        try {
-            client.connect(ip);
-            client.authPassword(username, password);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public boolean checkSSHConnection() {
+        EmbeddedSSHClient sshClient = EmbeddedSSHClient.builder()
+                .username(username).password(password).hostname(ip).build();
+        Session session = sshClient.get();
+        return session.isConnected();
     }
 
 }

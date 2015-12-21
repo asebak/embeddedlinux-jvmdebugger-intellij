@@ -1,7 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.ui;
 
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
@@ -66,15 +65,14 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                             progressIndicator.setText(EmbeddedLinuxJVMBundle.getString("ssh.tryingtoconnect"));
                             progressIndicator.setIndeterminate(true);
                         }
+
                         boolean success = SSHConnectionValidator
                                 .builder()
                                 .ip(hostName.getText())
                                 .password(new String(password.getPassword()))
                                 .username(username.getText())
-                                .build().checkSSHConnection(SSH.builder()
-                                        .connectionTimeout(10000)
-                                        .timeout(10000)
-                                        .build().toClient(), project);
+                                .build().checkSSHConnection();
+
                         sshStatus.setVisible(true);
                         if (success) {
                             sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));

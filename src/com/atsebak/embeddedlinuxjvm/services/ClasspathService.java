@@ -3,8 +3,8 @@ package com.atsebak.embeddedlinuxjvm.services;
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.deploy.DeployedLibrary;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -63,12 +63,14 @@ public class ClasspathService {
             throws IOException, RuntimeConfigurationException {
         SSHHandlerTarget target = SSHHandlerTarget.builder().piRunnerParameters(runnerParameters)
                 .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                .ssh(SSH.builder()
-                        .connectionTimeout(30000)
-                        .timeout(30000)
-                        .build()).build();
+                .ssh(EmbeddedSSHClient.builder()
+                        .hostname(runnerParameters.getHostname())
+                        .password(runnerParameters.getPassword())
+                        .username(runnerParameters.getUsername()).build())
+                .build();
 
-        List<DeployedLibrary> targetLibraries = target.listAlreadyUploadedJars();
+//        List<DeployedLibrary> targetLibraries = target.listAlreadyUploadedJars(); //todo fix but already deprecated
+        List<DeployedLibrary> targetLibraries = null;
 
         Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
         //todo improve based on last modified date, size, and the name of the file and not just the filename

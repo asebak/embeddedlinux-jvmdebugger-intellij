@@ -4,8 +4,8 @@ import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMOutputForwarder;
 import com.atsebak.embeddedlinuxjvm.deploy.DeploymentTarget;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSH;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.atsebak.embeddedlinuxjvm.services.ClasspathService;
@@ -40,9 +40,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
-import net.schmizz.sshj.connection.ConnectionException;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.transport.TransportException;
+import com.jcraft.jsch.Session;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -134,15 +132,14 @@ public class AppCommandLineState extends JavaCommandLineState {
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
-                    if(isDebugMode) {
-                        //todo fix tcp connection closing issue
+                    if (isDebugMode) {
+                        //todo fix tcp connection closing issue random error message showing up
                     }
-                    Session.Command command = EmbeddedLinuxJVMConsoleView.getInstance(project).getCommand();
-                    if(command != null) {
-                        command.close();
+                    Session session = EmbeddedLinuxJVMConsoleView.getInstance(project).getSession();
+                    if (session != null) {
+                        session.disconnect();
                     }
-                } catch (ConnectionException e) {
-                } catch (TransportException e) {
+                } catch (Exception e) {
                 }
             }
 
@@ -266,10 +263,12 @@ public class AppCommandLineState extends JavaCommandLineState {
                 .sshHandlerTarget(SSHHandlerTarget.builder()
                         .piRunnerParameters(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                        .ssh(SSH.builder()
-                                .connectionTimeout(30000)
-                                .timeout(30000)
-                                .build()).build()).build();
+                        .ssh(EmbeddedSSHClient.builder()
+                                .hostname(runnerParameters.getHostname())
+                                .password(runnerParameters.getPassword())
+                                .username(runnerParameters.getUsername()).build())
+                        .build())
+                .build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }
 
