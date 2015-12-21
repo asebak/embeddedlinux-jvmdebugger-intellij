@@ -9,6 +9,15 @@
     ]]></description>
 
   <change-notes><![CDATA[
+          <b>Version 1.01</b>
+        <ul>
+            <li>
+                Fixed showing errors in console window at runtime.
+            </li>
+            <li>
+                Made upload progress more visible on the toolbar.
+            </li>
+        </ul>
         <b>Version 1.0</b>
         <ul>
             <li>
