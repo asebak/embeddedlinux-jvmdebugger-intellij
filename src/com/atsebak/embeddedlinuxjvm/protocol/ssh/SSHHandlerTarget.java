@@ -1,5 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
+import com.atsebak.embeddedlinuxjvm.commandline.JavaStatusChecker;
 import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import java.util.List;
 public class SSHHandlerTarget {
     public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
+    public static ArrayList<Thread> threads = new ArrayList<Thread>();
     private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private EmbeddedSSHClient ssh;
@@ -129,11 +132,21 @@ public class SSHHandlerTarget {
                     cmd)).build();
             channelExec.setCommand(linuxCommands.toString());
             channelExec.connect();
+            checkOnProcess(channelExec);
         } catch (JSchException e) {
             setErrorOnUI(e.getMessage());
         }
 
-        consoleView.setSession(session);
+//        consoleView.setSession(session);
+    }
+
+    /**
+     * Checks if command is done running
+     */
+    private void checkOnProcess(final ChannelExec channelExec) {
+        Thread t = new JavaStatusChecker(channelExec, consoleView.getProject(), piRunnerParameters);
+        threads.add(t);
+        t.start();
     }
 
     /**
