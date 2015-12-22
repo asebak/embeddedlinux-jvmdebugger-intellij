@@ -22,6 +22,7 @@ import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.ui.RawCommandLineEditor;
 import com.intellij.util.ui.UIUtil;
+import org.jdesktop.swingx.prompt.PromptSupport;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,6 +92,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
             public void actionPerformed(ActionEvent e) {
             }
         });
+        PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("debugport.placeholder"), debugPort);
         ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
