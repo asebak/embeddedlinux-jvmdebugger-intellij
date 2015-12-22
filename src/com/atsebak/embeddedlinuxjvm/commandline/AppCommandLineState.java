@@ -11,6 +11,9 @@ import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfiguration
 import com.atsebak.embeddedlinuxjvm.services.ClasspathService;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.RemoteCommandLineBuilder;
+import com.intellij.debugger.DebuggerManagerEx;
+import com.intellij.debugger.engine.DebugProcessImpl;
+import com.intellij.debugger.impl.DebuggerSession;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.executors.DefaultDebugExecutor;
@@ -34,6 +37,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -132,17 +136,43 @@ public class AppCommandLineState extends JavaCommandLineState {
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
+                    closeSSHThreads();
                     if (isDebugMode) {
                         //todo fix tcp connection closing issue random error message showing up
+                        closeRemoteVM();
                     }
                     Session session = EmbeddedLinuxJVMConsoleView.getInstance(project).getSession();
-                    if (session != null) {
-                        session.disconnect();
-                    }
                 } catch (Exception e) {
                 }
             }
 
+            private void closeSSHThreads() {
+                for (Thread thread : SSHHandlerTarget.threads) {
+                    thread.interrupt();
+                }
+                SSHHandlerTarget.threads.clear();
+            }
+
+            private void closeRemoteVM() {
+                final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
+                if (debuggerSession == null) {
+                    return;
+                }
+
+                final DebugProcessImpl debugProcess = debuggerSession.getProcess();
+                if (debugProcess.isDetached() || debugProcess.isDetaching()) {
+                    debugProcess.stop(true);
+                    debugProcess.dispose();
+                    debuggerSession.dispose();
+                }
+            }
+
+            /**
+             * Called when user clicks the stop button
+             *
+             * @param event
+             * @param willBeDestroyed
+             */
             @Override
             public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
                 ProgressManager.getInstance().run(new Task.Backgroundable(project, EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
@@ -152,6 +182,11 @@ public class AppCommandLineState extends JavaCommandLineState {
                     }
                 });
                 super.processWillTerminate(event, willBeDestroyed);
+            }
+
+            @Override
+            public void onTextAvailable(ProcessEvent event, Key outputType) {
+                super.onTextAvailable(event, outputType);
             }
 
         });
@@ -299,13 +334,13 @@ public class AppCommandLineState extends JavaCommandLineState {
 
 
     /**
-     * Closes old session only
+     * Closes old session only for debug mode
      *
      * @param project
      * @param parameters
      */
     private void closeOldSession(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
-        final String configurationName = getRunConfigurationName(parameters.getPort());
+        final String configurationName = AppCommandLineState.getRunConfigurationName(parameters.getPort());
         final Collection<RunContentDescriptor> descriptors =
                 ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
                     @NotNull
@@ -335,6 +370,7 @@ public class AppCommandLineState extends JavaCommandLineState {
             }
         }
     }
+
     /**
      * Closes an old descriptor and creates a new one in debug mode connecting to remote target
      *

@@ -12,10 +12,16 @@
         <b>Version 1.02</b>
         <ul>
             <li>
-                Add progress bar to upload
+                Add upload progress in text.
             </li>
             <li>
-                Fixed some exception handling
+                Fixed some exception handling.
+            </li>
+            <li>
+                Fixed SSH commands not properly executing on embedded device.
+            </li>
+            <li>
+                Fixed exit state of running and debugging sessions.
             </li>
         </ul>
         <b>Version 1.01</b>

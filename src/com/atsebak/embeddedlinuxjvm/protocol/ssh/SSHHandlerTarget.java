@@ -1,5 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
+import com.atsebak.embeddedlinuxjvm.commandline.JavaStatusChecker;
 import com.atsebak.embeddedlinuxjvm.commandline.LinuxCommand;
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
@@ -12,7 +13,6 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +30,7 @@ import java.util.List;
 public class SSHHandlerTarget {
     public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
+    public static ArrayList<Thread> threads = new ArrayList<Thread>();
     private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private EmbeddedSSHClient ssh;
@@ -82,9 +83,7 @@ public class SSHHandlerTarget {
     private void forceCreateDirectories(String path) throws IOException, RuntimeConfigurationException {
         Session session = connect(ssh.get());
         try {
-            Channel channel = session.openChannel("shell");
-            PrintStream shellStream = new PrintStream(channel.getOutputStream());
-            channel.connect();
+            ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             List<String> commands = Arrays.asList(
                     String.format("mkdir -p %s", path),
                     String.format("cd %s", path),
@@ -95,15 +94,13 @@ public class SSHHandlerTarget {
             );
             for (String command : commands) {
                 consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + command + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
-                shellStream.println(command);
-                shellStream.flush();
             }
-
-            channel.disconnect();
+            channelExec.setCommand(LinuxCommand.builder().commands(commands).build().toString());
+            channelExec.connect();
+            channelExec.disconnect();
         } catch (JSchException e) {
             setErrorOnUI(e.getMessage());
         }
-
     }
 
     /**
@@ -121,19 +118,32 @@ public class SSHHandlerTarget {
             channelExec.setOutputStream(System.out, true);
             channelExec.setErrStream(System.err, true);
             //todo fix, only use sudo if they want to? but need to kill java process
-            LinuxCommand linuxCommands = LinuxCommand.builder().commands(Arrays.asList(
+            List<String> commands = Arrays.asList(
                     String.format("sudo kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", piRunnerParameters.getMainclass()),
                     String.format("cd %s", path),
                     String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
                     "rm *.tar",
-                    cmd)).build();
-            channelExec.setCommand(linuxCommands.toString());
+                    cmd);
+            for (String command : commands) {
+                consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.command") + command + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            }
+            channelExec.setCommand(LinuxCommand.builder().commands(commands).build().toString());
             channelExec.connect();
+            checkOnProcess(channelExec);
         } catch (JSchException e) {
             setErrorOnUI(e.getMessage());
         }
 
-        consoleView.setSession(session);
+//        consoleView.setSession(session);
+    }
+
+    /**
+     * Checks if command is done running
+     */
+    private void checkOnProcess(final ChannelExec channelExec) {
+        Thread t = new JavaStatusChecker(channelExec, consoleView.getProject(), piRunnerParameters);
+        threads.add(t);
+        t.start();
     }
 
     /**
