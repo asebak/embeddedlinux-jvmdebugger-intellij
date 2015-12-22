@@ -1,13 +1,18 @@
 package com.atsebak.embeddedlinuxjvm.commandline;
 
 
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.ExecutionManager;
+import com.intellij.execution.RunManager;
+import com.intellij.execution.RunnerAndConfigurationSettings;
+import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.ui.RunContentDescriptor;
 import com.intellij.openapi.project.Project;
 import com.jcraft.jsch.ChannelExec;
 import lombok.SneakyThrows;
 
+import java.util.Collection;
 import java.util.List;
 
 public class JavaStatusChecker extends Thread {
@@ -28,19 +33,30 @@ public class JavaStatusChecker extends Thread {
         while (!channelExec.isClosed()) { //runs until java app closes from target device
             Thread.sleep(1000);
         }
-        // todo programmatically end session based on weather debugging or running.
-        stopApplication();
         channelExec.disconnect();
         channelExec.getSession().disconnect();
+        //stopApplication(); //todo fix this stops debugger and runner states
     }
 
     private void stopApplication() {
-        ExecutionManager executionManager = ExecutionManager.getInstance(project);
-        List<RunContentDescriptor> descriptors = executionManager.getContentManager().getAllDescriptors();
-        for (RunContentDescriptor descriptor : descriptors) {
-            if (descriptor.getProcessHandler() != null) {
-                descriptor.getProcessHandler().destroyProcess();
+        final RunManagerImpl runManager = (RunManagerImpl) RunManager.getInstance(project);
+        final Collection<RunnerAndConfigurationSettings> allConfigurations = runManager.getSortedConfigurations();
+        List<RunContentDescriptor> allDescriptors = ExecutionManager.getInstance(project).getContentManager().getAllDescriptors();
+
+        for (RunnerAndConfigurationSettings runConfiguration : allConfigurations) {
+            if (runConfiguration.getConfiguration().getFactory().getType() instanceof EmbeddedLinuxJVMConfigurationType) {
+                for (RunContentDescriptor descriptor : allDescriptors) {
+                    if (runConfiguration.getName().equals(descriptor.getDisplayName())) {
+                        try {
+                            descriptor.getProcessHandler().destroyProcess();
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+
             }
+
         }
     }
 

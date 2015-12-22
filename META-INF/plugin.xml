@@ -20,9 +20,6 @@
             <li>
                 Fixed SSH commands not properly executing on embedded device.
             </li>
-            <li>
-                Fixed exit state of running and debugging sessions.
-            </li>
         </ul>
         <b>Version 1.01</b>
         <ul>
