@@ -40,6 +40,8 @@ $ sudo sh ./ci-build.sh
 * Lombok Project
 * SSHJ
 * Mockito/PowerMockito/JUnit
+* Jsch
+* Commons Compress
 
 ### Development
 
