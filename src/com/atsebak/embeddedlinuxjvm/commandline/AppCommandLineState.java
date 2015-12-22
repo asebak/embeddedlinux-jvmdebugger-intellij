@@ -143,6 +143,12 @@ public class AppCommandLineState extends JavaCommandLineState {
                 }
             }
 
+            /**
+             * Called when user clicks the stop button
+             *
+             * @param event
+             * @param willBeDestroyed
+             */
             @Override
             public void processWillTerminate(ProcessEvent event, boolean willBeDestroyed) {
                 ProgressManager.getInstance().run(new Task.Backgroundable(project, EmbeddedLinuxJVMBundle.message("pi.closingsession"), true) {
