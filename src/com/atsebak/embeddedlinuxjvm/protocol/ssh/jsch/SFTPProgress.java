@@ -1,52 +1,50 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch;
 
 
-import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.intellij.openapi.wm.StatusBar;
 import com.jcraft.jsch.SftpProgressMonitor;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class SFTPProgress implements SftpProgressMonitor {
-    private ProgressMonitor monitor;
-    private StatusBar statusBar;
-    private long count = 0;
-    private long max = 0;
-    private float percent;
+    private double count;
+    private double max;
+    private String src;
+    private int percent;
+    private int lastDisplayedPercent;
 
-    public SFTPProgress(@NotNull StatusBar statusBar) {
-        this.statusBar = statusBar;
+    SFTPProgress() {
+        count = 0;
+        max = 0;
+        percent = 0;
+        lastDisplayedPercent = 0;
     }
 
     @Override
     public void init(int op, String src, String dest, long max) {
-        statusBar.setInfo(EmbeddedLinuxJVMBundle.getString("pi.upload") + " 0%");
         this.max = max;
-        monitor = new ProgressMonitor(null, ((op == SftpProgressMonitor.PUT) ? "put" : "get") + ": " + src, "", 0, (int) max);
+        this.src = src;
         count = 0;
-        percent = -1;
-        monitor.setProgress((int) this.count);
-        monitor.setMillisToDecideToPopup(1000);
+        percent = 0;
+        lastDisplayedPercent = 0;
+        status();
     }
 
     @Override
     public boolean count(long count) {
         this.count += count;
-        if (percent >= this.count * 100 / max) {
-            return true;
-        }
-        percent = this.count * 100 / max;
-        monitor.setNote("Completed " + this.count + "(" + percent + "%) out of " + max + ".");
-        statusBar.setInfo(EmbeddedLinuxJVMBundle.getString("pi.upload") + this.count + "(" + percent + "%) out of " + max + ".");
-        monitor.setProgress((int) this.count);
-
-        return !(monitor.isCanceled());
+        percent = (int) ((this.count / max) * 100.0);
+        status();
+        return true;
     }
 
     @Override
     public void end() {
-        statusBar.setInfo("");
-        monitor.close();
+        percent = (int) ((count / max) * 100.0);
+        status();
+    }
+
+    private void status() {
+        if (lastDisplayedPercent <= percent - 10) {
+            System.out.println(src + ": " + percent + "% " + ((long) count) + "/" + ((long) max));
+            lastDisplayedPercent = percent;
+        }
     }
 }

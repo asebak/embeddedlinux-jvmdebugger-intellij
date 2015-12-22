@@ -25,6 +25,7 @@ public class EmbeddedSSHClient {
         session.setUserInfo(userInfo);
         session.setConfig("HashKnownHosts", "yes");
         session.setConfig("StrictHostKeyChecking", "no");
+        session.setTimeout(10);
         session.connect();
         return session;
     }

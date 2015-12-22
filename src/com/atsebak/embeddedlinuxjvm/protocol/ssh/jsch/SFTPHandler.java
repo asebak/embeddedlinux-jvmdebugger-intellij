@@ -2,8 +2,6 @@ package com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch;
 
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.StatusBar;
-import com.intellij.openapi.wm.WindowManager;
 import com.jcraft.jsch.*;
 
 import java.io.File;
@@ -22,12 +20,8 @@ public class SFTPHandler {
         channel.connect();
         final ChannelSftp channelSftp = (ChannelSftp) channel;
         channelSftp.cd(deploymentPath);
-        channelSftp.put(new FileInputStream(upload), upload.getName(), new SFTPProgress(getStatusBar()));
+        channelSftp.put(new FileInputStream(upload), upload.getName(), new SFTPProgress());
     }
 
-    private StatusBar getStatusBar() {
-        return WindowManager.getInstance().getStatusBar(project);
-
-    }
 
 }

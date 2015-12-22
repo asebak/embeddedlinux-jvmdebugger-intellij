@@ -33,10 +33,14 @@ public class SSHConnectionValidator {
      * @return status
      */
     public boolean checkSSHConnection() {
-        EmbeddedSSHClient sshClient = EmbeddedSSHClient.builder()
-                .username(username).password(password).hostname(ip).build();
-        Session session = sshClient.get();
-        return session.isConnected();
+        try {
+            EmbeddedSSHClient sshClient = EmbeddedSSHClient.builder()
+                    .username(username).password(password).hostname(ip).build();
+            Session session = sshClient.get();
+            return session.isConnected();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
