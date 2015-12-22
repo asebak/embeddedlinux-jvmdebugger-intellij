@@ -5,7 +5,6 @@ import com.intellij.openapi.project.Project;
 import com.jcraft.jsch.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class SFTPHandler {
@@ -20,8 +19,7 @@ public class SFTPHandler {
         channel.connect();
         final ChannelSftp channelSftp = (ChannelSftp) channel;
         channelSftp.cd(deploymentPath);
-        channelSftp.put(new FileInputStream(upload), upload.getName(), new SFTPProgress());
+        channelSftp.put(upload.getAbsolutePath(), upload.getName(), new SFTPProgress(project), ChannelSftp.OVERWRITE);
     }
-
 
 }

@@ -1,50 +1,47 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch;
 
 
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.WindowManager;
 import com.jcraft.jsch.SftpProgressMonitor;
 
 public class SFTPProgress implements SftpProgressMonitor {
     private double count;
     private double max;
-    private String src;
     private int percent;
-    private int lastDisplayedPercent;
+    private Project project;
 
-    SFTPProgress() {
+    SFTPProgress(Project project) {
+        this.project = project;
         count = 0;
         max = 0;
         percent = 0;
-        lastDisplayedPercent = 0;
     }
 
     @Override
     public void init(int op, String src, String dest, long max) {
         this.max = max;
-        this.src = src;
         count = 0;
         percent = 0;
-        lastDisplayedPercent = 0;
-        status();
+        showStatus();
     }
 
     @Override
     public boolean count(long count) {
         this.count += count;
         percent = (int) ((this.count / max) * 100.0);
-        status();
+        showStatus();
         return true;
     }
 
     @Override
     public void end() {
-        percent = (int) ((count / max) * 100.0);
-        status();
+        WindowManager.getInstance().getStatusBar(project).setInfo("");
     }
 
-    private void status() {
-        if (lastDisplayedPercent <= percent - 10) {
-            System.out.println(src + ": " + percent + "% " + ((long) count) + "/" + ((long) max));
-            lastDisplayedPercent = percent;
-        }
+    private void showStatus() {
+        WindowManager.getInstance().getStatusBar(project).setInfo(EmbeddedLinuxJVMBundle.getString("pi.upload") + " " + percent + "%");
     }
+
 }

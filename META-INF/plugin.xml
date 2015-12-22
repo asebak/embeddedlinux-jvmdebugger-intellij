@@ -14,6 +14,9 @@
             <li>
                 Add progress bar to upload
             </li>
+            <li>
+                Fixed some exception handling
+            </li>
         </ul>
         <b>Version 1.01</b>
         <ul>

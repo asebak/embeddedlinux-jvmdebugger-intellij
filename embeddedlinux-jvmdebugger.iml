@@ -26,5 +26,6 @@
     <orderEntry type="library" name="jsch-0.1.51" level="project" />
     <orderEntry type="library" name="commons-io-2.4" level="project" />
     <orderEntry type="library" name="jsch-0.1.53" level="project" />
+    <orderEntry type="library" name="jsch-0.1.52" level="project" />
   </component>
 </module>
