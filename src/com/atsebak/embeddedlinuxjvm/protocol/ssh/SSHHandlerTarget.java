@@ -28,7 +28,7 @@ import java.util.List;
 
 @Builder
 public class SSHHandlerTarget {
-    private static final String NEW_LINE = System.getProperty("line.separator");
+    public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
     private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
@@ -49,7 +49,6 @@ public class SSHHandlerTarget {
                 + piRunnerParameters.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
         String deploymentPath = remoteDir + FileUtilities.SEPARATOR + consoleView.getProject().getName();
         genericUpload(deploymentPath, compileOutput);
-        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.finished") + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         runJavaApp(deploymentPath, cmd);
     }
 
@@ -64,9 +63,8 @@ public class SSHHandlerTarget {
     public void genericUpload(@NotNull final String deploymentPath, @NotNull final File fileToUpload) throws IOException, RuntimeConfigurationException {
         forceCreateDirectories(deploymentPath);
         Session session = connect(ssh.get());
-        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload") + "\r\n", ConsoleViewContentType.SYSTEM_OUTPUT);
         try {
-            SFTPHandler sftpHandler = new SFTPHandler(consoleView.getProject());
+            SFTPHandler sftpHandler = new SFTPHandler(consoleView);
             sftpHandler.upload(session, fileToUpload, deploymentPath);
         } catch (Exception e) {
             setErrorOnUI(e.getMessage());

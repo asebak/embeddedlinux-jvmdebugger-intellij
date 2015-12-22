@@ -1,6 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch;
 
 
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.intellij.openapi.project.Project;
 import com.jcraft.jsch.*;
 
@@ -9,9 +10,11 @@ import java.io.FileNotFoundException;
 
 public class SFTPHandler {
     private Project project;
+    private EmbeddedLinuxJVMConsoleView consoleView;
 
-    public SFTPHandler(Project project) {
-        this.project = project;
+    public SFTPHandler(EmbeddedLinuxJVMConsoleView consoleView) {
+        this.consoleView = consoleView;
+        this.project = consoleView.getProject();
     }
 
     public void upload(Session session, final File upload, String deploymentPath) throws JSchException, SftpException, FileNotFoundException {
@@ -19,7 +22,7 @@ public class SFTPHandler {
         channel.connect();
         final ChannelSftp channelSftp = (ChannelSftp) channel;
         channelSftp.cd(deploymentPath);
-        channelSftp.put(upload.getAbsolutePath(), upload.getName(), new SFTPProgress(project), ChannelSftp.OVERWRITE);
+        channelSftp.put(upload.getAbsolutePath(), upload.getName(), new SFTPProgress(consoleView), ChannelSftp.OVERWRITE);
     }
 
 }

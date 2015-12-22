@@ -1,22 +1,25 @@
 package com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch;
 
 
+import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.WindowManager;
+import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.jcraft.jsch.SftpProgressMonitor;
 
 public class SFTPProgress implements SftpProgressMonitor {
     private double count;
     private double max;
     private int percent;
-    private Project project;
+    private EmbeddedLinuxJVMConsoleView consoleView;
+    private int lastDisplayedPercent;
 
-    SFTPProgress(Project project) {
-        this.project = project;
+    SFTPProgress(EmbeddedLinuxJVMConsoleView consoleView) {
+        this.consoleView = consoleView;
         count = 0;
         max = 0;
         percent = 0;
+        lastDisplayedPercent = 0;
     }
 
     @Override
@@ -24,7 +27,8 @@ public class SFTPProgress implements SftpProgressMonitor {
         this.max = max;
         count = 0;
         percent = 0;
-        showStatus();
+        lastDisplayedPercent = 0;
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload") + " 0%" + SSHHandlerTarget.NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
     }
 
     @Override
@@ -37,11 +41,16 @@ public class SFTPProgress implements SftpProgressMonitor {
 
     @Override
     public void end() {
-        WindowManager.getInstance().getStatusBar(project).setInfo("");
+        consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.deployment.finished") + SSHHandlerTarget.NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+//        WindowManager.getInstance().getStatusBar(consoleView.getProject()).setInfo("");
     }
 
     private void showStatus() {
-        WindowManager.getInstance().getStatusBar(project).setInfo(EmbeddedLinuxJVMBundle.getString("pi.upload") + " " + percent + "%");
+        if (lastDisplayedPercent <= percent - 10) {
+            consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload") + " " + percent + "%" + SSHHandlerTarget.NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
+            lastDisplayedPercent = percent;
+        }
+//        WindowManager.getInstance().getStatusBar(consoleView.getProject()).setInfo(EmbeddedLinuxJVMBundle.getString("pi.upload") + " " + percent + "%");
     }
 
 }
