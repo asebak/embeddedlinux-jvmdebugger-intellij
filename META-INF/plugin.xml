@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, Intel x86, ARM processors)</name>
-    <version>1.01</version>
+    <version>1.02</version>
   <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,7 +9,16 @@
     ]]></description>
 
   <change-notes><![CDATA[
-          <b>Version 1.01</b>
+        <b>Version 1.02</b>
+        <ul>
+            <li>
+                Add progress bar to upload
+            </li>
+            <li>
+                Fixed some exception handling
+            </li>
+        </ul>
+        <b>Version 1.01</b>
         <ul>
             <li>
                 Fixed showing errors in console window at runtime.

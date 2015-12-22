@@ -207,7 +207,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                             File classpathArchive = FileUtilities.createClasspathArchive(service.deltaOfDeployedJars(hostLibraries), project);
                             invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
-                            EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getLocalizedMessage()),
+                            EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
                                     ConsoleViewContentType.ERROR_OUTPUT);
                         }
                     }
