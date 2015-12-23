@@ -44,7 +44,6 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.PathsList;
-import com.jcraft.jsch.Session;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,8 +62,6 @@ public class AppCommandLineState extends JavaCommandLineState {
     @NotNull
     private final EmbeddedLinuxJVMRunConfiguration configuration;
     @NotNull
-    private final ExecutionEnvironment environment;
-    @NotNull
     private final RunnerSettings runnerSettings;
     @NotNull
     private final EmbeddedLinuxJVMOutputForwarder outputForwarder;
@@ -82,7 +79,6 @@ public class AppCommandLineState extends JavaCommandLineState {
     public AppCommandLineState(@NotNull ExecutionEnvironment environment, @NotNull EmbeddedLinuxJVMRunConfiguration configuration) {
         super(environment);
         this.configuration = configuration;
-        this.environment = environment;
         this.runnerSettings = environment.getRunnerSettings();
         this.project = environment.getProject();
         this.isDebugMode = runnerSettings instanceof DebuggingRunnerData;
@@ -136,35 +132,40 @@ public class AppCommandLineState extends JavaCommandLineState {
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
-                    closeSSHThreads();
                     if (isDebugMode) {
                         //todo fix tcp connection closing issue random error message showing up
-                        closeRemoteVM();
+                        final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
+                        if (debuggerSession == null) {
+                            return;
+                        }
+
+                        final DebugProcessImpl debugProcess = debuggerSession.getProcess();
+                        if (debugProcess.isDetached() || debugProcess.isDetaching()) {
+                            debugProcess.stop(true);
+                            debugProcess.dispose();
+                            debuggerSession.dispose();
+                        }
                     }
-                    Session session = EmbeddedLinuxJVMConsoleView.getInstance(project).getSession();
                 } catch (Exception e) {
                 }
             }
 
-            private void closeSSHThreads() {
-//                for (Thread thread : SSHHandlerTarget.threads) {
-//                    thread.interrupt();
+            /**
+             * closes debug session
+             */
+            private void closeDescriptors() {
+                //todo remove remote debugger console
+                final Collection<RunContentDescriptor> descriptors =
+                        ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
+                            @NotNull
+                            @Override
+                            public Boolean fun(String title) {
+                                return AppCommandLineState.getRunConfigurationName(configuration.getRunnerParameters().getPort()).equals(title);
+                            }
+                        });
+//                for (RunContentDescriptor descriptor : descriptors) {
+//                    final Content content = descriptor.getAttachedContent();
 //                }
-//                SSHHandlerTarget.threads.clear();
-            }
-
-            private void closeRemoteVM() {
-                final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
-                if (debuggerSession == null) {
-                    return;
-                }
-
-                final DebugProcessImpl debugProcess = debuggerSession.getProcess();
-                if (debugProcess.isDetached() || debugProcess.isDetaching()) {
-                    debugProcess.stop(true);
-                    debugProcess.dispose();
-                    debuggerSession.dispose();
-                }
             }
 
             /**
@@ -179,6 +180,9 @@ public class AppCommandLineState extends JavaCommandLineState {
                     @Override
                     public void run(@NotNull ProgressIndicator progressIndicator) {
                         closeSSHConnection();
+                        if (isDebugMode) {
+                            closeDescriptors();
+                        }
                     }
                 });
                 super.processWillTerminate(event, willBeDestroyed);
