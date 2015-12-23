@@ -1,7 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.runner.data;
 
-import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
+import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
@@ -17,7 +17,7 @@ public class EmbeddedLinuxJVMRunnerValidator {
      * @param rp
      * @throws RuntimeConfigurationException
      */
-    public static void checkPiSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters rp) throws RuntimeConfigurationWarning {
+    public static void checkEmbeddedSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters rp) throws RuntimeConfigurationWarning {
         if (StringUtil.isEmptyOrSpaces(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.hostname"));
         }
@@ -26,6 +26,9 @@ public class EmbeddedLinuxJVMRunnerValidator {
         }
         if (StringUtil.isEmptyOrSpaces(rp.getUsername())) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.username"));
+        }
+        if (StringUtil.isEmptyOrSpaces(rp.getKeyPath()) && rp.isUsingKey()) {
+            throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.key"));
         }
     }
 

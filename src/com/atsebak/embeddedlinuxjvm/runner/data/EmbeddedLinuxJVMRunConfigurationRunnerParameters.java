@@ -9,6 +9,9 @@ public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneab
     public String mainclass;
     private String hostname;
     private boolean runAsRoot;
+    private boolean usingKey;
+    @Nullable
+    private String keyPath;
     private String port;
     private String username;
     @Nullable

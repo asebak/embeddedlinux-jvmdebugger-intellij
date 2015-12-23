@@ -94,7 +94,7 @@ public class EmbeddedLinuxJVMRunConfiguration extends LocatableConfigurationBase
     @Override
     public void checkConfiguration() throws RuntimeConfigurationException {
         EmbeddedLinuxJVMRunnerValidator.checkJavaSettings(this);
-        EmbeddedLinuxJVMRunnerValidator.checkPiSettings(getRunnerParameters());
+        EmbeddedLinuxJVMRunnerValidator.checkEmbeddedSettings(getRunnerParameters());
     }
 
     /**

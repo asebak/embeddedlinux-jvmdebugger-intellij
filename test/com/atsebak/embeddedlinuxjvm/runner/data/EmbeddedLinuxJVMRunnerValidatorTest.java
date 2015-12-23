@@ -16,7 +16,7 @@ public class EmbeddedLinuxJVMRunnerValidatorTest {
         piRunnerParameters.setUsername("testuser");
         piRunnerParameters.setPassword("testpasssword");
         try {
-            EmbeddedLinuxJVMRunnerValidator.checkPiSettings(piRunnerParameters);
+            EmbeddedLinuxJVMRunnerValidator.checkEmbeddedSettings(piRunnerParameters);
         } catch (Exception e) {
             fail("Should not have thrown any RuntimeConfigurationWarning");
         }
@@ -24,6 +24,6 @@ public class EmbeddedLinuxJVMRunnerValidatorTest {
 
     @Test(expected = RuntimeConfigurationWarning.class)
     public void nullRunnerSettings() throws RuntimeConfigurationWarning {
-        EmbeddedLinuxJVMRunnerValidator.checkPiSettings(piRunnerParameters);
+        EmbeddedLinuxJVMRunnerValidator.checkEmbeddedSettings(piRunnerParameters);
     }
 }
