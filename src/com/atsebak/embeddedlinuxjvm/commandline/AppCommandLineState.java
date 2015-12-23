@@ -301,7 +301,7 @@ public class AppCommandLineState extends JavaCommandLineState {
 
         DeploymentTarget target = DeploymentTarget.builder()
                 .sshHandlerTarget(SSHHandlerTarget.builder()
-                        .piRunnerParameters(runnerParameters)
+                        .params(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                         .ssh(EmbeddedSSHClient.builder()
                                 .hostname(runnerParameters.getHostname())
