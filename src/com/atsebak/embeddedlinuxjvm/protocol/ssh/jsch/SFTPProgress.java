@@ -6,6 +6,7 @@ import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.jcraft.jsch.SftpProgressMonitor;
+import org.jetbrains.annotations.NotNull;
 
 public class SFTPProgress implements SftpProgressMonitor {
     private double count;
@@ -14,7 +15,7 @@ public class SFTPProgress implements SftpProgressMonitor {
     private EmbeddedLinuxJVMConsoleView consoleView;
     private int lastDisplayedPercent;
 
-    SFTPProgress(EmbeddedLinuxJVMConsoleView consoleView) {
+    public SFTPProgress(@NotNull EmbeddedLinuxJVMConsoleView consoleView) {
         this.consoleView = consoleView;
         count = 0;
         max = 0;
@@ -31,6 +32,12 @@ public class SFTPProgress implements SftpProgressMonitor {
         consoleView.print(EmbeddedLinuxJVMBundle.getString("pi.upload") + " 0%" + SSHHandlerTarget.NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
     }
 
+    /**
+     * Progress of upload/download
+     *
+     * @param count
+     * @return
+     */
     @Override
     public boolean count(long count) {
         this.count += count;

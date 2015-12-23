@@ -13,6 +13,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.application.ApplicationManager;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -22,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +30,6 @@ import java.util.List;
 public class SSHHandlerTarget {
     public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
-    public static ArrayList<Thread> threads = new ArrayList<Thread>();
     private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private EmbeddedSSHClient ssh;
@@ -119,7 +118,7 @@ public class SSHHandlerTarget {
             channelExec.setErrStream(System.err, true);
             //todo fix, only use sudo if they want to? but need to kill java process
             List<String> commands = Arrays.asList(
-                    String.format("sudo kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", piRunnerParameters.getMainclass()),
+                    String.format("%s kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", piRunnerParameters.isRunAsRoot() ? "sudo" : "", piRunnerParameters.getMainclass()),
                     String.format("cd %s", path),
                     String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
                     "rm *.tar",
@@ -133,17 +132,13 @@ public class SSHHandlerTarget {
         } catch (JSchException e) {
             setErrorOnUI(e.getMessage());
         }
-
-//        consoleView.setSession(session);
     }
 
     /**
      * Checks if command is done running
      */
     private void checkOnProcess(final ChannelExec channelExec) {
-        Thread t = new JavaStatusChecker(channelExec, consoleView.getProject(), piRunnerParameters);
-        threads.add(t);
-        t.start();
+        ApplicationManager.getApplication().executeOnPooledThread(new JavaStatusChecker(channelExec, consoleView));
     }
 
     /**
@@ -166,6 +161,11 @@ public class SSHHandlerTarget {
         return session;
     }
 
+    /**
+     * Sets errors on the UI
+     *
+     * @param message
+     */
     private void setErrorOnUI(String message) {
         final Notification notification = new Notification(
                 com.atsebak.embeddedlinuxjvm.utils.Notifications.GROUPDISPLAY_ID,

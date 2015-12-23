@@ -57,7 +57,7 @@ import java.util.List;
 
 public class AppCommandLineState extends JavaCommandLineState {
     @NonNls
-    private static final String RUN_CONFIGURATION_NAME_PATTERN = "PI Debugger (%s)";
+    private static final String RUN_CONFIGURATION_NAME_PATTERN = "Embedded Device Debugger (%s)";
     @NonNls
     private static final String DEBUG_TCP_MESSAGE = "Listening for transport dt_socket at address: %s";
     @NotNull
@@ -147,10 +147,10 @@ public class AppCommandLineState extends JavaCommandLineState {
             }
 
             private void closeSSHThreads() {
-                for (Thread thread : SSHHandlerTarget.threads) {
-                    thread.interrupt();
-                }
-                SSHHandlerTarget.threads.clear();
+//                for (Thread thread : SSHHandlerTarget.threads) {
+//                    thread.interrupt();
+//                }
+//                SSHHandlerTarget.threads.clear();
             }
 
             private void closeRemoteVM() {

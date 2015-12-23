@@ -16,6 +16,11 @@ public class EmbeddedSSHClient {
     private String hostname;
 
 
+    /**
+     * Gets SSH Client
+     *
+     * @return
+     */
     @SneakyThrows(JSchException.class)
     public Session get() {
         JSch jsch = new JSch();
