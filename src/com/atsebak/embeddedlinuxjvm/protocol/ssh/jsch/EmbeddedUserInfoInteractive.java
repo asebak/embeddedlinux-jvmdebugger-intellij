@@ -24,14 +24,7 @@ public class EmbeddedUserInfoInteractive implements UserInfo, UIKeyboardInteract
     }
 
     public boolean promptYesNo(String str) {
-        Object[] options = {"yes", "no"};
-        int foo = JOptionPane.showOptionDialog(null,
-                str,
-                "Warning",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.WARNING_MESSAGE,
-                null, options, options[0]);
-        return foo == 0;
+        return true;
     }
 
     public String getPassphrase() {

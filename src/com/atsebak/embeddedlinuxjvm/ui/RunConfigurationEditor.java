@@ -73,7 +73,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                             progressIndicator.setIndeterminate(true);
                         }
 
-                        boolean success = SSHConnectionValidator
+                        SSHConnectionValidator.SSHConnectionState validator = SSHConnectionValidator
                                 .builder()
                                 .ip(hostName.getText())
                                 .password(new String(password.getPassword()))
@@ -83,11 +83,11 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                                 .build().checkSSHConnection();
 
                         sshStatus.setVisible(true);
-                        if (success) {
+                        if (validator.isConnected()) {
                             sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
                             sshStatus.setForeground(Color.GREEN);
                         } else {
-                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
+                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error") + ": " + validator.getMessage());
                             sshStatus.setForeground(Color.RED);
                         }
                     }
