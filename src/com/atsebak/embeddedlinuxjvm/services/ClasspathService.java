@@ -51,7 +51,7 @@ public class ClasspathService {
     }
 
     /**
-     * Gets the deployed jars on target machine
+     * Gets the deployed jars on target machine using SSH
      *
      * @return
      * @throws IOException
@@ -61,7 +61,7 @@ public class ClasspathService {
     @Deprecated
     public List<File> invokeFindDeployedJars(List<File> hostLibraries, EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters)
             throws IOException, RuntimeConfigurationException {
-        SSHHandlerTarget target = SSHHandlerTarget.builder().piRunnerParameters(runnerParameters)
+        SSHHandlerTarget target = SSHHandlerTarget.builder().params(runnerParameters)
                 .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                 .ssh(EmbeddedSSHClient.builder()
                         .hostname(runnerParameters.getHostname())

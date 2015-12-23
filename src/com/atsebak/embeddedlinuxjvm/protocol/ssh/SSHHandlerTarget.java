@@ -30,7 +30,8 @@ import java.util.List;
 public class SSHHandlerTarget {
     public static final String NEW_LINE = System.getProperty("line.separator");
     private static final String OUTPUT_LOCATION = "IdeaProjects";
-    private EmbeddedLinuxJVMRunConfigurationRunnerParameters piRunnerParameters;
+    private static final String EMBEDDED_LINUX_HOME = "home";
+    private EmbeddedLinuxJVMRunConfigurationRunnerParameters params;
     private EmbeddedLinuxJVMConsoleView consoleView;
     private EmbeddedSSHClient ssh;
 
@@ -45,8 +46,8 @@ public class SSHHandlerTarget {
      */
     public void uploadAndRunJavaApp(@NotNull final File compileOutput, @NotNull final String cmd)
             throws IOException, ClassNotFoundException, RuntimeConfigurationException {
-        final String remoteDir = FileUtilities.SEPARATOR + "home" + FileUtilities.SEPARATOR
-                + piRunnerParameters.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
+        final String remoteDir = FileUtilities.SEPARATOR + EMBEDDED_LINUX_HOME + FileUtilities.SEPARATOR
+                + params.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
         String deploymentPath = remoteDir + FileUtilities.SEPARATOR + consoleView.getProject().getName();
         genericUpload(deploymentPath, compileOutput);
         runJavaApp(deploymentPath, cmd);
@@ -79,7 +80,7 @@ public class SSHHandlerTarget {
      * @throws IOException
      * @throws RuntimeConfigurationException
      */
-    private void forceCreateDirectories(String path) throws IOException, RuntimeConfigurationException {
+    private void forceCreateDirectories(@NotNull final String path) throws IOException, RuntimeConfigurationException {
         Session session = connect(ssh.get());
         try {
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
@@ -109,16 +110,15 @@ public class SSHHandlerTarget {
      * @param cmd
      * @throws IOException
      */
-    private void runJavaApp(String path, String cmd) throws IOException, RuntimeConfigurationException {
+    private void runJavaApp(@NotNull final String path, @NotNull final String cmd) throws IOException, RuntimeConfigurationException {
         consoleView.print(NEW_LINE + EmbeddedLinuxJVMBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         Session session = connect(ssh.get());
         try {
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             channelExec.setOutputStream(System.out, true);
             channelExec.setErrStream(System.err, true);
-            //todo fix, only use sudo if they want to? but need to kill java process
             List<String> commands = Arrays.asList(
-                    String.format("%s kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", piRunnerParameters.isRunAsRoot() ? "sudo" : "", piRunnerParameters.getMainclass()),
+                    String.format("%s kill -9 $(ps -efww | grep \"%s\"| grep -v grep | tr -s \" \"| cut -d\" \" -f2)", params.isRunAsRoot() ? "sudo" : "", params.getMainclass()),
                     String.format("cd %s", path),
                     String.format("tar -xvf %s.tar", consoleView.getProject().getName()),
                     "rm *.tar",
@@ -137,7 +137,7 @@ public class SSHHandlerTarget {
     /**
      * Checks if command is done running
      */
-    private void checkOnProcess(final ChannelExec channelExec) {
+    private void checkOnProcess(@NotNull final ChannelExec channelExec) {
         ApplicationManager.getApplication().executeOnPooledThread(new JavaStatusChecker(channelExec, consoleView));
     }
 
@@ -149,8 +149,8 @@ public class SSHHandlerTarget {
     @SneakyThrows({RuntimeConfigurationException.class})
     private Session connect(Session session) {
         if (!session.isConnected()) {
-            session = EmbeddedSSHClient.builder().username(piRunnerParameters.getUsername())
-                    .password(piRunnerParameters.getPassword()).hostname(piRunnerParameters.getHostname()).build().get();
+            session = EmbeddedSSHClient.builder().username(params.getUsername())
+                    .password(params.getPassword()).hostname(params.getHostname()).build().get();
             if (!session.isConnected()) {
                 setErrorOnUI(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
                 throw new RuntimeConfigurationException(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
@@ -166,7 +166,7 @@ public class SSHHandlerTarget {
      *
      * @param message
      */
-    private void setErrorOnUI(String message) {
+    private void setErrorOnUI(@NotNull final String message) {
         final Notification notification = new Notification(
                 com.atsebak.embeddedlinuxjvm.utils.Notifications.GROUPDISPLAY_ID,
                 EmbeddedLinuxJVMBundle.getString("pi.ssh.connection.error"), message,

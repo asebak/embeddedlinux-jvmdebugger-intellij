@@ -248,6 +248,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
                                     ConsoleViewContentType.ERROR_OUTPUT);
+                            //todo should cancel application
                         }
                     }
                 });
@@ -300,12 +301,15 @@ public class AppCommandLineState extends JavaCommandLineState {
 
         DeploymentTarget target = DeploymentTarget.builder()
                 .sshHandlerTarget(SSHHandlerTarget.builder()
-                        .piRunnerParameters(runnerParameters)
+                        .params(runnerParameters)
                         .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                         .ssh(EmbeddedSSHClient.builder()
                                 .hostname(runnerParameters.getHostname())
                                 .password(runnerParameters.getPassword())
-                                .username(runnerParameters.getUsername()).build())
+                                .username(runnerParameters.getUsername())
+                                .useKey(runnerParameters.isUsingKey())
+                                .key(runnerParameters.getKeyPath())
+                                .build())
                         .build())
                 .build();
         target.upload(new File(projectOutput), commandLineTarget.toString());

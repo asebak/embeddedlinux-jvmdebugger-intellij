@@ -30,6 +30,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
 
 public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
@@ -47,6 +50,9 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
     private RawCommandLineEditor vmParameters;
     private RawCommandLineEditor programArguments;
     private JLabel sshStatus;
+    private JCheckBox usingKey;
+    private JTextField keyfile;
+    private JButton selectPrivateKeyButton;
     private JComponent myAnchor;
 
     /**
@@ -67,19 +73,21 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                             progressIndicator.setIndeterminate(true);
                         }
 
-                        boolean success = SSHConnectionValidator
+                        SSHConnectionValidator.SSHConnectionState validator = SSHConnectionValidator
                                 .builder()
                                 .ip(hostName.getText())
                                 .password(new String(password.getPassword()))
                                 .username(username.getText())
+                                .useKey(usingKey.isSelected())
+                                .key(keyfile.getText())
                                 .build().checkSSHConnection();
 
                         sshStatus.setVisible(true);
-                        if (success) {
+                        if (validator.isConnected()) {
                             sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
                             sshStatus.setForeground(Color.GREEN);
                         } else {
-                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
+                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error") + ": " + validator.getMessage());
                             sshStatus.setForeground(Color.RED);
                         }
                     }
@@ -87,15 +95,63 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
 
             }
         });
+
+        keyFileStateChange();
+
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
+
         myModule.getComponent().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
+        final JFileChooser keyChooser = new JFileChooser();
+        keyChooser.setDialogTitle(EmbeddedLinuxJVMBundle.getString("ssh.dialog.title"));
+        keyChooser.setMultiSelectionEnabled(false);
+        keyChooser.setFileHidingEnabled(false);
+        selectPrivateKeyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                if (selectPrivateKeyButton == button) {
+                    int returnVal = keyChooser.showOpenDialog(myGenericPanel);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        File file = keyChooser.getSelectedFile();
+                        keyfile.setText(file.getAbsolutePath());
+                    }
+                }
+            }
+        });
+        usingKey.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JCheckBox source = (JCheckBox) e.getSource();
+                if (usingKey == source) {
+                    keyFileStateChange();
+                }
+            }
+        });
         PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("debugport.placeholder"), debugPort);
+        PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("ssh.privatekey.ph"), keyfile);
         ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
+    }
+
+    @Override
+    protected void disposeEditor() {
+        super.disposeEditor();
+    }
+
+    private void keyFileStateChange() {
+        if (!usingKey.isSelected()) {
+            keyfile.setEnabled(false);
+            password.setEnabled(true);
+            selectPrivateKeyButton.setEnabled(false);
+        } else {
+            keyfile.setEnabled(false);
+            password.setEnabled(false);
+            selectPrivateKeyButton.setEnabled(true);
+        }
     }
 
     /**
@@ -115,10 +171,13 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         programArguments.setText(parameters.getProgramArguments());
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
+        usingKey.setSelected(parameters.isUsingKey());
+        keyfile.setText(parameters.getKeyPath());
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
         password.setText(parameters.getPassword());
         sshStatus.setVisible(false);
+        keyFileStateChange();
     }
 
     /**
@@ -131,17 +190,16 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         final String className = getMainClassField().getText();
         final PsiClass aClass = myModuleSelector.findClass(className);
 
-
         configuration.getRunnerParameters().setMainclass(aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className);
 
-        setPiSettings(configuration.getRunnerParameters());
+        setSettings(configuration.getRunnerParameters());
     }
 
     /**
      * Specific settings for this runner
      * @param parameters
      */
-    private void setPiSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
+    private void setSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         parameters.setHostname(hostName.getText());
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
@@ -149,6 +207,8 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         parameters.setPassword(new String(password.getPassword()));
         parameters.setVmParameters(vmParameters.getText());
         parameters.setProgramArguments(programArguments.getText());
+        parameters.setUsingKey(usingKey.isSelected());
+        parameters.setKeyPath(keyfile.getText());
     }
 
     /**

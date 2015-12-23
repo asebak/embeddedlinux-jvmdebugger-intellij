@@ -2,16 +2,24 @@ package com.atsebak.embeddedlinuxjvm.protocol.ssh;
 
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.jcraft.jsch.Session;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
 @Builder
 public class SSHConnectionValidator {
-    String ip;
-    String username;
-    String password;
+
+    private String ip;
+    private String username;
+    @Nullable
+    private String password;
+    @Nullable
+    private String key;
+    private boolean useKey;
 
     /**
      * Pings to see if it can contact hostname
@@ -26,21 +34,30 @@ public class SSHConnectionValidator {
         }
     }
 
-
     /**
      * Can connect to remote target
      *
      * @return status
      */
-    public boolean checkSSHConnection() {
+    public SSHConnectionState checkSSHConnection() {
         try {
-            EmbeddedSSHClient sshClient = EmbeddedSSHClient.builder()
-                    .username(username).password(password).hostname(ip).build();
+            EmbeddedSSHClient sshClient = EmbeddedSSHClient
+                    .builder()
+                    .username(username).password(password).hostname(ip)
+                    .key(key).useKey(useKey).build();
             Session session = sshClient.get();
-            return session.isConnected();
+            return new SSHConnectionValidator.SSHConnectionState(session.isConnected(), null);
         } catch (Exception e) {
-            return false;
+            return new SSHConnectionValidator.SSHConnectionState(false, e.getMessage());
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SSHConnectionState {
+        private boolean connected;
+        private String message;
+
     }
 
 }

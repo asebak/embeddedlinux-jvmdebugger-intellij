@@ -25,25 +25,11 @@ public class CommandLineTarget {
         addRunAsRootOption(cmdBuf);
         addEnvironmentVariables(cmdBuf);
         cmdBuf.append(" java ");
-        addDebugOptions(cmdBuf);
         addVMArguments(cmdBuf);
         addClasspath(cmdBuf);
         addMainType(cmdBuf);
         addArguments(cmdBuf);
         return cmdBuf.toString().replaceAll("\\s{2,}", " ").trim();
-    }
-
-    /**
-     * Adds project arguments to JVM
-     *
-     * @param cmdBuf
-     */
-    private void addArguments(@NotNull StringBuilder cmdBuf) {
-        for (String arg : parameters.getProgramParametersList().getParameters()) {
-            if (!arg.contains("transport=dt_socket") && StringUtils.isNotBlank(arg)) {
-                cmdBuf.append(' ').append(arg.trim());
-            }
-        }
     }
 
     /**
@@ -85,7 +71,7 @@ public class CommandLineTarget {
      * Adds debug options
      * @param cmdBuf
      */
-    private void addDebugOptions(@NotNull StringBuilder cmdBuf) {
+    private void addArguments(@NotNull StringBuilder cmdBuf) {
         if (!parameters.getProgramParametersList().getParameters().isEmpty()) {
             for (String arg : parameters.getProgramParametersList().getParameters()) {
                 cmdBuf.append(' ').append(arg.trim());
