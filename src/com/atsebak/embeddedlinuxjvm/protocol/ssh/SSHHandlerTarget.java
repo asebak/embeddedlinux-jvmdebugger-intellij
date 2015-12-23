@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 @Builder
 public class SSHHandlerTarget {
@@ -139,6 +140,16 @@ public class SSHHandlerTarget {
      */
     private void checkOnProcess(@NotNull final ChannelExec channelExec) {
         ApplicationManager.getApplication().executeOnPooledThread(new JavaStatusChecker(channelExec, consoleView));
+    }
+
+    public Vector getAlreadyDeployedLibraries() throws JSchException {
+        final String remoteDir = FileUtilities.SEPARATOR + EMBEDDED_LINUX_HOME + FileUtilities.SEPARATOR
+                + params.getUsername() + FileUtilities.SEPARATOR + OUTPUT_LOCATION;
+        String path = remoteDir + FileUtilities.SEPARATOR + consoleView.getProject().getName();
+        String jarsPath = path + FileUtilities.SEPARATOR + FileUtilities.LIB;
+        SFTPHandler handler = new SFTPHandler();
+        Session session = connect(ssh.get());
+        return handler.getFiles(session, jarsPath);
     }
 
     /**
