@@ -2,20 +2,19 @@ package com.atsebak.embeddedlinuxjvm.services;
 
 
 import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
-import com.atsebak.embeddedlinuxjvm.deploy.DeployedLibrary;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.SftpException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClasspathService {
     @NotNull
@@ -33,10 +32,11 @@ public class ClasspathService {
     /**
      * Gets the delta of jars between host and target machines.  It will always add the normal project output path but not necessarily the external libs
      * Some potential problems can be that the user stops it midway while deploying so the jars don't go on the target.
-     *
+     * Note: This is not a proper way of doing this but simple to do
      * @param hostLibraries
      * @return targetLibraries
      */
+    @Deprecated
     public List<File> deltaOfDeployedJars(List<File> hostLibraries) {
         List<File> targetLibraries = new ArrayList<File>();
         for (File hostFile : hostLibraries) {
@@ -51,8 +51,8 @@ public class ClasspathService {
     }
 
     /**
-     * Gets the deployed jars on target machine using SSH
-     *
+     * Proper way: Gets the deployed jars on target machine using SSH than compares name, date and size to make sure its correct
+     * The reason for this as it will exponentially increase deployment times to not keep on uploading files that already exist on remote.
      * @return
      * @throws IOException
      * @throws RuntimeConfigurationException
@@ -60,33 +60,36 @@ public class ClasspathService {
      */
     @Deprecated
     public List<File> invokeFindDeployedJars(List<File> hostLibraries, EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters)
-            throws IOException, RuntimeConfigurationException {
+            throws IOException, RuntimeConfigurationException, JSchException, SftpException {
         SSHHandlerTarget target = SSHHandlerTarget.builder().params(runnerParameters)
                 .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                 .ssh(EmbeddedSSHClient.builder()
                         .hostname(runnerParameters.getHostname())
                         .password(runnerParameters.getPassword())
-                        .username(runnerParameters.getUsername()).build())
+                        .username(runnerParameters.getUsername())
+                        .useKey(runnerParameters.isUsingKey())
+                        .key(runnerParameters.getKeyPath())
+                        .build())
                 .build();
-
-//        List<DeployedLibrary> targetLibraries = target.listAlreadyUploadedJars(); //todo fix but already deprecated
-        List<DeployedLibrary> targetLibraries = null;
-
-        Set<String> filesToDeploy = new HashSet<String>(); //hash what files exist
-        //todo improve based on last modified date, size, and the name of the file and not just the filename
-        for (DeployedLibrary deployedLibrary : targetLibraries) {
+        Set<String> filesAlreadyDeployed = new HashSet<String>();
+        List<File> newLibraries = new ArrayList<File>();
+        Vector alreadyDeployedLibraries = target.getAlreadyDeployedLibraries();
+        for (Object alreadyDeployedLibrary : alreadyDeployedLibraries) {
+            ChannelSftp.LsEntry targetLibrary = (ChannelSftp.LsEntry) alreadyDeployedLibrary;
             for (File hostFile : hostLibraries) {
-                if (deployedLibrary.getJarName().equals(hostFile.getName())) {
-                    filesToDeploy.add(hostFile.getName());
+                //Names, Last Modified and Size have to be the exact same for it to be identied as the same file
+                if (targetLibrary.getFilename().equals(hostFile.getName()) && hostFile.length() == targetLibrary.getAttrs().getSize()
+                        && targetLibrary.getAttrs().getMtimeString().equals(new Date(hostFile.lastModified()).toString())) {
+                    //hash what files exist
+                    filesAlreadyDeployed.add(hostFile.getName());
                     break;
                 }
             }
         }
 
         //add files that do not exist on target
-        List<File> newLibraries = new ArrayList<File>();
         for (File hostFile : hostLibraries) {
-            if (!filesToDeploy.contains(hostFile.getName())) {
+            if (!filesAlreadyDeployed.contains(hostFile.getName())) {
                 newLibraries.add(hostFile);
             }
         }
