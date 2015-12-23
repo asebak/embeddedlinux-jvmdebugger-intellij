@@ -1,10 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.services;
 
 
-import com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHHandlerTarget;
-import com.atsebak.embeddedlinuxjvm.protocol.ssh.jsch.EmbeddedSSHClient;
-import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
 import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.jcraft.jsch.ChannelSftp;
@@ -56,23 +53,12 @@ public class ClasspathService {
      * @return
      * @throws IOException
      * @throws RuntimeConfigurationException
-     * @deprecated use deltaOfDeployedJars instead
      */
-    @Deprecated
-    public List<File> invokeFindDeployedJars(List<File> hostLibraries, EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters)
+    public List<File> invokeFindDeployedJars(@NotNull final List<File> hostLibraries, @NotNull final SSHHandlerTarget target)
             throws IOException, RuntimeConfigurationException, JSchException, SftpException {
-        SSHHandlerTarget target = SSHHandlerTarget.builder().params(runnerParameters)
-                .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                .ssh(EmbeddedSSHClient.builder()
-                        .hostname(runnerParameters.getHostname())
-                        .password(runnerParameters.getPassword())
-                        .username(runnerParameters.getUsername())
-                        .useKey(runnerParameters.isUsingKey())
-                        .key(runnerParameters.getKeyPath())
-                        .build())
-                .build();
         Set<String> filesAlreadyDeployed = new HashSet<String>();
         List<File> newLibraries = new ArrayList<File>();
+
         Vector alreadyDeployedLibraries = target.getAlreadyDeployedLibraries();
         for (Object alreadyDeployedLibrary : alreadyDeployedLibraries) {
             ChannelSftp.LsEntry targetLibrary = (ChannelSftp.LsEntry) alreadyDeployedLibrary;

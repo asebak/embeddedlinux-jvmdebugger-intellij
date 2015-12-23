@@ -243,7 +243,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                         try {
                             ClasspathService service = ServiceManager.getService(project, ClasspathService.class);
                             List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
-                            File classpathArchive = FileUtilities.createClasspathArchive(service.invokeFindDeployedJars(hostLibraries, configuration.getRunnerParameters()), project);
+                            File classpathArchive = FileUtilities.createClasspathArchive(service.invokeFindDeployedJars(hostLibraries, buildTargetHandler()), project);
                             invokeDeployment(classpathArchive.getPath(), commandLineTarget);
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
@@ -297,21 +297,7 @@ public class AppCommandLineState extends JavaCommandLineState {
      */
     private void invokeDeployment(String projectOutput, CommandLineTarget commandLineTarget) throws RuntimeConfigurationException, IOException, ClassNotFoundException {
         EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.getString("pi.deployment.start"), ConsoleViewContentType.SYSTEM_OUTPUT);
-        EmbeddedLinuxJVMRunConfigurationRunnerParameters runnerParameters = configuration.getRunnerParameters();
-
-        DeploymentTarget target = DeploymentTarget.builder()
-                .sshHandlerTarget(SSHHandlerTarget.builder()
-                        .params(runnerParameters)
-                        .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
-                        .ssh(EmbeddedSSHClient.builder()
-                                .hostname(runnerParameters.getHostname())
-                                .password(runnerParameters.getPassword())
-                                .username(runnerParameters.getUsername())
-                                .useKey(runnerParameters.isUsingKey())
-                                .key(runnerParameters.getKeyPath())
-                                .build())
-                        .build())
-                .build();
+        DeploymentTarget target = DeploymentTarget.builder().sshHandlerTarget(buildTargetHandler()).build();
         target.upload(new File(projectOutput), commandLineTarget.toString());
     }
 
@@ -399,6 +385,24 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void runSession(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         final RunnerAndConfigurationSettings settings = createRunConfiguration(project, parameters.getPort(), parameters.getHostname());
         ProgramRunnerUtil.executeConfiguration(project, settings, DefaultDebugExecutor.getDebugExecutorInstance());
+    }
+
+    /**
+     * Builds SSH Handler
+     *
+     * @return
+     */
+    private SSHHandlerTarget buildTargetHandler() {
+        return SSHHandlerTarget.builder().params(configuration.getRunnerParameters())
+                .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
+                .ssh(EmbeddedSSHClient.builder()
+                        .hostname(configuration.getRunnerParameters().getHostname())
+                        .password(configuration.getRunnerParameters().getPassword())
+                        .username(configuration.getRunnerParameters().getUsername())
+                        .useKey(configuration.getRunnerParameters().isUsingKey())
+                        .key(configuration.getRunnerParameters().getKeyPath())
+                        .build())
+                .build();
     }
 
 
