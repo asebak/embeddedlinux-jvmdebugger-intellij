@@ -27,5 +27,10 @@
     <orderEntry type="library" name="commons-io-2.4" level="project" />
     <orderEntry type="library" name="jsch-0.1.53" level="project" />
     <orderEntry type="library" name="jsch-0.1.52" level="project" />
+    <orderEntry type="library" name="powermock-module-junit4-rule-agent-1.6.4" level="project" />
+    <orderEntry type="library" name="powermock-module-junit4-rule-agent-1.5.5" level="project" />
+    <orderEntry type="library" name="powermock-api-mockito-1.6.4" level="project" />
+    <orderEntry type="library" name="powermock-module-junit4-1.6.4" level="project" />
+    <orderEntry type="library" name="javassist-3.12.1.GA" level="project" />
   </component>
 </module>
