@@ -132,8 +132,11 @@ public class AppCommandLineState extends JavaCommandLineState {
         handler.addProcessListener(new ProcessAdapter() {
             private void closeSSHConnection() {
                 try {
+                    EmbeddedLinuxJVMConsoleView instance = EmbeddedLinuxJVMConsoleView.getInstance(project);
+                    JavaStatusChecker javaStatusChecker = new JavaStatusChecker(instance);
+                    javaStatusChecker.forceStopJavaApplication(instance.getSession(), configuration.getRunnerParameters().isRunAsRoot(), configuration.getRunnerParameters().getMainclass());
                     if (isDebugMode) {
-                        //todo fix tcp connection closing issue random error message showing up
+                        //todo fix tcp connection closing issue random error message showing up, its because remote debugger needs to be closed before embedded console
                         final DebuggerSession debuggerSession = DebuggerManagerEx.getInstanceEx(project).getContext().getDebuggerSession();
                         if (debuggerSession == null) {
                             return;
@@ -206,7 +209,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     @Override
     protected JavaParameters createJavaParameters() throws ExecutionException {
         EmbeddedLinuxJVMConsoleView.getInstance(project).clear();
-        JavaParameters javaParams = new JavaParameters();
+        final JavaParameters javaParams = new JavaParameters();
         final ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
 
@@ -248,7 +251,8 @@ public class AppCommandLineState extends JavaCommandLineState {
                         } catch (Exception e) {
                             EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
                                     ConsoleViewContentType.ERROR_OUTPUT);
-                            //todo should cancel application
+                            JavaStatusChecker javaStatusChecker = new JavaStatusChecker(null, EmbeddedLinuxJVMConsoleView.getInstance(project));
+                            javaStatusChecker.stopApplication(-1);
                         }
                     }
                 });
@@ -260,7 +264,7 @@ public class AppCommandLineState extends JavaCommandLineState {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
                 if (isDebugMode) {
-                    progressIndicator.setIndeterminate(true);
+//                    progressIndicator(true);
                     final String initializeMsg = String.format(DEBUG_TCP_MESSAGE, configuration.getRunnerParameters().getPort());
                     //this should wait until the deployment states that it's listening to the port
                     while (!outputForwarder.toString().contains(initializeMsg)) {
@@ -359,7 +363,6 @@ public class AppCommandLineState extends JavaCommandLineState {
                     content.getManager().setSelectedContent(content);
                     ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(executor.getToolWindowId());
                     window.activate(null, false, true);
-                    return;
                 }
             }
         }

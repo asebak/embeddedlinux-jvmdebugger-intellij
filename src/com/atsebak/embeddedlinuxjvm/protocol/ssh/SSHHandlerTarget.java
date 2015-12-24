@@ -114,6 +114,7 @@ public class SSHHandlerTarget {
     private void runJavaApp(@NotNull final String path, @NotNull final String cmd) throws IOException, RuntimeConfigurationException {
         consoleView.print(NEW_LINE + EmbeddedLinuxJVMBundle.getString("pi.deployment.build") + NEW_LINE + NEW_LINE, ConsoleViewContentType.SYSTEM_OUTPUT);
         Session session = connect(ssh.get());
+        consoleView.setSession(session);
         try {
             ChannelExec channelExec = (ChannelExec) session.openChannel("exec");
             channelExec.setOutputStream(System.out, true);
