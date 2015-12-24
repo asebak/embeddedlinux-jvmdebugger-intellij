@@ -8,13 +8,14 @@ https://plugins.jetbrains.com/plugin/7738
 
 ![alt text][logo]
 
-Embedded Linux JVM Debugger is a Plugin for IntelliJ that makes it easier to develop Embedded Java applications for embedded systems running on Embedded Linux or on the Yocto Kernel.  It easily integrates with platforms like raspberry pi, ARM microprocessor boards, intel x86 boards, etc.
+Embedded Linux JVM Debugger is a Plugin for IntelliJ IDEA that makes it easier to develop Embedded Java applications for embedded systems running on any variant of embedded linux.  It easily integrates any embedded system such as the raspberry pi or beaglebone black. As long as java can run on the embedded device and ssh protocol is enabled than it's never been simpler to develop embedded java applications.
 
-  - Supports Java 6+ with VM arguments and program paramaters
+  - Supports Java 6+ with Virtual Machine and Program Arguments.
   - Custom Run and Debug configurations for your hardware board.
-  - Automatic rapid deployment to your target device using SSH and SFTP using a delta algorithm for your external jars.
-  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi (RPi).
-  - Supports Yocto Project (You need the Receipe For Java and the Board Support Package Implementation for your H/W board).
+  - Works cross platforms on the host machine whether that is Windows, Linux or Mac platforms.
+  - Smart and rapid deployment algorithm deploy only changed files on the remote device.
+  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi I or II.
+  - Easily integratable with various kernels: Debian, Yocto Project, etc.
 
 
 ### How To Use
@@ -23,7 +24,7 @@ Embedded Linux JVM Debugger is a Plugin for IntelliJ that makes it easier to dev
 
 ![alt text][config]
 
-- Enter in required configurations (username, password, hostname) note: Enable sudo if you require GPIO access. Debug port can be anything that's not reserved.
+- Enter in required configurations (username, password or ssh private key file, hostname) note: Enable sudo if you require GPIO access. Debug port can be anything that's not reserved.
 
 - Run it on your Hardware running Embedded Linux.
 
@@ -38,10 +39,10 @@ $ sudo sh ./ci-build.sh
 
 ### External Libraries
 * Lombok Project
-* SSHJ
 * Mockito/PowerMockito/JUnit
 * Jsch
 * Commons Compress
+* IntelliJ SDK 13+
 
 ### Development
 
