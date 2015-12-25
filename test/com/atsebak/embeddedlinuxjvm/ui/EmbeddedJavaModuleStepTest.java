@@ -9,27 +9,27 @@ import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
 
-public class PIJavaModuleStepTest {
+public class EmbeddedJavaModuleStepTest {
 
     RPiJavaModuleBuilder RPiJavaModuleBuilder = Mockito.mock(RPiJavaModuleBuilder.class);
-    private PIJavaModuleStep piJavaModuleStep;
+    private EmbeddedJavaModuleStep embeddedJavaModuleStep;
 
     @Before
     public void setUp() {
-        piJavaModuleStep = new PIJavaModuleStep(RPiJavaModuleBuilder);
+        embeddedJavaModuleStep = new EmbeddedJavaModuleStep(RPiJavaModuleBuilder);
     }
 
     @Test
     public void validPackageName() throws ConfigurationException {
-        piJavaModuleStep.setPackageName("com.atsebak");
-        boolean validate = piJavaModuleStep.validate();
+        embeddedJavaModuleStep.setPackageName("com.atsebak");
+        boolean validate = embeddedJavaModuleStep.validate();
         assertEquals(validate, true);
     }
 
     @Test(expected = ConfigurationException.class)
     public void badPackageName() throws ConfigurationException {
-        piJavaModuleStep.setPackageName("com.atsebak--");
-        boolean validate = piJavaModuleStep.validate();
+        embeddedJavaModuleStep.setPackageName("com.atsebak--");
+        boolean validate = embeddedJavaModuleStep.validate();
         assertEquals(validate, false);
     }
 }

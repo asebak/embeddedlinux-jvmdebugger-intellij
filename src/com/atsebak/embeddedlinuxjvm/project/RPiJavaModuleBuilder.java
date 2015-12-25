@@ -1,7 +1,7 @@
 package com.atsebak.embeddedlinuxjvm.project;
 
 import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
-import com.atsebak.embeddedlinuxjvm.ui.PIJavaModuleStep;
+import com.atsebak.embeddedlinuxjvm.ui.EmbeddedJavaModuleStep;
 import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.ProjectUtils;
 import com.atsebak.embeddedlinuxjvm.utils.Template;
@@ -28,6 +28,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.PsiTestUtil;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -41,14 +42,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Getter
 @Setter
 @NoArgsConstructor
 public class RPiJavaModuleBuilder extends JavaModuleBuilder {
-    public static final ProjectType PI_PROJECT_TYPE = new ProjectType("PI_JAVA");
+    private static final ProjectType PI_PROJECT_TYPE = new ProjectType("PI_JAVA");
     private static final String PROJECT_NAME = "Raspberry PI";
     private String packageName;
     @Nullable
     private File[] jarsToAdd;
+    private boolean noLibrariesNeeded;
 
     /**
      * Used to define the hierachy of the project definition
@@ -95,14 +98,14 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
                     }
                     srcPath += FileUtilities.SEPARATOR + directory;
                 }
-                Template.builder().name("main.ftl")
+                Template.builder().name(getMainClassTemplateName())
                         .classContext(this.getClass())
                         .outputFile(srcPath + FileUtilities.SEPARATOR + "Main.java")
                         .data(new HashMap<String, Object>() {{
                             put("packagename", packageName);
                         }}).build()
                         .toFile();
-                ProjectUtils.addProjectConfiguration(rootModel.getModule(), project, packageName + ".Main");
+                ProjectUtils.addProjectConfiguration(rootModel.getModule(), packageName + ".Main", getPresentableName());
             }
         });
     }
@@ -199,11 +202,13 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     @Override
     protected void setupModule(Module module) throws ConfigurationException {
         super.setupModule(module);
-        final String libPath = module.getProject().getBasePath() + File.separator + "lib";
-        VfsUtil.createDirectories(libPath);
-        File outputFiles = new File(libPath);
-        FileUtilities.unzip(getClass().getResourceAsStream("/pi4j.zip"), outputFiles.getAbsolutePath());
-        jarsToAdd = outputFiles.listFiles();
+        if (!noLibrariesNeeded) {
+            final String libPath = module.getProject().getBasePath() + File.separator + "lib";
+            VfsUtil.createDirectories(libPath);
+            File outputFiles = new File(libPath);
+            FileUtilities.unzip(getClass().getResourceAsStream("/pi4j.zip"), outputFiles.getAbsolutePath());
+            jarsToAdd = outputFiles.listFiles();
+        }
     }
 
     /**
@@ -236,7 +241,7 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     @Nullable
     @Override
     public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
-        PIJavaModuleStep step = new PIJavaModuleStep(this);
+        EmbeddedJavaModuleStep step = new EmbeddedJavaModuleStep(this);
         Disposer.register(parentDisposable, step);
         return step;
     }
@@ -258,4 +263,15 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     public void addSourcePath(Pair<String, String> pair) {
 
     }
+
+    /**
+     * gets file marker file name
+     *
+     * @return
+     */
+    public String getMainClassTemplateName() {
+        return "rpimain.ftl";
+    }
+
+
 }
