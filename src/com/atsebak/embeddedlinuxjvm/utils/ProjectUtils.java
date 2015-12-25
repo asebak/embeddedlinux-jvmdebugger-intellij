@@ -61,22 +61,21 @@ public class ProjectUtils {
     }
 
     /**
-     * Adds a run configuration dynamically
-     *
+     * adds run configuration dynamically
      * @param module
-     * @param project
      * @param mainClass
+     * @param boardName
      */
-    public static void addProjectConfiguration(final Module module, final Project project, final String mainClass) {
+    public static void addProjectConfiguration(final Module module, final String mainClass, final String boardName) {
         final Runnable r = new Runnable() {
             @Override
             public void run() {
-                final RunManager runManager = RunManager.getInstance(project);
+                final RunManager runManager = RunManager.getInstance(module.getProject());
                 final RunnerAndConfigurationSettings settings = runManager.
                         createRunConfiguration(module.getName(), EmbeddedLinuxJVMConfigurationType.getInstance().getFactory());
                 final EmbeddedLinuxJVMRunConfiguration configuration = (EmbeddedLinuxJVMRunConfiguration) settings.getConfiguration();
 
-                configuration.setName(EmbeddedLinuxJVMBundle.getString("pi.runner.name"));
+                configuration.setName(EmbeddedLinuxJVMBundle.message("runner.name", boardName));
                 configuration.getRunnerParameters().setRunAsRoot(true);
                 configuration.getRunnerParameters().setMainclass(mainClass);
 
@@ -85,7 +84,7 @@ public class ProjectUtils {
 
                 final Notification notification = new Notification(
                         Notifications.GROUPDISPLAY_ID,
-                        EmbeddedLinuxJVMBundle.getString("pi.connection.required"), EmbeddedLinuxJVMBundle.getString("pi.connection.notsetup"),
+                        EmbeddedLinuxJVMBundle.getString("pi.connection.required"), EmbeddedLinuxJVMBundle.message("pi.connection.notsetup", boardName),
                         NotificationType.INFORMATION);
                 com.intellij.notification.Notifications.Bus.notify(notification);
             }

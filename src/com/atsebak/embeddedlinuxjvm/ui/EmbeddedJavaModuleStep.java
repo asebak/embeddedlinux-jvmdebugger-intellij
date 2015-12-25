@@ -1,5 +1,6 @@
 package com.atsebak.embeddedlinuxjvm.ui;
 
+import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.lang.java.lexer.JavaLexer;
@@ -11,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
+public class EmbeddedJavaModuleStep extends ModuleWizardStep implements Disposable {
     private RPiJavaModuleBuilder RPiJavaModuleBuilder;
     private JPanel main;
     private JTextField packageField;
 
-    public PIJavaModuleStep(@NotNull RPiJavaModuleBuilder RPiJavaModuleBuilder) {
+    public EmbeddedJavaModuleStep(@NotNull RPiJavaModuleBuilder RPiJavaModuleBuilder) {
         this.RPiJavaModuleBuilder = RPiJavaModuleBuilder;
     }
 
@@ -63,7 +64,7 @@ public class PIJavaModuleStep extends ModuleWizardStep implements Disposable {
     public boolean validate() throws ConfigurationException {
         if (StringUtil.isEmptyOrSpaces(packageField.getText()) ||
                 !isValidFullyQualifiedJavaIdentifier(packageField.getText())) {
-            throw new ConfigurationException("Base package is invalid");
+            throw new ConfigurationException(EmbeddedLinuxJVMBundle.getString("basepackage.invalid"));
         }
 
         return true;
