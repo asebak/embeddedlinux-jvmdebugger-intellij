@@ -15,7 +15,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * The icon displayed in the project creator dialog
-     *
      * @return
      */
     @Override
@@ -25,7 +24,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * Build for module
-     *
      * @return
      */
     @Override
@@ -35,7 +33,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * Module name
-     *
      * @return
      */
     @Override
@@ -46,7 +43,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * Help description of the module
-     *
      * @return
      */
     @Override
@@ -57,7 +53,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * Project Type
-     *
      * @return
      */
     @Override
@@ -67,7 +62,6 @@ public class BeagleBoneBlackJavaModuleBuilder extends RPiJavaModuleBuilder {
 
     /**
      * gets file marker file name
-     *
      * @return
      */
     public String getMainClassTemplateName() {

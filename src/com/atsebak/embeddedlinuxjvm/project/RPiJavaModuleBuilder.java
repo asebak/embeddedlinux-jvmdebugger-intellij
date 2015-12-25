@@ -202,7 +202,7 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     @Override
     protected void setupModule(Module module) throws ConfigurationException {
         super.setupModule(module);
-        if (!noLibrariesNeeded) {
+        if(!noLibrariesNeeded) {
             final String libPath = module.getProject().getBasePath() + File.separator + "lib";
             VfsUtil.createDirectories(libPath);
             File outputFiles = new File(libPath);
@@ -266,7 +266,6 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
 
     /**
      * gets file marker file name
-     *
      * @return
      */
     public String getMainClassTemplateName() {
