@@ -35,7 +35,7 @@ public class JavaStatusChecker extends Thread {
         project = null;
         channelExec = null;
     }
-    public JavaStatusChecker(@NotNull ChannelExec channelExec, @NotNull EmbeddedLinuxJVMConsoleView consoleView) {
+    public JavaStatusChecker(@Nullable ChannelExec channelExec, @NotNull EmbeddedLinuxJVMConsoleView consoleView) {
         this.channelExec = channelExec;
         this.project = consoleView.getProject();
         this.consoleView = consoleView;
@@ -47,6 +47,9 @@ public class JavaStatusChecker extends Thread {
     @Override
     @SneakyThrows
     public void run() {
+        if (channelExec == null) {
+            return;
+        }
         while (!channelExec.isClosed()) {
             Thread.sleep(1000);
         }
