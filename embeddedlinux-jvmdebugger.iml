@@ -9,7 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="IntelliJ IDEA IU-141.1532.4" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IntelliJ IDEA Community Edition IC-145.597.3" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lombok" level="project" />
     <orderEntry type="library" name="bcprov-ext-jdk15on-1.47" level="project" />
@@ -32,5 +32,6 @@
     <orderEntry type="library" name="powermock-api-mockito-1.6.4" level="project" />
     <orderEntry type="library" name="powermock-module-junit4-1.6.4" level="project" />
     <orderEntry type="library" name="javassist-3.12.1.GA" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
