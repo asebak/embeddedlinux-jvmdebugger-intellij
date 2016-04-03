@@ -9,16 +9,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
-          <b>Version 1.21</b>
+          <b>Version 1.20</b>
         <ul>
             <li>Fixed project templates</li>
             <li>Migrate to IntelliJ 2016</li>
-        </ul>
-        <b>Version 1.1</b>
-        <ul>
-            <li>Added SSH Private key file</li>
-            <li>Closes java process on remote device when manually being closed</li>
-            <li>Fast deployment times on larger java projects</li>
         </ul>
         <b>Version 1.11</b>
         <ul>
