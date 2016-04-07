@@ -2,6 +2,7 @@ package com.atsebak.embeddedlinuxjvm.runner.data;
 
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Data
@@ -12,7 +13,10 @@ public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneab
     private boolean usingKey;
     @Nullable
     private String keyPath;
-    private String port;
+    @NotNull
+    private String port = "1234";
+    @NotNull
+    private int sshPort = 22;
     private String username;
     @Nullable
     private String password;

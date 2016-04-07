@@ -7,11 +7,11 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 import lombok.Builder;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Builder
 public class EmbeddedSSHClient {
-    private static final int SSH_PORT = 22;
     private String username;
     @Nullable
     private String password;
@@ -19,7 +19,8 @@ public class EmbeddedSSHClient {
     private String key;
     private boolean useKey;
     private String hostname;
-
+    @NotNull
+    private int port;
 
     /**
      * Gets SSH Client
@@ -30,7 +31,7 @@ public class EmbeddedSSHClient {
     public Session get() {
         JSch jsch = new JSch();
         UserInfo userInfo;
-        Session session = jsch.getSession(username, hostname, SSH_PORT);
+        Session session = jsch.getSession(username, hostname, port);
         if (useKey) {
             jsch.addIdentity(key);
             userInfo = new EmbeddedUserInfoInteractive();

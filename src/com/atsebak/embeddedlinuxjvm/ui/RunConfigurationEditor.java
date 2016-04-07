@@ -16,7 +16,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.psi.JavaCodeFragment;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiMethodUtil;
 import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.PanelWithAnchor;
@@ -27,12 +26,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunConfiguration> implements PanelWithAnchor {
     private final ConfigurationModuleSelector myModuleSelector;
@@ -53,6 +54,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
     private JCheckBox usingKey;
     private JTextField keyfile;
     private JButton selectPrivateKeyButton;
+    private JTextField sshPort;
     private JComponent myAnchor;
 
     /**
@@ -62,72 +64,58 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
      */
     public RunConfigurationEditor(final Project project) {
         myProject = project;
-        validateConnection.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
-                    public void run() {
-                        final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
-                        if (progressIndicator != null) {
-                            progressIndicator.setText(EmbeddedLinuxJVMBundle.getString("ssh.tryingtoconnect"));
-                            progressIndicator.setIndeterminate(true);
-                        }
+        validateConnection.addActionListener(e -> ProgressManager.getInstance().runProcessWithProgressSynchronously(new Runnable() {
+            public void run() {
+                final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
+                if (progressIndicator != null) {
+                    progressIndicator.setText(EmbeddedLinuxJVMBundle.getString("ssh.tryingtoconnect"));
+                    progressIndicator.setIndeterminate(true);
+                }
 
-                        SSHConnectionValidator.SSHConnectionState validator = SSHConnectionValidator
-                                .builder()
-                                .ip(hostName.getText())
-                                .password(new String(password.getPassword()))
-                                .username(username.getText())
-                                .useKey(usingKey.isSelected())
-                                .key(keyfile.getText())
-                                .build().checkSSHConnection();
+                SSHConnectionValidator.SSHConnectionState validator = SSHConnectionValidator
+                        .builder()
+                        .ip(hostName.getText())
+                        .password(new String(password.getPassword()))
+                        .username(username.getText())
+                        .useKey(usingKey.isSelected())
+                        .key(keyfile.getText())
+                        .build().checkSSHConnection();
 
-                        sshStatus.setVisible(true);
-                        if (validator.isConnected()) {
-                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
-                            sshStatus.setForeground(Color.GREEN);
-                        } else {
-                            sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error") + ": " + validator.getMessage());
-                            sshStatus.setForeground(Color.RED);
-                        }
-                    }
-                }, EmbeddedLinuxJVMBundle.getString("pi.validatingconnection"), true, myProject);
-
+                sshStatus.setVisible(true);
+                if (validator.isConnected()) {
+                    sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.connection.success"));
+                    sshStatus.setForeground(Color.GREEN);
+                } else {
+                    sshStatus.setText(EmbeddedLinuxJVMBundle.getString("ssh.remote.error") + ": " + validator.getMessage());
+                    sshStatus.setForeground(Color.RED);
+                }
             }
-        });
+        }, EmbeddedLinuxJVMBundle.getString("pi.validatingconnection"), true, myProject));
 
         keyFileStateChange();
 
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
 
-        myModule.getComponent().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
+        myModule.getComponent().addActionListener(e -> {
         });
         final JFileChooser keyChooser = new JFileChooser();
         keyChooser.setDialogTitle(EmbeddedLinuxJVMBundle.getString("ssh.dialog.title"));
         keyChooser.setMultiSelectionEnabled(false);
         keyChooser.setFileHidingEnabled(false);
-        selectPrivateKeyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton button = (JButton) e.getSource();
-                if (selectPrivateKeyButton == button) {
-                    int returnVal = keyChooser.showOpenDialog(myGenericPanel);
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        File file = keyChooser.getSelectedFile();
-                        keyfile.setText(file.getAbsolutePath());
-                    }
+        selectPrivateKeyButton.addActionListener(e -> {
+            JButton button = (JButton) e.getSource();
+            if (selectPrivateKeyButton == button) {
+                int returnVal = keyChooser.showOpenDialog(myGenericPanel);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = keyChooser.getSelectedFile();
+                    keyfile.setText(file.getAbsolutePath());
                 }
             }
         });
-        usingKey.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                JCheckBox source = (JCheckBox) e.getSource();
-                if (usingKey == source) {
-                    keyFileStateChange();
-                }
+        usingKey.addItemListener(e -> {
+            JCheckBox source = (JCheckBox) e.getSource();
+            if (usingKey == source) {
+                keyFileStateChange();
             }
         });
         PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("debugport.placeholder"), debugPort);
@@ -135,6 +123,31 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
+
+        //restrict only numbers
+        ((AbstractDocument) sshPort.getDocument()).setDocumentFilter(new DocumentFilter() {
+            Pattern regEx = Pattern.compile("\\d+");
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                Matcher matcher = regEx.matcher(text);
+                if (!matcher.matches()) {
+                    return;
+                }
+                super.replace(fb, offset, length, text, attrs);
+            }
+        });
+
+        ((AbstractDocument) debugPort.getDocument()).setDocumentFilter(new DocumentFilter() {
+            Pattern regEx = Pattern.compile("\\d+");
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                Matcher matcher = regEx.matcher(text);
+                if (!matcher.matches()) {
+                    return;
+                }
+                super.replace(fb, offset, length, text, attrs);
+            }
+        });
     }
 
     @Override
@@ -176,6 +189,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         debugPort.setText(parameters.getPort());
         username.setText(parameters.getUsername());
         password.setText(parameters.getPassword());
+        sshPort.setText(Integer.toString(parameters.getSshPort()));
         sshStatus.setVisible(false);
         keyFileStateChange();
     }
@@ -209,6 +223,10 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         parameters.setProgramArguments(programArguments.getText());
         parameters.setUsingKey(usingKey.isSelected());
         parameters.setKeyPath(keyfile.getText());
+        if(org.apache.commons.lang.StringUtils.isEmpty(sshPort.getText())) {
+            sshPort.setText("22");
+        }
+        parameters.setSshPort(Integer.parseInt(sshPort.getText()));
     }
 
     /**
@@ -225,18 +243,15 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
      * Creates UI Components
      */
     private void createUIComponents() {
-        myMainClass = new LabeledComponent<EditorTextFieldWithBrowseButton>();
-        myMainClass.setComponent(new EditorTextFieldWithBrowseButton(myProject, true, new JavaCodeFragment.VisibilityChecker() {
-            @Override
-            public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place) {
-                if (declaration instanceof PsiClass) {
-                    final PsiClass aClass = (PsiClass)declaration;
-                    if (ConfigurationUtil.MAIN_CLASS.value(aClass) && PsiMethodUtil.findMainMethod(aClass) != null || place.getParent() != null && myModuleSelector.findClass(((PsiClass)declaration).getQualifiedName()) != null) {
-                        return Visibility.VISIBLE;
-                    }
+        myMainClass = new LabeledComponent<>();
+        myMainClass.setComponent(new EditorTextFieldWithBrowseButton(myProject, true, (declaration, place) -> {
+            if (declaration instanceof PsiClass) {
+                final PsiClass aClass = (PsiClass)declaration;
+                if (ConfigurationUtil.MAIN_CLASS.value(aClass) && PsiMethodUtil.findMainMethod(aClass) != null || place.getParent() != null && myModuleSelector.findClass(((PsiClass)declaration).getQualifiedName()) != null) {
+                    return JavaCodeFragment.VisibilityChecker.Visibility.VISIBLE;
                 }
-                return Visibility.NOT_VISIBLE;
             }
+            return JavaCodeFragment.VisibilityChecker.Visibility.NOT_VISIBLE;
         }));
     }
 

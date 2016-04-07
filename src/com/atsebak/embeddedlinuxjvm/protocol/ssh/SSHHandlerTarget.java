@@ -161,8 +161,12 @@ public class SSHHandlerTarget {
     @SneakyThrows({RuntimeConfigurationException.class})
     private Session connect(Session session) {
         if (!session.isConnected()) {
-            session = EmbeddedSSHClient.builder().username(params.getUsername())
-                    .password(params.getPassword()).hostname(params.getHostname()).build().get();
+            session = EmbeddedSSHClient.builder()
+                    .username(params.getUsername())
+                    .password(params.getPassword())
+                    .hostname(params.getHostname())
+                    .port(params.getSshPort())
+                    .build().get();
             if (!session.isConnected()) {
                 setErrorOnUI(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));
                 throw new RuntimeConfigurationException(EmbeddedLinuxJVMBundle.getString("ssh.remote.error"));

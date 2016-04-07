@@ -163,7 +163,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                             @NotNull
                             @Override
                             public Boolean fun(String title) {
-                                return AppCommandLineState.getRunConfigurationName(configuration.getRunnerParameters().getPort()).equals(title);
+                                return AppCommandLineState.getRunConfigurationName(String.valueOf(configuration.getRunnerParameters().getPort())).equals(title);
                             }
                         });
 //                for (RunContentDescriptor descriptor : descriptors) {
@@ -399,6 +399,7 @@ public class AppCommandLineState extends JavaCommandLineState {
         return SSHHandlerTarget.builder().params(configuration.getRunnerParameters())
                 .consoleView(EmbeddedLinuxJVMConsoleView.getInstance(project))
                 .ssh(EmbeddedSSHClient.builder()
+                        .port(configuration.getRunnerParameters().getSshPort())
                         .hostname(configuration.getRunnerParameters().getHostname())
                         .password(configuration.getRunnerParameters().getPassword())
                         .username(configuration.getRunnerParameters().getUsername())

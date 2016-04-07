@@ -21,7 +21,7 @@ public class EmbeddedLinuxJVMRunnerValidator {
         if (StringUtil.isEmptyOrSpaces(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.hostname"));
         }
-        if (StringUtil.isEmptyOrSpaces(rp.getPort())) {
+        if (StringUtil.isEmptyOrSpaces(String.valueOf(rp.getPort()))) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.port"));
         }
         if (StringUtil.isEmptyOrSpaces(rp.getUsername())) {
@@ -29,6 +29,9 @@ public class EmbeddedLinuxJVMRunnerValidator {
         }
         if (StringUtil.isEmptyOrSpaces(rp.getKeyPath()) && rp.isUsingKey()) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.key"));
+        }
+        if(StringUtil.isEmptyOrSpaces(String.valueOf(rp.getSshPort()))) {
+            throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.sshport"));
         }
     }
 

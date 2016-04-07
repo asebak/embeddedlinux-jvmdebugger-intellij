@@ -9,7 +9,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
-          <b>Version 1.20</b>
+        <b>Version 1.20</b>
         <ul>
             <li>Fixed project templates</li>
             <li>Migrate to IntelliJ 2016</li>

@@ -20,6 +20,7 @@ public class SSHConnectionValidator {
     @Nullable
     private String key;
     private boolean useKey;
+    private int port;
 
     /**
      * Pings to see if it can contact hostname
@@ -43,8 +44,13 @@ public class SSHConnectionValidator {
         try {
             EmbeddedSSHClient sshClient = EmbeddedSSHClient
                     .builder()
-                    .username(username).password(password).hostname(ip)
-                    .key(key).useKey(useKey).build();
+                    .port(port)
+                    .username(username)
+                    .password(password)
+                    .hostname(ip)
+                    .key(key)
+                    .useKey(useKey)
+                    .build();
             Session session = sshClient.get();
             return new SSHConnectionValidator.SSHConnectionState(session.isConnected(), null);
         } catch (Exception e) {
