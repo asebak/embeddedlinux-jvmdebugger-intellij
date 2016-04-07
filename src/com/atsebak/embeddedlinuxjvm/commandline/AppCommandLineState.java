@@ -159,13 +159,7 @@ public class AppCommandLineState extends JavaCommandLineState {
             private void closeDescriptors() {
                 //todo remove remote debugger console
                 final Collection<RunContentDescriptor> descriptors =
-                        ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
-                            @NotNull
-                            @Override
-                            public Boolean fun(String title) {
-                                return AppCommandLineState.getRunConfigurationName(String.valueOf(configuration.getRunnerParameters().getPort())).equals(title);
-                            }
-                        });
+                        ExecutionHelper.findRunningConsoleByTitle(project, title -> AppCommandLineState.getRunConfigurationName(configuration.getRunnerParameters().getPort()).equals(title));
 //                for (RunContentDescriptor descriptor : descriptors) {
 //                    final Content content = descriptor.getAttachedContent();
 //                }
@@ -237,27 +231,19 @@ public class AppCommandLineState extends JavaCommandLineState {
         final Application app = ApplicationManager.getApplication();
 
         //deploy on Non-read thread so can execute right away
-        app.executeOnPooledThread(new Runnable() {
-            @Override
-            public void run() {
-                ApplicationManager.getApplication().runReadAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            ClasspathService service = ServiceManager.getService(project, ClasspathService.class);
-                            List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
-                            File classpathArchive = FileUtilities.createClasspathArchive(service.invokeFindDeployedJars(hostLibraries, buildTargetHandler()), project);
-                            invokeDeployment(classpathArchive.getPath(), commandLineTarget);
-                        } catch (Exception e) {
-                            EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
-                                    ConsoleViewContentType.ERROR_OUTPUT);
-                            JavaStatusChecker javaStatusChecker = new JavaStatusChecker(null, EmbeddedLinuxJVMConsoleView.getInstance(project));
-                            javaStatusChecker.stopApplication(-1);
-                        }
-                    }
-                });
+        app.executeOnPooledThread(() -> ApplicationManager.getApplication().runReadAction(() -> {
+            try {
+                ClasspathService service = ServiceManager.getService(project, ClasspathService.class);
+                List<File> hostLibraries = invokeClassPathResolver(classPath.getPathList(), manager.getProjectSdk());
+                File classpathArchive = FileUtilities.createClasspathArchive(service.invokeFindDeployedJars(hostLibraries, buildTargetHandler()), project);
+                invokeDeployment(classpathArchive.getPath(), commandLineTarget);
+            } catch (Exception e) {
+                EmbeddedLinuxJVMConsoleView.getInstance(project).print(EmbeddedLinuxJVMBundle.message("pi.connection.failed", e.getMessage()) + "\r\n",
+                        ConsoleViewContentType.ERROR_OUTPUT);
+                JavaStatusChecker javaStatusChecker = new JavaStatusChecker(null, EmbeddedLinuxJVMConsoleView.getInstance(project));
+                javaStatusChecker.stopApplication(-1);
             }
-        });
+        }));
 
         //invoke later because it reads from other threads(debugging executor)
         ProgressManager.getInstance().run(new Task.Backgroundable(project, EmbeddedLinuxJVMBundle.message("pi.deploy"), true) {
@@ -269,12 +255,7 @@ public class AppCommandLineState extends JavaCommandLineState {
                     //this should wait until the deployment states that it's listening to the port
                     while (!outputForwarder.toString().contains(initializeMsg)) {
                     }
-                    app.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeOldSessionAndDebug(project, configuration.getRunnerParameters());
-                        }
-                    });
+                    app.invokeLater(() -> closeOldSessionAndDebug(project, configuration.getRunnerParameters()));
                 }
             }
         });
@@ -340,13 +321,7 @@ public class AppCommandLineState extends JavaCommandLineState {
     private void closeOldSession(final Project project, EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
         final String configurationName = AppCommandLineState.getRunConfigurationName(parameters.getPort());
         final Collection<RunContentDescriptor> descriptors =
-                ExecutionHelper.findRunningConsoleByTitle(project, new NotNullFunction<String, Boolean>() {
-                    @NotNull
-                    @Override
-                    public Boolean fun(String title) {
-                        return configurationName.equals(title);
-                    }
-                });
+                ExecutionHelper.findRunningConsoleByTitle(project, configurationName::equals);
 
         if (descriptors.size() > 0) {
             final RunContentDescriptor descriptor = descriptors.iterator().next();

@@ -21,7 +21,7 @@ public class EmbeddedLinuxJVMRunnerValidator {
         if (StringUtil.isEmptyOrSpaces(rp.getHostname())) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.hostname"));
         }
-        if (StringUtil.isEmptyOrSpaces(String.valueOf(rp.getPort()))) {
+        if (StringUtil.isEmptyOrSpaces(rp.getPort())) {
             throw new RuntimeConfigurationWarning(EmbeddedLinuxJVMBundle.getString("pi.invalid.port"));
         }
         if (StringUtil.isEmptyOrSpaces(rp.getUsername())) {
