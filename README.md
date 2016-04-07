@@ -14,7 +14,7 @@ Embedded Linux JVM Debugger is a Plugin for IntelliJ IDEA that makes it easier t
   - Custom Run and Debug configurations for your hardware board.
   - Works cross platforms on the host machine whether that is Windows, Linux or Mac platforms.
   - Smart and rapid deployment algorithm deploy only changed files on the remote device.
-  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi I or II.
+  - Project Templates and integration with PI4J https://github.com/Pi4J/pi4j/ specifically for the Raspberry Pi I, II, or III.
   - Easily integratable with various kernels: Debian, Yocto Project, etc.
 
 
@@ -38,11 +38,11 @@ $ sudo sh ./ci-build.sh
 ```
 
 ### External Libraries
-* Lombok Project
+* Lombok Project (Install the IntelliJ plugin or project won't compile)
 * Mockito/PowerMockito/JUnit
 * Jsch
 * Commons Compress
-* IntelliJ SDK 13+
+* IntelliJ SDK 2016 + Java 8 (since release 1.20)
 
 ### Development
 
