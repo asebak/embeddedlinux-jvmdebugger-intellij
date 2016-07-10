@@ -19,6 +19,7 @@ public class CommandLineTargetTest {
     EmbeddedLinuxJVMRunConfiguration piRunConfiguration = Mockito.mock(EmbeddedLinuxJVMRunConfiguration.class);
     EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
     ParametersList parametersList = Mockito.mock(ParametersList.class);
+    ParametersList jvmParametersList = Mockito.mock(ParametersList.class);
 
     @Before
     public void setUp() {
@@ -29,7 +30,7 @@ public class CommandLineTargetTest {
         when(piRunConfiguration.getRunnerParameters()).thenReturn(parameters);
         when(javaParameters.getProgramParametersList()).thenReturn(parametersList);
         when(javaParameters.getProgramParametersList().getParameters()).thenReturn(new ArrayList<String>());
-        when(javaParameters.getVMParametersList()).thenReturn(parametersList);
+        when(javaParameters.getVMParametersList()).thenReturn(jvmParametersList);
         when(javaParameters.getMainClass()).thenReturn(parameters.getMainclass());
     }
 
@@ -46,6 +47,7 @@ public class CommandLineTargetTest {
 
     @Test
     public void testDebugCommand() {
+        JavaParameters params = Mockito.mock(JavaParameters.class);
         String debugCommand = CommandLineTarget.builder()
                 .isDebugging(true)
                 .parameters(javaParameters)
@@ -64,4 +66,17 @@ public class CommandLineTargetTest {
                 .build().toString();
         assertTrue(runCommand.contains(String.format("sudo java -cp classes:lib/'*' %s %s", parameters.getMainclass(), "1 2 3")));
     }
+
+    @Test
+    public void testRemoveJavaAgent() {
+        when(jvmParametersList.getParameters()).thenReturn(Arrays.asList("-javaagent:123", "-foo:bar"));
+        String runCommand = CommandLineTarget.builder()
+                .isDebugging(false)
+                .parameters(javaParameters)
+                .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
+                .build().toString();
+        System.out.println(runCommand);
+        assertTrue(runCommand.contains(String.format("sudo java %s -cp classes:lib/'*' %s", "-foo:bar" ,parameters.getMainclass())));
+    }
+
 }
