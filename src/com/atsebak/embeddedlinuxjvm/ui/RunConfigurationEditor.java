@@ -74,6 +74,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
 
                 SSHConnectionValidator.SSHConnectionState validator = SSHConnectionValidator
                         .builder()
+                        .port(Integer.valueOf(sshPort.getText()))
                         .ip(hostName.getText())
                         .password(new String(password.getPassword()))
                         .username(username.getText())
