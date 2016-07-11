@@ -61,7 +61,7 @@ public class CommandLineTarget {
                     embeddedLinuxJVMRunConfiguration.getRunnerParameters().getPort());
         }
         for (String arg : parameters.getVMParametersList().getParameters()) {
-            if (!arg.contains("transport=dt_socket") && StringUtils.isNotBlank(arg)
+            if (!arg.contains("transport=dt_socket") && !arg.contains("javaagent") && StringUtils.isNotBlank(arg)
                     && !parameters.getProgramParametersList().getParameters().equals(parameters.getVMParametersList().getParameters())) {
                 cmdBuf.append(' ').append(arg.trim());
             }
