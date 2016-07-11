@@ -61,6 +61,7 @@ public class CommandLineTarget {
                     embeddedLinuxJVMRunConfiguration.getRunnerParameters().getPort());
         }
         for (String arg : parameters.getVMParametersList().getParameters()) {
+            //todo see if devs need the java agent support because for now this is a quick fix that might not be the proper way
             if (!arg.contains("transport=dt_socket") && !arg.contains("javaagent") && StringUtils.isNotBlank(arg)
                     && !parameters.getProgramParametersList().getParameters().equals(parameters.getVMParametersList().getParameters())) {
                 cmdBuf.append(' ').append(arg.trim());
