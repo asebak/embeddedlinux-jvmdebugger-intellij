@@ -4,10 +4,13 @@ import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.atsebak.embeddedlinuxjvm.protocol.ssh.SSHConnectionValidator;
 import com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.atsebak.embeddedlinuxjvm.runner.data.EmbeddedLinuxJVMRunConfigurationRunnerParameters;
+import com.intellij.application.options.ModulesComboBox;
 import com.intellij.execution.JavaExecutionUtil;
 import com.intellij.execution.configurations.ConfigurationUtil;
 import com.intellij.execution.ui.ClassBrowser;
 import com.intellij.execution.ui.ConfigurationModuleSelector;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -39,8 +42,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
     private final ConfigurationModuleSelector myModuleSelector;
     private final Project myProject;
     private LabeledComponent<EditorTextFieldWithBrowseButton> myMainClass;
-    private LabeledComponent<JComboBox> myModule;
-    private JPanel myGenericPanel;
+    private LabeledComponent<ModulesComboBox> myModule;
     private JCheckBox runAsRootCheckBox;
     private JTextField debugPort;
     private JTextField hostName;
@@ -95,6 +97,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
 
         keyFileStateChange();
 
+        myModule.getComponent().fillModules(project);
         myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent());
 
         myModule.getComponent().addActionListener(e -> {
@@ -106,7 +109,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         selectPrivateKeyButton.addActionListener(e -> {
             JButton button = (JButton) e.getSource();
             if (selectPrivateKeyButton == button) {
-                int returnVal = keyChooser.showOpenDialog(myGenericPanel);
+                int returnVal = keyChooser.showOpenDialog(mainPanel);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = keyChooser.getSelectedFile();
                     keyfile.setText(file.getAbsolutePath());
@@ -179,9 +182,11 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
                 configuration.getRunnerParameters().getMainclass().replaceAll("\\$", "\\.") : "");
 
         EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters = configuration.getRunnerParameters();
-        vmParameters.setDialogCaption(EmbeddedLinuxJVMBundle.getString("app.vmoptions"));
+        Module moduleParam = null;
+        if (parameters.getModuleName() != null && parameters.getModuleName().length() > 0) {
+            moduleParam = ModuleManager.getInstance(myProject).findModuleByName(parameters.getModuleName());
+        }
         vmParameters.setText(parameters.getVmParameters());
-        programArguments.setDialogCaption(EmbeddedLinuxJVMBundle.getString("app.programargs"));
         programArguments.setText(parameters.getProgramArguments());
         hostName.setText(parameters.getHostname());
         runAsRootCheckBox.setSelected(parameters.isRunAsRoot());
@@ -192,6 +197,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         password.setText(parameters.getPassword());
         sshPort.setText(Integer.toString(parameters.getSshPort()));
         sshStatus.setVisible(false);
+        myModule.getComponent().setSelectedModule(moduleParam);
         keyFileStateChange();
     }
 
@@ -215,6 +221,10 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
      * @param parameters
      */
     private void setSettings(EmbeddedLinuxJVMRunConfigurationRunnerParameters parameters) {
+        String moduleName = "";
+        if (myModule.getComponent().getSelectedModule() != null) {
+            moduleName = myModule.getComponent().getSelectedModule().getName();
+        }
         parameters.setHostname(hostName.getText());
         parameters.setPort(debugPort.getText());
         parameters.setRunAsRoot(runAsRootCheckBox.isSelected());
@@ -224,6 +234,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         parameters.setProgramArguments(programArguments.getText());
         parameters.setUsingKey(usingKey.isSelected());
         parameters.setKeyPath(keyfile.getText());
+        parameters.setModuleName(moduleName);
         if(org.apache.commons.lang.StringUtils.isEmpty(sshPort.getText())) {
             sshPort.setText("22");
         }
