@@ -133,9 +133,9 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
      * Big icon is Java modules
      * @return
      */
-    @Override
+    //@Override
     public Icon getBigIcon() {
-        return AllIcons.Modules.Types.JavaModule;
+        return IconLoader.findIcon("/pi.png");
     }
 
     /**
@@ -151,7 +151,7 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
      * Build for module
      * @return
      */
-    @Override
+    //@Override
     public String getBuilderId() {
         return getClass().getName();
     }

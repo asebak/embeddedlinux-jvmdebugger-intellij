@@ -2,13 +2,17 @@
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, BeagleBone Black, Intel Galileo II, and several other IoT Devices)</name>
     <version>1.21</version>
-    <vendor email="ahmad@atsebak.com" url="http://www.atsebak.com">At Sebak</vendor>
+    <vendor email="radio_frequency at hotmail dot com" url="">At Sebak</vendor>
 
   <description><![CDATA[
     <p>Java Runner/Debugger for Embedded Systems/IoT Devices that run on any variant of the Embedded Linux Kernel</p>
     ]]></description>
 
   <change-notes><![CDATA[
+        <b>Version 1.22</b>
+        <ul>
+           <li>Added multi-module project support </li>
+        </ul>
         <b>Version 1.21</b>
         <ul>
            <li>Configurable SSH Port </li>
