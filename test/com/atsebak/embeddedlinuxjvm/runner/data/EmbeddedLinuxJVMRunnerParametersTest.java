@@ -12,6 +12,7 @@ public class EmbeddedLinuxJVMRunnerParametersTest {
         EmbeddedLinuxJVMRunConfigurationRunnerParameters embeddedLinuxJVMRunConfigurationRunnerParameters = new EmbeddedLinuxJVMRunConfigurationRunnerParameters();
         embeddedLinuxJVMRunConfigurationRunnerParameters.setClassesDirectory("/main/target");
         embeddedLinuxJVMRunConfigurationRunnerParameters.setHostname("10.42.0.224");
+        embeddedLinuxJVMRunConfigurationRunnerParameters.setModuleName("mymodule");
         embeddedLinuxJVMRunConfigurationRunnerParameters.setMainclass("com.raspberrypi.Main");
         embeddedLinuxJVMRunConfigurationRunnerParameters.setPort("100");
         embeddedLinuxJVMRunConfigurationRunnerParameters.setPassword("tester");

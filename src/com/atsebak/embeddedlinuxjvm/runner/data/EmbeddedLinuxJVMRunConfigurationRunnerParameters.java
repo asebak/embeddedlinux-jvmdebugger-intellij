@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Data
 public class EmbeddedLinuxJVMRunConfigurationRunnerParameters implements Cloneable {
+	public String moduleName;
     public String mainclass;
     private String hostname;
     private boolean runAsRoot;

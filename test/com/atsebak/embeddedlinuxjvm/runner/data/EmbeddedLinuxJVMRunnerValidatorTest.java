@@ -12,6 +12,7 @@ public class EmbeddedLinuxJVMRunnerValidatorTest {
     public void testCheckPiSettings() {
         piRunnerParameters.setHostname("10.42.0.25");
         piRunnerParameters.setPort("40");
+        piRunnerParameters.setModuleName("mymodule");
         piRunnerParameters.setMainclass("Main");
         piRunnerParameters.setUsername("testuser");
         piRunnerParameters.setPassword("testpasssword");

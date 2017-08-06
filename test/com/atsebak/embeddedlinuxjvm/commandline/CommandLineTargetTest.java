@@ -24,6 +24,7 @@ public class CommandLineTargetTest {
     @Before
     public void setUp() {
         parameters.setRunAsRoot(true);
+        parameters.setModuleName("mymodule");
         parameters.setMainclass("com.test.Main");
         parameters.setPort("4000");
         parameters.setHostname("127.0.0.1");
@@ -31,6 +32,7 @@ public class CommandLineTargetTest {
         when(javaParameters.getProgramParametersList()).thenReturn(parametersList);
         when(javaParameters.getProgramParametersList().getParameters()).thenReturn(new ArrayList<String>());
         when(javaParameters.getVMParametersList()).thenReturn(jvmParametersList);
+        when(javaParameters.getModuleName()).thenReturn(parameters.getModuleName());
         when(javaParameters.getMainClass()).thenReturn(parameters.getMainclass());
     }
 
