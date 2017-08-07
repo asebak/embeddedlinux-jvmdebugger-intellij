@@ -11,6 +11,7 @@ https://plugins.jetbrains.com/plugin/7738
 Embedded Linux JVM Debugger is a Plugin for IntelliJ IDEA that makes it easier to develop Embedded Java applications for embedded systems running on any variant of embedded linux.  It easily integrates any embedded system such as the raspberry pi or beaglebone black. As long as java can run on the embedded device and ssh protocol is enabled than it's never been simpler to develop embedded java applications.
 
   - Supports Java 6+ with Virtual Machine and Program Arguments.
+  - Supports Multi-Module projects in IntelliJ.
   - Custom Run and Debug configurations for your hardware board.
   - Works cross platforms on the host machine whether that is Windows, Linux or Mac platforms.
   - Smart and rapid deployment algorithm deploy only changed files on the remote device.
