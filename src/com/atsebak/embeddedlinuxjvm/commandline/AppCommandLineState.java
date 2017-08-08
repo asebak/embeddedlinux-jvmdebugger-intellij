@@ -36,6 +36,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -206,13 +207,6 @@ public class AppCommandLineState extends JavaCommandLineState {
         final ProjectRootManager manager = ProjectRootManager.getInstance(project);
         javaParams.setJdk(manager.getProjectSdk());
 
-        // All modules to use the same things
-        Module[] modules = ModuleManager.getInstance(project).getModules();
-        if (modules.length > 0) {
-            for (Module module : modules) {
-                javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
-            }
-        }
         // setting jvm config
         javaParams.getProgramParametersList().add(configuration.getRunnerParameters().getProgramArguments());
         javaParams.getVMParametersList().add(configuration.getRunnerParameters().getVmParameters());
@@ -220,6 +214,24 @@ public class AppCommandLineState extends JavaCommandLineState {
         javaParams.setMainClass(configuration.getRunnerParameters().getMainclass());
         javaParams.setWorkingDirectory(project.getBasePath());
         javaParams.getProgramParametersList().addParametersString(configuration.getOutputFilePath());
+
+        if (!javaParams.getModuleName().isEmpty()) {
+            Module module = ModuleManager.getInstance(project).findModuleByName(javaParams.getModuleName());
+            if (module != null) {
+                javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
+                for (Module moduleDep : ModuleRootManager.getInstance(module).getDependencies()) {
+                    javaParams.configureByModule(moduleDep, JavaParameters.JDK_AND_CLASSES);
+                }
+            }
+        } else {
+			// All modules to use the same things
+			Module[] modules = ModuleManager.getInstance(project).getModules();
+			if (modules.length > 0) {
+				for (Module module : modules) {
+					javaParams.configureByModule(module, JavaParameters.JDK_AND_CLASSES);
+				}
+			}
+        }
 
         final CommandLineTarget commandLineTarget = CommandLineTarget.builder()
                 .embeddedLinuxJVMRunConfiguration(configuration)
