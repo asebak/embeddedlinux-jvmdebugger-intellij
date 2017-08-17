@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PLUGIN_MODULE" version="4">
   <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/META-INF/plugin.xml" />
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager">
     <output url="file://$USER_HOME$/IdeaProjects/production/embeddedlinux-jvm" />
     <output-test url="file://$USER_HOME$/IdeaProjects/test/embeddedlinux-jvm" />
     <content url="file://$MODULE_DIR$">
@@ -34,5 +34,6 @@
     <orderEntry type="library" name="javassist-3.12.1.GA" level="project" />
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="commons-compress-1.8" level="project" />
   </component>
 </module>
