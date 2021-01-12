@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.6.5'
+}
+
+group 'com.atsebak'
+version '1.23'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly files('lib/lombok.jar')
+    annotationProcessor files('lib/lombok.jar')
+
+    compile files('lib/commons-compress-1.8.jar')
+    compile files('lib/freemarker.jar')
+    compile files('lib/jsch-0.1.52.jar')
+
+    testCompile files('lib/junit-4.11.jar')
+    testCompile files('lib/mockito-all-1.9.5.jar')
+    testCompile files('lib/powermock-mockito-1.5.5-full.jar')
+}
+
+intellij {
+    version '2017.1.4'
+    intellij.updateSinceUntilBuild = false
+}
+
+jar {
+    from('Resources') {
+        include 'pi.png'
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
