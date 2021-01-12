@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.atsebak'
-version '1.23'
+version '1.24'
 
 repositories {
     mavenCentral()
