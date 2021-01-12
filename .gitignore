@@ -36,3 +36,7 @@ out.html
 target
 test-system
 *.zip
+
+#gradle
+.gradle
+build/

@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.atsebak.raspberrypi</id>
     <name>Embedded Linux JVM Debugger (Raspberry Pi, BeagleBone Black, Intel Galileo II, and several other IoT Devices)</name>
-    <version>1.23</version>
+    <version>1.24</version>
     <vendor email="radio_frequency at hotmail dot com" url="">At Sebak</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
+        <b>Version 1.24</b>
+        <ul>
+           <li>Fixed JDWP address binding to support debugging on Java 9+ platforms</li>
+        </ul>
         <b>Version 1.23</b>
         <ul>
            <li>Small fix for multi-module project support </li>
