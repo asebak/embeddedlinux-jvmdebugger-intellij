@@ -29,8 +29,10 @@ dependencies {
     testCompile files('lib/powermock-mockito-1.5.5-full.jar')
 }
 
+def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "2019.3.5")
+
 intellij {
-    version = '2019.3.5' //2019.3.5 or 213.7172.25
+    version = intellijVersion
     type = 'IC'
     updateSinceUntilBuild = false
     plugins = ['java']

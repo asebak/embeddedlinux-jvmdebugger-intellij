@@ -1,6 +1,16 @@
 language: java
-jdk:
-- oraclejdk8
-cache:
-directories:
-- idea-IC
+
+jdk: openjdk11
+
+env:
+  - IDEA_VERSION=2019.3.5
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - ./gradlew --console=plain check verifyPlugin
+    - stage: release
+      if: tag IS present
+      script:
+        - ./gradlew --console=plain buildPlugin
