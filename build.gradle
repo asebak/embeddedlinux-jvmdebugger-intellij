@@ -1,10 +1,16 @@
 plugins {
-    id 'java'
-    id 'org.jetbrains.intellij' version '0.6.5'
+    id "org.jetbrains.intellij" version "1.4.0"
+    id "idea"
+    id "java"
 }
 
 group 'com.atsebak'
 version '1.24'
+
+
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -16,7 +22,7 @@ dependencies {
 
     compile files('lib/commons-compress-1.8.jar')
     compile files('lib/freemarker.jar')
-    compile files('lib/jsch-0.1.52.jar')
+    compile files('lib/jsch-0.1.55.jar')
 
     testCompile files('lib/junit-4.11.jar')
     testCompile files('lib/mockito-all-1.9.5.jar')
@@ -24,8 +30,10 @@ dependencies {
 }
 
 intellij {
-    version '2017.1.4'
-    intellij.updateSinceUntilBuild = false
+    version = '2019.3.5' //2019.3.5 or 213.7172.25
+    type = 'IC'
+    updateSinceUntilBuild = false
+    plugins = ['java']
 }
 
 jar {
