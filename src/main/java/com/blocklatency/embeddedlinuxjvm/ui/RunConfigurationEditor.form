@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.blocklatency.embeddedlinuxjvm.ui.RunConfigurationEditor">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="13" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="751" height="523"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="3f3eb" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <labelFor value="c60bd"/>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.hostname"/>
+        </properties>
+      </component>
+      <component id="60c26" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.port"/>
+        </properties>
+      </component>
+      <component id="137e5" class="javax.swing.JCheckBox" binding="runAsRootCheckBox" default-binding="true">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="20"/>
+          </grid>
+        </constraints>
+        <properties>
+          <selected value="true"/>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.sudo"/>
+        </properties>
+      </component>
+      <component id="54499" class="javax.swing.JTextField" binding="debugPort">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c60bd" class="javax.swing.JTextField" binding="hostName">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="73a12" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.username"/>
+        </properties>
+      </component>
+      <component id="ff411" class="javax.swing.JTextField" binding="username">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="dd5cc" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.password"/>
+        </properties>
+      </component>
+      <component id="5909c" class="javax.swing.JPasswordField" binding="password">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c75f6" class="javax.swing.JCheckBox" binding="usingKey">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="20"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="ssh.key"/>
+        </properties>
+      </component>
+      <component id="ae8da" class="javax.swing.JTextField" binding="keyfile">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ea0f7" class="javax.swing.JButton" binding="selectPrivateKeyButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="ssh.select.key"/>
+        </properties>
+      </component>
+      <component id="87494" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="SSH Port"/>
+        </properties>
+      </component>
+      <component id="1a53c" class="javax.swing.JTextField" binding="sshPort">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="ac4fc" class="com.intellij.openapi.ui.LabeledComponent" binding="myModule">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <componentClass value="com.intellij.application.options.ModulesComboBox"/>
+          <labelInsets top="0" left="0" bottom="0" right="78"/>
+          <labelLocation value="West"/>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="app.module"/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <component id="d4bb4" class="com.intellij.openapi.ui.LabeledComponent" binding="myMainClass" custom-create="true">
+        <constraints>
+          <grid row="10" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="20"/>
+          </grid>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+          <labelInsets top="0" left="0" bottom="0" right="78"/>
+          <labelLocation value="West"/>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="app.mainclass"/>
+        </properties>
+      </component>
+      <component id="71922" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="135" height="16"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="app.vmoptions"/>
+        </properties>
+      </component>
+      <component id="bb6fa" class="com.intellij.ui.RawCommandLineEditor" binding="vmParameters">
+        <constraints>
+          <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="9f70b" class="javax.swing.JButton" binding="validateConnection">
+        <constraints>
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="pi.validationconection"/>
+        </properties>
+      </component>
+      <component id="78ee8" class="javax.swing.JLabel" binding="sshStatus">
+        <constraints>
+          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="831f7" class="com.intellij.ui.RawCommandLineEditor" binding="programArguments">
+        <constraints>
+          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="a0b00" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text resource-bundle="com/blocklatency/embeddedlinuxjvm/localization/EmbeddedLinuxJVMBundle" key="app.programargs"/>
+        </properties>
+      </component>
+      <vspacer id="aba59">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <minimum-size width="-1" height="15"/>
+            <preferred-size width="-1" height="15"/>
+          </grid>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+</form>
