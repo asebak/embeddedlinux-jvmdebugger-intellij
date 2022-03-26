@@ -7,8 +7,6 @@ plugins {
 group 'com.blocklatency'
 version '1.24'
 
-
-
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
