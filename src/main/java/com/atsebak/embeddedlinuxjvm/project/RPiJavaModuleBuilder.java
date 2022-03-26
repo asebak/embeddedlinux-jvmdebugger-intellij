@@ -6,11 +6,11 @@ import com.atsebak.embeddedlinuxjvm.utils.FileUtilities;
 import com.atsebak.embeddedlinuxjvm.utils.ProjectUtils;
 import com.atsebak.embeddedlinuxjvm.utils.Template;
 import com.google.common.io.Files;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
@@ -19,7 +19,12 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectType;
+import com.intellij.openapi.roots.JavadocOrderRootType;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.Pair;
@@ -27,20 +32,25 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.testFramework.PsiTestUtil;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -206,8 +216,8 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
             final String libPath = module.getProject().getBasePath() + File.separator + "lib";
             VfsUtil.createDirectories(libPath);
             File outputFiles = new File(libPath);
-            FileUtilities.unzip(getClass().getResourceAsStream("/pi4j.zip"), outputFiles.getAbsolutePath());
-            jarsToAdd = outputFiles.listFiles();
+            FileUtilities.unzip(Objects.requireNonNull(getClass().getResource("/pi4j-2.1.1.zip")).openStream(), outputFiles.getAbsolutePath());
+            jarsToAdd = Arrays.stream(Objects.requireNonNull(outputFiles.listFiles())).filter(x -> FileNameUtils.getExtension(x.getName()).contains("jar")).toArray(File[]::new);
         }
     }
 
@@ -224,12 +234,46 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
         if (jarsToAdd == null) {
             return;
         }
+        //referenced: https://intellij-support.jetbrains.com/hc/en-us/community/posts/115000036724-Programmatically-add-directory-based-dependency-library-to-module
+        attachDirBasedLibrary(module, "pi4j", Arrays.stream(jarsToAdd).findFirst().get().getParentFile().getPath());
+    }
 
-        for (final File fileEntry : jarsToAdd) {
-            if (!fileEntry.isDirectory() && Files.getFileExtension(fileEntry.getName()).contains("jar")) {
-                PsiTestUtil.addLibrary(module, fileEntry.getName(), fileEntry.getParentFile().getPath(), fileEntry.getName());
+    private void attachDirBasedLibrary(@NotNull final Module module,
+                                       @NotNull final String libName,
+                                       @NotNull final String dir)
+    {
+        ApplicationManager.getApplication().invokeLater(() ->
+        {
+            final ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
+            final String urlString = VirtualFileManager.constructUrl(LocalFileSystem.PROTOCOL, dir);
+            final VirtualFile dirVirtualFile = VirtualFileManager.getInstance().findFileByUrl(urlString);
+            if (dirVirtualFile != null)
+            {
+                final ModifiableRootModel modifiableModel = rootManager.getModifiableModel();
+                final Library newLib = createDirLib(libName, dirVirtualFile, modifiableModel.getModuleLibraryTable());
+                modifiableModel.commit();
             }
+        });
+    }
+
+
+    private Library createDirLib(@NotNull final String libName,
+                                 @NotNull final VirtualFile dirVirtualFile,
+                                 @NotNull final LibraryTable table)
+    {
+        Library library = table.getLibraryByName(libName);
+        if (library == null)
+        {
+            library = table.createLibrary(libName);
+
+            Library.ModifiableModel libraryModel = library.getModifiableModel();
+            libraryModel.addJarDirectory(dirVirtualFile,  true, OrderRootType.CLASSES);
+            libraryModel.addJarDirectory(dirVirtualFile,  true, OrderRootType.SOURCES);
+            libraryModel.addJarDirectory(dirVirtualFile, true, JavadocOrderRootType.getInstance());
+            libraryModel.commit();
+
         }
+        return library;
     }
 
     /**

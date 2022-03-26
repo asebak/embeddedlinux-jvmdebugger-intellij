@@ -12,6 +12,7 @@
         <b>Version 1.24</b>
         <ul>
            <li>Fixed JDWP address binding to support debugging on Java 9+ platforms</li>
+           <li>Remove project templates as they did not have much use</li>
         </ul>
         <b>Version 1.23</b>
         <ul>
@@ -147,8 +148,6 @@
 
       <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
-      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
-      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.BeagleBoneBlackJavaModuleBuilder"/>
       <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.services.ClasspathService"
                       serviceInterface="com.atsebak.embeddedlinuxjvm.services.ClasspathService"/>
   </extensions>
