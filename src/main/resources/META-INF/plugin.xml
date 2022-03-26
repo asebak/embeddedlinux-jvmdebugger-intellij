@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-  <id>com.atsebak.raspberrypi</id>
-    <name>Embedded Linux JVM Debugger (Raspberry Pi, BeagleBone Black, Intel Galileo II, and several other IoT Devices)</name>
+  <id>com.blocklatency.raspberrypi</id>
+    <name>Embedded Linux JVM Debugger for Raspberry PI </name>
     <version>1.24</version>
-    <vendor email="radio_frequency at hotmail dot com" url="">At Sebak</vendor>
+    <vendor email="radio_frequency at hotmail dot com" url="">Block Latency</vendor>
 
   <description><![CDATA[
     <p>Java Runner/Debugger for Embedded Systems/IoT Devices that run on any variant of the Embedded Linux Kernel</p>
@@ -142,14 +142,14 @@
     <idea-version since-build="191.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
-      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner"/>
-      <programRunner implementation="com.atsebak.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger"/>
-      <moduleBuilder builderClass="com.atsebak.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
+      <programRunner implementation="com.blocklatency.embeddedlinuxjvm.runner.EmbeddedLinuxJVMRunner"/>
+      <programRunner implementation="com.blocklatency.embeddedlinuxjvm.runner.EmbeddedLinuxJVMDebugger"/>
+      <moduleBuilder builderClass="com.blocklatency.embeddedlinuxjvm.project.RPiJavaModuleBuilder"/>
 
-      <configurationType implementation="com.atsebak.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
-      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
-      <projectService serviceImplementation="com.atsebak.embeddedlinuxjvm.services.ClasspathService"
-                      serviceInterface="com.atsebak.embeddedlinuxjvm.services.ClasspathService"/>
+      <configurationType implementation="com.blocklatency.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMConfigurationType"/>
+      <projectService serviceImplementation="com.blocklatency.embeddedlinuxjvm.console.EmbeddedLinuxJVMConsoleView"/>
+      <projectService serviceImplementation="com.blocklatency.embeddedlinuxjvm.services.ClasspathService"
+                      serviceInterface="com.blocklatency.embeddedlinuxjvm.services.ClasspathService"/>
   </extensions>
 
 </idea-plugin>
