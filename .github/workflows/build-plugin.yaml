@@ -1,8 +1,5 @@
-name: Generate changelog and plugin archive for new release
-on:
-  push:
-    tags:
-      - '*'
+name: Build Plugin
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,34 +13,3 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew buildPlugin
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-      - name: Simple conventional changelog
-        uses: lstocchi/simple-conventional-changelog@0.0.11
-        id: changelog
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          current-tag: ${{ steps.get_version.outputs.VERSION }}
-          types-mapping: 'feat:Features,fix:Bug Fixes,docs:Documentation,refactor:Refactoring,build:Builds,chore:Other'
-          scopes-mapping: 'UI:UI,Hub:Hub'
-      - run: |
-          echo '${{ steps.changelog.outputs.changelog }}'
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: ${{ steps.get_version.outputs.VERSION }}
-          body: ${{ steps.changelog.outputs.changelog }}
-      - name: Attach zip to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: '${{ github.workspace }}/build/distributions/com.blocklatency.intellij.embeddedlinux-jvmdebugger-${{ steps.get_version.outputs.VERSION }}.zip'
-          asset_name: 'Embeddedlinux-jvmdebug-${{ steps.get_version.outputs.VERSION }}.zip'
-          asset_content_type: application/zip
