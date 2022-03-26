@@ -1,6 +1,5 @@
 ![alt text][overviewlogo]
 =============================
-[![Build Status](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij.svg?branch=master)](https://travis-ci.org/asebak/embeddedlinux-jvmdebugger-intellij)
 
 ```
 https://plugins.jetbrains.com/plugin/7738
@@ -10,7 +9,7 @@ https://plugins.jetbrains.com/plugin/7738
 
 Embedded Linux JVM Debugger is a Plugin for IntelliJ IDEA that makes it easier to develop Embedded Java applications for embedded systems running on any variant of embedded linux.  It easily integrates any embedded system such as the raspberry pi or beaglebone black. As long as java can run on the embedded device and ssh protocol is enabled than it's never been simpler to develop embedded java applications.
 
-  - Supports Java 6+ with Virtual Machine and Program Arguments.
+  - Supports Java 11+ with Virtual Machine and Program Arguments.
   - Supports Multi-Module projects in IntelliJ.
   - Custom Run and Debug configurations for your hardware board.
   - Works cross platforms on the host machine whether that is Windows, Linux or Mac platforms.
@@ -43,17 +42,17 @@ $ sudo sh ./ci-build.sh
 * Mockito/PowerMockito/JUnit
 * Jsch
 * Commons Compress
-* IntelliJ SDK 2016 + Java 8 (since release 1.20)
+* IntelliJ SDK 2019 + Java 11 (since release 1.24)
 
 ### Development
 
 If you want to contribute and add functionality, make sure to add unit tests if they are needed.
 
-[overviewlogo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/embeddedlinuxjvm.png
+[overviewlogo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/src/main/resources/documentation/embeddedlinuxjvm.png
 "Overview"
 
-[logo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/sample1.png
+[logo]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/src/main/resources/documentation/sample1.png
 "Sample Build Output"
 
-[config]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/Resources/documentation/sample2.png
+[config]: https://raw.githubusercontent.com/asebak/embeddedlinux-jvmdebugger-intellij/master/src/main/resources/documentation/sample2.png
 "Sample Run Configuration"

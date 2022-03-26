@@ -125,6 +125,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("debugport.placeholder"), debugPort);
         PromptSupport.setPrompt(EmbeddedLinuxJVMBundle.getString("ssh.privatekey.ph"), keyfile);
         ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(getMainClassField());
+       // new ClassBrowser.AppClassBrowser(project, myModuleSelector).setField(getMainClassField());
 
         myAnchor = UIUtil.mergeComponentsWithAnchor(myMainClass, myModule);
 

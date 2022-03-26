@@ -1,19 +1,19 @@
 package com.atsebak.embeddedlinuxjvm.runner.conf;
 
-import com.atsebak.embeddedlinuxjvm.localization.EmbeddedLinuxJVMBundle;
 import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.ConfigurationType;
 import com.intellij.execution.configurations.ConfigurationTypeUtil;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 public class EmbeddedLinuxJVMConfigurationType implements ConfigurationType {
     private static final String NAME = "Embedded Linux JVM";
-    private static final String DESCRIPTION = EmbeddedLinuxJVMBundle.getString("pi.app.description");
+    private static final String DESCRIPTION = "Run as an Embedded Java application";
     private ConfigurationFactory configurationFactory;
 
     /**
@@ -24,6 +24,12 @@ public class EmbeddedLinuxJVMConfigurationType implements ConfigurationType {
             @Override
             public RunConfiguration createTemplateConfiguration(Project project) {
                 return new EmbeddedLinuxJVMRunConfiguration(project, this, NAME);
+            }
+
+            @Override
+            public @NotNull
+            @NonNls String getId() {
+                return DESCRIPTION;
             }
         };
     }
@@ -68,7 +74,7 @@ public class EmbeddedLinuxJVMConfigurationType implements ConfigurationType {
     @NotNull
     @Override
     public String getId() {
-        return getConfigurationTypeDescription();
+        return DESCRIPTION;
     }
 
     /**

@@ -124,7 +124,7 @@ public class EmbeddedLinuxJVMConsoleView implements Disposable {
         if (consoleView.isShowing()) {
             consoleView.clear();
         } else {
-            ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+            ApplicationManager.getApplication().invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     consoleView.flushDeferredText();

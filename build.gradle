@@ -17,19 +17,23 @@ repositories {
 }
 
 dependencies {
-    compileOnly files('lib/lombok.jar')
-    annotationProcessor files('lib/lombok.jar')
 
-    compile files('lib/commons-compress-1.8.jar')
-    compile files('lib/freemarker.jar')
-    compile files('lib/jsch-0.1.55.jar')
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    testCompile files('lib/junit-4.11.jar')
-    testCompile files('lib/mockito-all-1.9.5.jar')
-    testCompile files('lib/powermock-mockito-1.5.5-full.jar')
+    compile 'org.apache.commons:commons-compress:1.21'
+    compile 'org.freemarker:freemarker:2.3.31'
+    compile 'com.jcraft:jsch:0.1.55'
+
+    testCompile 'junit:junit:4.13.2'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'org.powermock:powermock-module-junit4:2.0.9'
+    testCompile 'org.powermock:powermock-api-mockito:1.7.4'
+
+
 }
 
-def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "2019.3.5")
+def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "213.7172.25")
 
 intellij {
     version = intellijVersion
