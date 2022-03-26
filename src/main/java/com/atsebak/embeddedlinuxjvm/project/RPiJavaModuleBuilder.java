@@ -61,7 +61,7 @@ public class RPiJavaModuleBuilder extends JavaModuleBuilder {
     private String packageName;
     @Nullable
     private File[] jarsToAdd;
-    private boolean noLibrariesNeeded;
+    private boolean noLibrariesNeeded = true;
 
     /**
      * Used to define the hierachy of the project definition
