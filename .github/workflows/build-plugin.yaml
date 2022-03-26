@@ -1,4 +1,4 @@
-name: Generate changelog and plugin archive for new release
+name: Build Plugin
 on: [push]
 jobs:
   build:
