@@ -2,7 +2,8 @@
 =============================
 
 ```
-https://plugins.jetbrains.com/plugin/7738
+https://plugins.jetbrains.com/plugin/7738 (Legacy Plugin Java 8)
+https://plugins.jetbrains.com/plugin/18849 (New Version Going Forward Java 9 +)
 ```
 
 ![alt text][logo]
