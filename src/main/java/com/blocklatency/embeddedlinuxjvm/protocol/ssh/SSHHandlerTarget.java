@@ -91,6 +91,8 @@ public class SSHHandlerTarget {
                     String.format("mkdir -p %s", FileUtilities.CLASSES),
                     String.format("mkdir -p %s", FileUtilities.LIB),
                     String.format("cd %s", path + FileUtilities.SEPARATOR + FileUtilities.CLASSES),
+                    "rm -rf *",
+                    String.format("cd %s", path + FileUtilities.SEPARATOR + FileUtilities.LIB),
                     "rm -rf *"
             );
             for (String command : commands) {
