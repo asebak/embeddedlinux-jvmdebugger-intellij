@@ -236,7 +236,7 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         parameters.setUsingKey(usingKey.isSelected());
         parameters.setKeyPath(keyfile.getText());
         parameters.setModuleName(moduleName);
-        if(org.apache.commons.lang.StringUtils.isEmpty(sshPort.getText())) {
+        if (sshPort.getText().isEmpty()) {
             sshPort.setText("22");
         }
         parameters.setSshPort(Integer.parseInt(sshPort.getText()));
@@ -296,4 +296,3 @@ public class RunConfigurationEditor extends SettingsEditor<EmbeddedLinuxJVMRunCo
         myModule.setAnchor(anchor);
     }
 }
-
