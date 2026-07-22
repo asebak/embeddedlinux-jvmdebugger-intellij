@@ -81,4 +81,16 @@ public class CommandLineTargetTest {
         assertTrue(runCommand.contains(String.format("sudo java %s -cp classes:lib/'*' %s", "-foo:bar" ,parameters.getMainclass())));
     }
 
+    @Test
+    public void testIgnoreBlankVmArguments() {
+        when(jvmParametersList.getParameters()).thenReturn(Arrays.asList(" ", "-foo:bar"));
+        String runCommand = CommandLineTarget.builder()
+                .isDebugging(false)
+                .parameters(javaParameters)
+                .embeddedLinuxJVMRunConfiguration(piRunConfiguration)
+                .build().toString();
+
+        assertTrue(runCommand.contains(String.format("sudo java %s -cp classes:lib/'*' %s", "-foo:bar", parameters.getMainclass())));
+    }
+
 }

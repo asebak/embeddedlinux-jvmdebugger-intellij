@@ -3,7 +3,6 @@ package com.blocklatency.embeddedlinuxjvm.commandline;
 import com.blocklatency.embeddedlinuxjvm.runner.conf.EmbeddedLinuxJVMRunConfiguration;
 import com.intellij.execution.configurations.JavaParameters;
 import lombok.Builder;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -62,7 +61,7 @@ public class CommandLineTarget {
         }
         for (String arg : parameters.getVMParametersList().getParameters()) {
             //todo see if devs need the java agent support because for now this is a quick fix that might not be the proper way
-            if (!arg.contains("transport=dt_socket") && !arg.contains("javaagent") && StringUtils.isNotBlank(arg)
+            if (!arg.contains("transport=dt_socket") && !arg.contains("javaagent") && !arg.trim().isEmpty()
                     && !parameters.getProgramParametersList().getParameters().equals(parameters.getVMParametersList().getParameters())) {
                 cmdBuf.append(' ').append(arg.trim());
             }
